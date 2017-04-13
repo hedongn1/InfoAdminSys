@@ -11,9 +11,10 @@ package infoadminsys.cls;
  */
 public class Student {
     
-   public String id,name;
-   public String sex;
+   public String id,name,sex;
    public String depart,major;
+   public String hometown,birthday,IDnum;
+   public String Address;
    public String email,NO;
    final public String type="学生";
    static public String Attr="id,name,sex,depart,major,email,NO";

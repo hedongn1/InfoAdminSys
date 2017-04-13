@@ -12,10 +12,10 @@ import infoadminsys.ui.*;
  * @author lsh
  */
 public class temporalEnter {
-    /*public static void main(String args[]) {
+    public static void main(String args[]) {
         StudentUI S = new StudentUI("15307130120");
         S.setLocationRelativeTo(null);
         S.setVisible(true);
     }
-    */
+    
 }
