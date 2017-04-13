@@ -131,10 +131,10 @@ public class LoginUI extends javax.swing.JFrame {
             return;
         } else {
             //JOptionPane.showMessageDialog(frame, result, "提示", JOptionPane.WARNING_MESSAGE);
-            StudentUI S=new StudentUI();
+            StudentUI S=new StudentUI(username);
             S.setLocationRelativeTo(this);
             S.setVisible(true);
-            return;
+            this.dispose();
         }
     }//GEN-LAST:event_btnsubmitActionPerformed
 

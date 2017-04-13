@@ -5,20 +5,17 @@
  */
 package infoadminsys.cls;
 
-import java.util.*;
-import infoadminsys.util.JdbcUtil;
-
 /**
  *
  * @author lsh
  */
 public class Student {
-   static public String id,name,sex,depart,major,email,NO;
-   final static public String type="学生";
-   static String Attr="id,name,sex,depart,major,email,NO";
-   
-   static public void getDataFromDB() {       
-       String sql="SELECT"+Attr+"FROM student WHERE student.id=?";
-       List<String> params=new ArrayList<String>();      
-   }
+    
+   public String id,name;
+   public String sex;
+   public String depart,major;
+   public String email,NO;
+   final public String type="学生";
+   static public String Attr="id,name,sex,depart,major,email,NO";
+
 }

@@ -11,15 +11,18 @@ import infoadminsys.cls.Student;
  *
  * @author lsh
  */
-public class AccoutManageUI extends javax.swing.JFrame {
+public class AccountManageUI extends javax.swing.JFrame {
 
     /**
      * Creates new form AccoutManageUI
      */
-    public AccoutManageUI() {
+    public AccountManageUI() {
+    }
+    
+    public AccountManageUI(String id,String type) {
         initComponents();
-        jLabel_account2.setText(Student.id);
-        jLabel_type2.setText(Student.type);
+        jLabel_account2.setText(id);
+        jLabel_type2.setText(type);
     }
 
     /**
@@ -132,8 +135,7 @@ public class AccoutManageUI extends javax.swing.JFrame {
                 .addGap(50, 50, 50)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel_account1)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel_account2)))
+                    .addComponent(jLabel_account2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel_type1)

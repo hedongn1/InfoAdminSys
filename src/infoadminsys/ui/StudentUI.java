@@ -6,10 +6,11 @@
 package infoadminsys.ui;
 
 import javax.swing.JOptionPane;
-import infoadminsys.cls.Student;
+import infoadminsys.cls.*;
+import infoadminsys.ui.*;
+import infoadminsys.util.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import javax.swing.JFrame;
 
 /**
  *
@@ -20,25 +21,30 @@ public class StudentUI extends javax.swing.JFrame {
     /**
      * Creates new form StudentUI
      */
-    Student stu = new Student();
+    private String id;
+    private Student student;
+    private StudentUtil studentUtil=new StudentUtil();
 
     private void setText() {
-        jLabel_hello.setText("您好, " + Student.name);
-        jTextField_name.setText(Student.name);
-        jComboBox_sex.setSelectedItem(Student.sex);
-        jTextField_id.setText(Student.id);
-        jTextField_depart.setText(Student.depart);
-        jTextField_major.setText(Student.major);
-        jTextField_email.setText(Student.email);
-        jTextField_NO.setText(Student.NO);
+        jLabel_hello.setText("您好, " + student.name);
+        jTextField_name.setText(student.name);
+        jTextField_sex.setText(student.sex);
+        jComboBox_sex.setSelectedItem(student.sex);
+        jTextField_id.setText(student.id);
+        jTextField_depart.setText(student.depart);
+        jTextField_major.setText(student.major);
+        jTextField_email.setText(student.email);
+        jTextField_NO.setText(student.NO);
     }
 
     private void setEdit(boolean edit) {
         jTextField_name.setEditable(false);
-        jComboBox_sex.setEditable(false);
-        jTextField_id.setEditable(edit);
-        jTextField_depart.setEditable(edit);
-        jTextField_major.setEditable(edit);
+        jTextField_sex.setEditable(edit);
+        jTextField_sex.setVisible(!edit);
+        jComboBox_sex.setVisible(edit);
+        jTextField_id.setEditable(false);
+        jTextField_depart.setEditable(false);
+        jTextField_major.setEditable(false);
         jTextField_email.setEditable(edit);
         jTextField_NO.setEditable(edit);
     }
@@ -54,33 +60,34 @@ public class StudentUI extends javax.swing.JFrame {
         jButton_save.setVisible(false);
         jButton_back.setVisible(false);
     }
-
-    private void getData() {
-        Student.id = "15307130120";
-        Student.name = "林士翰";
-        Student.sex = "男";
-        Student.email = "lshzy137@163.com";
-        Student.NO = "5218333";
-        Student.depart = "CS";
-        Student.major = "CS";
-    }
-
+    
     private void saveData() {
+        student.name=jTextField_name.getText();
+        student.sex=jTextField_sex.getText();
+        student.id=jTextField_id.getText();
+        student.depart=jTextField_depart.getText();
+        student.major=jTextField_major.getText();
+        student.email=jTextField_email.getText();
+        student.NO=jTextField_NO.getText();
+        studentUtil.uploadData();
     }
 
-    private void update(boolean readDB) {
+    private void display(boolean readDB) {
         if (readDB) {
-            Student.getDataFromDB();
+            student=studentUtil.downloadData(id);
         }
         setText();
         setEdit(false);
         buttonReadonly();
     }
-
+    
     public StudentUI() {
+    }
+    
+    public StudentUI(String username) {
         initComponents();
-        this.setLocationRelativeTo(null);
-        update(true);
+        id=username;
+        display(true);
     }
 
     /**
@@ -117,6 +124,7 @@ public class StudentUI extends javax.swing.JFrame {
         jComboBox_sex = new javax.swing.JComboBox<>();
         jLabel_address = new javax.swing.JLabel();
         jTextField_address = new javax.swing.JTextField();
+        jTextField_sex = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -232,6 +240,9 @@ public class StudentUI extends javax.swing.JFrame {
             }
         });
 
+        jTextField_sex.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
+        jTextField_sex.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -267,13 +278,18 @@ public class StudentUI extends javax.swing.JFrame {
                                     .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField_depart, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jTextField_birthday, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jComboBox_sex, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(50, 50, 50)
-                                .addComponent(jLabel_major)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField_major, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jTextField_depart, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jTextField_birthday, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(50, 50, 50)
+                                        .addComponent(jLabel_major)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jTextField_major, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jTextField_sex, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jComboBox_sex, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                             .addComponent(jTextField_address, javax.swing.GroupLayout.PREFERRED_SIZE, 600, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(21, 21, 21)
@@ -284,7 +300,7 @@ public class StudentUI extends javax.swing.JFrame {
                         .addComponent(jLabel_NO)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jTextField_NO, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(69, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -294,7 +310,8 @@ public class StudentUI extends javax.swing.JFrame {
                     .addComponent(jLabel_name)
                     .addComponent(jTextField_name, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1)
-                    .addComponent(jComboBox_sex, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jComboBox_sex, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField_sex, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jTextField_depart, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -334,6 +351,7 @@ public class StudentUI extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("个人信息", jPanel1);
 
+        jTable1.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
@@ -405,6 +423,9 @@ public class StudentUI extends javax.swing.JFrame {
         jLabel_logOut.setText("注销");
         jLabel_logOut.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel_logOut.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel_logOutMouseClicked(evt);
+            }
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 jLabel_logOutMouseExited(evt);
             }
@@ -459,7 +480,7 @@ public class StudentUI extends javax.swing.JFrame {
         // TODO add your handling code here:
         int result = JOptionPane.showConfirmDialog(this, "确定退出？未保存的内容将丢失！", "提示信息", JOptionPane.YES_NO_OPTION);
         if (result == 0) { //YES
-            update(false);
+            display(false);
         }
     }//GEN-LAST:event_jButton_backActionPerformed
 
@@ -490,11 +511,11 @@ public class StudentUI extends javax.swing.JFrame {
         // TODO add your handling code here:
         /*java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new AccoutManageUI().setVisible(true);
+                new AccountManageUI().setVisible(true);
             }
         });*/
         setEnabled(false);
-        AccoutManageUI AM = new AccoutManageUI();
+        AccountManageUI AM = new AccountManageUI(student.id,student.type);
         AM.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         AM.setLocationRelativeTo(this);
         AM.setAlwaysOnTop(true);
@@ -530,6 +551,14 @@ public class StudentUI extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField_addressActionPerformed
 
+    private void jLabel_logOutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel_logOutMouseClicked
+        // TODO add your handling code here:
+        LoginUI T = new LoginUI();
+        T.setLocationRelativeTo(null);
+        T.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jLabel_logOutMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton_back;
@@ -564,5 +593,6 @@ public class StudentUI extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField_id;
     private javax.swing.JTextField jTextField_major;
     private javax.swing.JTextField jTextField_name;
+    private javax.swing.JTextField jTextField_sex;
     // End of variables declaration//GEN-END:variables
 }

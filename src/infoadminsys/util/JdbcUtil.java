@@ -5,7 +5,6 @@
  */
 package infoadminsys.util;
 
-import infoadminsys.cls.UserPass;
 import java.lang.reflect.*;
 import java.sql.*;
 import java.util.*;
