@@ -86,8 +86,8 @@ public class StudentUI extends javax.swing.JFrame {
     
     public StudentUI(String username) {
         initComponents();
-        //System.out.println(jLabel_id.getFont());
-        //jTable1.getTableHeader().setFont(java));
+        //System.out.println(jTable1.getTableHeader().getFont());
+        //jTable1.getTableHeader().setFont();
         id=username;
         display(true);
     }
