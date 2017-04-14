@@ -7,12 +7,12 @@ package infoadminsys.ui;
 
 import javax.swing.JOptionPane;
 import infoadminsys.cls.*;
-import infoadminsys.ui.*;
 import infoadminsys.util.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.table.TableModel;
 import java.util.*;
+import java.awt.Font;
 
 /**
  *
@@ -25,9 +25,9 @@ public class StudentUI extends javax.swing.JFrame {
      */
     private String id;
     private Student student;
-    private StudentUtil studentUtil = new StudentUtil();
-    private List<SelectedCourse> SCList = new ArrayList<SelectedCourse>();
-    private SelectedCourseUtil SCUtil = new SelectedCourseUtil();
+    final private StudentUtil studentUtil = new StudentUtil();
+    private List<SelectedCourse> SCList = new ArrayList<>();
+    final private SelectedCourseUtil SCUtil = new SelectedCourseUtil();
 
     private void setText() {
         jLabel_hello.setText("您好, " + student.name);
@@ -37,7 +37,10 @@ public class StudentUI extends javax.swing.JFrame {
         jTextField_id.setText(student.id);
         jTextField_depart.setText(student.depart);
         jTextField_major.setText(student.major);
+        jTextField_hometown.setText(student.hometown);
         jTextField_birthday.setText(student.birthday.toString());
+        jTextField_IDnum.setText(student.IDnum);
+        jTextField_address.setText(student.address);
         jTextField_email.setText(student.email);
         jTextField_NO.setText(student.NO);
     }
@@ -50,6 +53,10 @@ public class StudentUI extends javax.swing.JFrame {
         jTextField_id.setEditable(false);
         jTextField_depart.setEditable(false);
         jTextField_major.setEditable(false);
+        jTextField_hometown.setEditable(edit);
+        jTextField_birthday.setEditable(edit);
+        jTextField_IDnum.setEditable(false);
+        jTextField_address.setEditable(edit);;
         jTextField_email.setEditable(edit);
         jTextField_NO.setEditable(edit);
     }
@@ -77,7 +84,7 @@ public class StudentUI extends javax.swing.JFrame {
         studentUtil.uploadData();
     }
 
-    private void display(boolean readDB) {
+    private void displayInfo(boolean readDB) {
         if (readDB) {
             student = studentUtil.downloadData(id);
         }
@@ -86,10 +93,10 @@ public class StudentUI extends javax.swing.JFrame {
         buttonReadonly();
     }
     
-    private Object[][] getObject(){
-        int courseNum=SCList.size();
-        Object[][] courses=new Object[courseNum][3];
-        for(int i=0;i<courseNum;i++) {
+    private Object[][] getCourses(){
+        int rowNum=SCList.size();
+        Object[][] courses=new Object[rowNum][3];
+        for(int i=0;i<rowNum;i++) {
             courses[i][0]=SCList.get(i).course_id;
             courses[i][1]=SCList.get(i).course_name;
             courses[i][2]=SCList.get(i).teacher_name;
@@ -97,9 +104,8 @@ public class StudentUI extends javax.swing.JFrame {
         return courses;
     }
     
-    private TableModel tabelModel() {
-        SCList=SCUtil.downloadData(id);
-        return new javax.swing.table.DefaultTableModel(getObject(),
+    private TableModel SCTableModel() {
+        return new javax.swing.table.DefaultTableModel(getCourses(),
                 new String[]{
                     "课程号", "课程名称", "教师"
                 }
@@ -113,16 +119,44 @@ public class StudentUI extends javax.swing.JFrame {
             }
         };
     }
+    
+    private Object[][] getScores(){
+        int rowNum=SCList.size();
+        Object[][] scores=new Object[rowNum][3];
+        for(int i=0;i<rowNum;i++) {
+            scores[i][0]=SCList.get(i).course_id;
+            scores[i][1]=SCList.get(i).course_name;
+            scores[i][2]=SCList.get(i).score;
+        }
+        return scores;
+    }
+    
+    private TableModel scoreTableModel() {
+        return new javax.swing.table.DefaultTableModel(getScores(),
+                new String[]{
+                    "课程号", "课程名称", "成绩"
+                }
+        ) {
+            boolean[] canEdit = new boolean[]{
+                false, false, false
+            };
 
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit[columnIndex];
+            }
+        };
+    }
+    
     public StudentUI() {
     }
 
     public StudentUI(String username) {
         id = username;
+        SCList=SCUtil.downloadData(id);
         initComponents();
-        //System.out.println(jTable1.getTableHeader().getFont());
-        //jTable1.getTableHeader().setFont();
-        display(true);
+        jTable_courses.getTableHeader().setFont(new Font("Lucida Grande", 0, 13));
+        jTable_scores.getTableHeader().setFont(new Font("Lucida Grande", 0, 13));
+        displayInfo(true);
     }
 
     /**
@@ -164,17 +198,23 @@ public class StudentUI extends javax.swing.JFrame {
         jTextField_IDnum = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTable_courses = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable_scores = new javax.swing.JTable();
         jLabel_account = new javax.swing.JLabel();
         jLabel_hello = new javax.swing.JLabel();
         jLabel_logOut = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(800, 600));
+        setResizable(false);
 
         jTabbedPane1.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
+        jTabbedPane1.setPreferredSize(new java.awt.Dimension(800, 577));
+        jTabbedPane1.setRequestFocusEnabled(false);
 
-        jPanel1.setPreferredSize(new java.awt.Dimension(800, 600));
+        jPanel1.setPreferredSize(new java.awt.Dimension(800, 522));
 
         jLabel_name.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
         jLabel_name.setText("姓名：");
@@ -266,15 +306,7 @@ public class StudentUI extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton_modify)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton_save)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton_back)
-                .addGap(20, 20, 20))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
+                .addContainerGap(15, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel_email, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel_address, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -284,41 +316,56 @@ public class StudentUI extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jTextField_email, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(22, 22, 22)
-                        .addComponent(jLabel_NO)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField_NO, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jTextField_name, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTextField_hometown, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTextField_id, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel_birthday, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel_depart, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jTextField_sex, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jComboBox_sex, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addComponent(jTextField_birthday, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(jLabel_IDnum))
+                                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addComponent(jTextField_depart, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(40, 40, 40)
+                                                .addComponent(jLabel_major)))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jTextField_major, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jTextField_IDnum, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                            .addComponent(jTextField_address))
+                        .addContainerGap(16, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField_name, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField_hometown, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField_id, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel_birthday, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel_depart, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jTextField_sex, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jTextField_email, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(51, 51, 51)
+                                .addComponent(jLabel_NO)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jComboBox_sex, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jTextField_NO, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField_depart, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jTextField_birthday, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(8, 8, 8)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel_major)
-                                    .addComponent(jLabel_IDnum))
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(jButton_modify)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField_major, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jTextField_IDnum, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                    .addComponent(jTextField_address, javax.swing.GroupLayout.PREFERRED_SIZE, 600, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(75, Short.MAX_VALUE))
+                                .addComponent(jButton_save)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                        .addComponent(jButton_back)
+                        .addGap(20, 20, 20))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -359,25 +406,33 @@ public class StudentUI extends javax.swing.JFrame {
                     .addComponent(jTextField_email, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel_NO)
                     .addComponent(jTextField_NO, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 380, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton_save)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 330, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jButton_back)
-                    .addComponent(jButton_modify))
-                .addGap(7, 7, 7))
+                    .addComponent(jButton_modify)
+                    .addComponent(jButton_save))
+                .addContainerGap(8, Short.MAX_VALUE))
         );
 
         jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel_email, jTextField_email});
 
+        jTextField_birthday.getAccessibleContext().setAccessibleName("");
+
         jTabbedPane1.addTab("个人信息", jPanel1);
 
-        jTable1.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
-        jTable1.setModel(tabelModel());
-        jTable1.setColumnSelectionAllowed(true);
-        jTable1.setShowGrid(true);
-        jTable1.setSurrendersFocusOnKeystroke(true);
-        jScrollPane2.setViewportView(jTable1);
-        jTable1.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        jPanel2.setPreferredSize(new java.awt.Dimension(800, 576));
+
+        jScrollPane2.setPreferredSize(new java.awt.Dimension(800, 576));
+        jScrollPane2.setViewportView(null);
+
+        jTable_courses.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
+        jTable_courses.setModel(SCTableModel());
+        jTable_courses.setColumnSelectionAllowed(true);
+        jTable_courses.setGridColor(new java.awt.Color(102, 102, 102));
+        jTable_courses.setShowGrid(true);
+        jTable_courses.setSurrendersFocusOnKeystroke(true);
+        jScrollPane2.setViewportView(jTable_courses);
+        jTable_courses.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -385,27 +440,41 @@ public class StudentUI extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 825, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 594, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         jTabbedPane1.addTab("选课查询", jPanel2);
 
+        jPanel3.setPreferredSize(new java.awt.Dimension(800, 576));
+
+        jScrollPane1.setBounds(new java.awt.Rectangle(0, 0, 0, 0));
+        jScrollPane1.setPreferredSize(new java.awt.Dimension(800, 576));
+
+        jTable_scores.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
+        jTable_scores.setModel(scoreTableModel());
+        jTable_scores.setBounds(new java.awt.Rectangle(0, 0, 0, 0));
+        jTable_scores.setGridColor(new java.awt.Color(102, 102, 102));
+        jScrollPane1.setViewportView(jTable_scores);
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 837, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 600, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("成绩查询", jPanel3);
@@ -444,29 +513,30 @@ public class StudentUI extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(20, 20, 20)
+                .addContainerGap()
                 .addComponent(jLabel_hello)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel_account, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel_logOut, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(20, 20, 20))
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)
+                .addGap(19, 19, 19))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(6, 6, 6)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jLabel_logOut)
-                    .addComponent(jLabel_hello)
-                    .addComponent(jLabel_account, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 596, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel_account, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel_hello, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 576, Short.MAX_VALUE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
-        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel_account, jLabel_hello, jLabel_logOut});
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel_account, jLabel_logOut});
 
         pack();
         setLocationRelativeTo(null);
@@ -482,7 +552,7 @@ public class StudentUI extends javax.swing.JFrame {
         // TODO add your handling code here:
         int result = JOptionPane.showConfirmDialog(this, "确定退出？未保存的内容将丢失！", "提示信息", JOptionPane.YES_NO_OPTION);
         if (result == 0) { //YES
-            display(false);
+            displayInfo(false);
         }
     }//GEN-LAST:event_jButton_backActionPerformed
 
@@ -563,9 +633,11 @@ public class StudentUI extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTable_courses;
+    private javax.swing.JTable jTable_scores;
     private javax.swing.JTextField jTextField_IDnum;
     private javax.swing.JTextField jTextField_NO;
     private javax.swing.JTextField jTextField_address;

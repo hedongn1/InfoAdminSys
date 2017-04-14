@@ -23,7 +23,7 @@ public class SelectedCourseUtil {
     }
 
     public List<SelectedCourse> downloadData(String id) {
-        String sql = "SELECT C.id as course_id, C.name as course_name, T.name as teacher_name "
+        String sql = "SELECT C.id as course_id, C.name as course_name, T.name as teacher_name, score "
                    + "FROM (selectedcourse SC INNER JOIN course C ON SC.course_id=C.id),teacher T "
                    + "WHERE C.teacher_id=T.id AND student_id=?";
         List<Object> param = new ArrayList<>();
