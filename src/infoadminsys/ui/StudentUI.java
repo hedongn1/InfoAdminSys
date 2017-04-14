@@ -11,6 +11,8 @@ import infoadminsys.ui.*;
 import infoadminsys.util.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import javax.swing.table.TableModel;
+import java.util.*;
 
 /**
  *
@@ -23,7 +25,9 @@ public class StudentUI extends javax.swing.JFrame {
      */
     private String id;
     private Student student;
-    private StudentUtil studentUtil=new StudentUtil();
+    private StudentUtil studentUtil = new StudentUtil();
+    private List<SelectedCourse> SCList = new ArrayList<SelectedCourse>();
+    private SelectedCourseUtil SCUtil = new SelectedCourseUtil();
 
     private void setText() {
         jLabel_hello.setText("您好, " + student.name);
@@ -33,6 +37,7 @@ public class StudentUI extends javax.swing.JFrame {
         jTextField_id.setText(student.id);
         jTextField_depart.setText(student.depart);
         jTextField_major.setText(student.major);
+        jTextField_birthday.setText(student.birthday.toString());
         jTextField_email.setText(student.email);
         jTextField_NO.setText(student.NO);
     }
@@ -60,35 +65,63 @@ public class StudentUI extends javax.swing.JFrame {
         jButton_save.setVisible(false);
         jButton_back.setVisible(false);
     }
-    
+
     private void saveData() {
-        student.name=jTextField_name.getText();
-        student.sex=jTextField_sex.getText();
-        student.id=jTextField_id.getText();
-        student.depart=jTextField_depart.getText();
-        student.major=jTextField_major.getText();
-        student.email=jTextField_email.getText();
-        student.NO=jTextField_NO.getText();
+        student.name = jTextField_name.getText();
+        student.sex = jTextField_sex.getText();
+        student.id = jTextField_id.getText();
+        student.depart = jTextField_depart.getText();
+        student.major = jTextField_major.getText();
+        student.email = jTextField_email.getText();
+        student.NO = jTextField_NO.getText();
         studentUtil.uploadData();
     }
 
     private void display(boolean readDB) {
         if (readDB) {
-            student=studentUtil.downloadData(id);
+            student = studentUtil.downloadData(id);
         }
         setText();
         setEdit(false);
         buttonReadonly();
     }
     
-    public StudentUI() {
+    private Object[][] getObject(){
+        int courseNum=SCList.size();
+        Object[][] courses=new Object[courseNum][3];
+        for(int i=0;i<courseNum;i++) {
+            courses[i][0]=SCList.get(i).course_id;
+            courses[i][1]=SCList.get(i).course_name;
+            courses[i][2]=SCList.get(i).teacher_name;
+        }
+        return courses;
     }
     
+    private TableModel tabelModel() {
+        SCList=SCUtil.downloadData(id);
+        return new javax.swing.table.DefaultTableModel(getObject(),
+                new String[]{
+                    "课程号", "课程名称", "教师"
+                }
+        ) {
+            boolean[] canEdit = new boolean[]{
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit[columnIndex];
+            }
+        };
+    }
+
+    public StudentUI() {
+    }
+
     public StudentUI(String username) {
+        id = username;
         initComponents();
         //System.out.println(jTable1.getTableHeader().getFont());
         //jTable1.getTableHeader().setFont();
-        id=username;
         display(true);
     }
 
@@ -275,7 +308,7 @@ public class StudentUI extends javax.swing.JFrame {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jTextField_depart, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jTextField_birthday, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jTextField_birthday, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(8, 8, 8)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(jLabel_major)
@@ -339,28 +372,12 @@ public class StudentUI extends javax.swing.JFrame {
         jTabbedPane1.addTab("个人信息", jPanel1);
 
         jTable1.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {"", null, null},
-                {"", "", null},
-                {null, null, null},
-                {null, null, null}
-            },
-            new String [] {
-                "课程号", "课程名称", "教师"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
+        jTable1.setModel(tabelModel());
         jTable1.setColumnSelectionAllowed(true);
         jTable1.setShowGrid(true);
+        jTable1.setSurrendersFocusOnKeystroke(true);
         jScrollPane2.setViewportView(jTable1);
+        jTable1.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -483,7 +500,7 @@ public class StudentUI extends javax.swing.JFrame {
     private void jLabel_accountMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel_accountMouseClicked
         // TODO add your handling code here:
         setEnabled(false);
-        AccountManageUI AM = new AccountManageUI(student.id,student.type);
+        AccountManageUI AM = new AccountManageUI(student.id, student.type);
         AM.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         AM.setLocationRelativeTo(this);
         AM.setAlwaysOnTop(true);

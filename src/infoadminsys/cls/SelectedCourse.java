@@ -10,7 +10,8 @@ package infoadminsys.cls;
  * @author hed
  */
 public class SelectedCourse {
-    private int student_id;
-    private int course_id;
-    private int score;
+    public String course_id;
+    public String course_name;
+    public String teacher_name;
+    public double score;
 }

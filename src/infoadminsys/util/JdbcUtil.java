@@ -20,7 +20,7 @@ public class JdbcUtil {
     private ResultSet resultSet = null;
     
     private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
-    private static final String DB_URL = "jdbc:mysql://localhost/EMP?useSSL=false";
+    private static final String DB_URL = "jdbc:mysql://localhost/InfoAdminSys?useSSL=false";
     
     private static final String DB_USERNAME = "root";
     private static final String DB_PASSWORD = "hedong";
@@ -57,7 +57,7 @@ public class JdbcUtil {
         if (resultSet.next()) {
             resultObject = cls.newInstance();
             for (int i = 0; i < cols_len; i++) {
-                String cols_name = metaData.getColumnName(i + 1);
+                String cols_name = metaData.getColumnLabel(i + 1);
                 Object cols_value = resultSet.getObject(cols_name);
                 if (cols_value == null) {
                     cols_value = "";
@@ -94,7 +94,7 @@ public class JdbcUtil {
         while(resultSet.next()) {
             T resultObject = cls.newInstance();
             for(int i = 0; i<cols_len; i++){
-                String cols_name = metaData.getColumnName(i+1);
+                String cols_name = metaData.getColumnLabel(i+1);
                 Object cols_value = resultSet.getObject(cols_name);
                 if(cols_value == null){
                     cols_value = "";
