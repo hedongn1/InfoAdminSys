@@ -22,8 +22,8 @@ public class LoginUtil {
         jdbcUtil.getConnection();
     }
     
-    public String Login(UserPass userpass){
-    	String ret = "用户名或密码错误！";
+    public UserPass Login(UserPass userpass){
+        UserPass ret = null;
         String username = userpass.getusername();
         String password = userpass.getpassword();
         String sql = "select * from userpass where username = ? and password = ?";
@@ -33,8 +33,7 @@ public class LoginUtil {
         try {
             UserPass dbuser = jdbcUtil.getSingleResult(sql,param,UserPass.class);
             if (dbuser != null) {
-                System.out.println("登陆成功");
-                ret = "登陆成功";
+                ret = dbuser;
             }
         } catch (Exception e) {
             e.printStackTrace();

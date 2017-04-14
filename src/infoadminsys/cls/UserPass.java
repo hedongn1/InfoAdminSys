@@ -12,7 +12,7 @@ package infoadminsys.cls;
 public class UserPass {
     private String username;
     private String password;
-    private String type;
+    public String type;
     
     public UserPass(){
     }
