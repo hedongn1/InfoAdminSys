@@ -5,6 +5,7 @@
  */
 package infoadminsys.util;
 
+import infoadminsys.cls.UserPass;
 import java.lang.reflect.*;
 import java.sql.*;
 import java.util.*;
@@ -19,7 +20,7 @@ public class JdbcUtil {
     private ResultSet resultSet = null;
     
     private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
-    private static final String DB_URL = "jdbc:mysql://localhost/EMP";
+    private static final String DB_URL = "jdbc:mysql://localhost/EMP?useSSL=false";
     
     private static final String DB_USERNAME = "root";
     private static final String DB_PASSWORD = "hedong";

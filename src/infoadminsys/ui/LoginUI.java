@@ -24,6 +24,43 @@ public class LoginUI extends javax.swing.JFrame {
     public LoginUI() {
         this.setTitle("教务管理系统");
         initComponents();
+        this.getRootPane().setDefaultButton(btnsubmit);
+    }
+    
+    private void LoginAction()
+    {
+        if (txtusername.getText() == null || txtusername.getText().length() <= 0) {
+            JOptionPane.showMessageDialog(frame, "请输入用户名", "提示", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (txtpassword.getText() == null || txtpassword.getText().length() <= 0) {
+            JOptionPane.showMessageDialog(frame, "请输入密码", "提示", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        LoginUtil loginUtil = new LoginUtil();
+        String username = txtusername.getText().trim();
+        String password = txtpassword.getText().trim();
+        UserPass userpass = new UserPass(username, password);
+        UserPass result = loginUtil.Login(userpass);
+
+        if (result == null) {
+            JOptionPane.showMessageDialog(frame, result, "提示", JOptionPane.WARNING_MESSAGE);
+            return;
+        } else {
+            //JOptionPane.showMessageDialog(frame, result, "提示", JOptionPane.WARNING_MESSAGE);
+            if ("student".equals(result.type)) {
+                StudentUI S = new StudentUI(username);
+                S.setLocationRelativeTo(this);
+                S.setVisible(true);
+                return;
+            } else
+            if ("teacher".equals(result.type)) {
+                
+            } else {
+                
+            }
+        }
     }
 
     /**
@@ -53,11 +90,21 @@ public class LoginUI extends javax.swing.JFrame {
                 txtpasswordActionPerformed(evt);
             }
         });
+        txtpassword.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtpasswordKeyPressed(evt);
+            }
+        });
 
         btnsubmit.setText("提交");
         btnsubmit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnsubmitActionPerformed(evt);
+            }
+        });
+        btnsubmit.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                btnsubmitKeyPressed(evt);
             }
         });
 
@@ -111,36 +158,22 @@ public class LoginUI extends javax.swing.JFrame {
 
     private void btnsubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnsubmitActionPerformed
         // TODO add your handling code here:
-        if (txtusername.getText() == null || txtusername.getText().length() <= 0) {
-            JOptionPane.showMessageDialog(frame, "请输入用户名", "提示", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        if (txtpassword.getText() == null || txtpassword.getText().length() <= 0) {
-            JOptionPane.showMessageDialog(frame, "请输入密码", "提示", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        LoginUtil loginUtil = new LoginUtil();
-        String username = txtusername.getText().trim();
-        String password = txtpassword.getText().trim();
-        UserPass userpass = new UserPass(username, password);
-        String result = loginUtil.Login(userpass);
-
-        if (result == "用户名或密码错误！") {
-            JOptionPane.showMessageDialog(frame, result, "提示", JOptionPane.WARNING_MESSAGE);
-            return;
-        } else {
-            //JOptionPane.showMessageDialog(frame, result, "提示", JOptionPane.WARNING_MESSAGE);
-            StudentUI S=new StudentUI(username);
-            S.setLocationRelativeTo(this);
-            S.setVisible(true);
-            this.dispose();
-        }
+        LoginAction();
     }//GEN-LAST:event_btnsubmitActionPerformed
 
     private void txtpasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtpasswordActionPerformed
         // TODO add your handling code here:
+        LoginAction();
     }//GEN-LAST:event_txtpasswordActionPerformed
+
+    private void btnsubmitKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnsubmitKeyPressed
+        // TODO add your handling code here:
+        LoginAction();
+    }//GEN-LAST:event_btnsubmitKeyPressed
+
+    private void txtpasswordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtpasswordKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtpasswordKeyPressed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
