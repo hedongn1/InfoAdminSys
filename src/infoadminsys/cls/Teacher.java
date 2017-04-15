@@ -5,15 +5,23 @@
  */
 package infoadminsys.cls;
 
+import java.sql.Date;
+
 /**
  *
  * @author hed
  */
 public class Teacher {
-    private String id;
-    private String name;
-    private String title;
-    private int age;
-    private String birthday;
-    private String email;
+    public String id;
+    public String name;
+    public String sex;
+    public String depart;
+    public String title;
+    public String hometown;
+    public Date birthday;
+    public String email;
+    public String address;
+    public String cell;
+    public String IDnum;
+    final public String type = "teacher";
 }

@@ -19,7 +19,7 @@ public class Student {
    public Date birthday;
    public String address;
    public String email,NO;
-   final public String type="学生";
+   final public String type="student";
    static public String Attr="id,name,sex,depart,major,email,NO";
 
 }
