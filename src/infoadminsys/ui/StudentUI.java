@@ -197,10 +197,10 @@ public class StudentUI extends javax.swing.JFrame {
         jLabel_IDnum = new javax.swing.JLabel();
         jTextField_IDnum = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
+        jScrollPane1 = new javax.swing.JScrollPane();
         jTable_courses = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        jScrollPane2 = new javax.swing.JScrollPane();
         jTable_scores = new javax.swing.JTable();
         jLabel_account = new javax.swing.JLabel();
         jLabel_hello = new javax.swing.JLabel();
@@ -211,10 +211,10 @@ public class StudentUI extends javax.swing.JFrame {
         setResizable(false);
 
         jTabbedPane1.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
-        jTabbedPane1.setPreferredSize(new java.awt.Dimension(800, 577));
-        jTabbedPane1.setRequestFocusEnabled(false);
+        jTabbedPane1.setPreferredSize(new java.awt.Dimension(800, 600));
 
-        jPanel1.setPreferredSize(new java.awt.Dimension(800, 522));
+        jPanel1.setPreferredSize(new java.awt.Dimension(800, 600));
+        jPanel1.setRequestFocusEnabled(false);
 
         jLabel_name.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
         jLabel_name.setText("姓名：");
@@ -306,7 +306,7 @@ public class StudentUI extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(15, Short.MAX_VALUE)
+                .addContainerGap(13, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel_email, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel_address, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -348,7 +348,7 @@ public class StudentUI extends javax.swing.JFrame {
                                             .addComponent(jTextField_major, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(jTextField_IDnum, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                             .addComponent(jTextField_address))
-                        .addContainerGap(16, Short.MAX_VALUE))
+                        .addContainerGap(18, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -359,7 +359,7 @@ public class StudentUI extends javax.swing.JFrame {
                                 .addComponent(jTextField_NO, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addGap(0, 514, Short.MAX_VALUE)
                                 .addComponent(jButton_modify)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButton_save)
@@ -406,12 +406,12 @@ public class StudentUI extends javax.swing.JFrame {
                     .addComponent(jTextField_email, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel_NO)
                     .addComponent(jTextField_NO, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 330, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jButton_back)
                     .addComponent(jButton_modify)
                     .addComponent(jButton_save))
-                .addContainerGap(8, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel_email, jTextField_email});
@@ -420,10 +420,11 @@ public class StudentUI extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("个人信息", jPanel1);
 
-        jPanel2.setPreferredSize(new java.awt.Dimension(800, 576));
+        jPanel2.setAutoscrolls(true);
+        jPanel2.setPreferredSize(new java.awt.Dimension(800, 600));
 
-        jScrollPane2.setPreferredSize(new java.awt.Dimension(800, 576));
-        jScrollPane2.setViewportView(null);
+        jScrollPane1.setPreferredSize(new java.awt.Dimension(800, 600));
+        jScrollPane1.setViewportView(null);
 
         jTable_courses.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
         jTable_courses.setModel(SCTableModel());
@@ -431,7 +432,7 @@ public class StudentUI extends javax.swing.JFrame {
         jTable_courses.setGridColor(new java.awt.Color(102, 102, 102));
         jTable_courses.setShowGrid(true);
         jTable_courses.setSurrendersFocusOnKeystroke(true);
-        jScrollPane2.setViewportView(jTable_courses);
+        jScrollPane1.setViewportView(jTable_courses);
         jTable_courses.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -439,42 +440,38 @@ public class StudentUI extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGap(0, 0, 0)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 798, Short.MAX_VALUE)
+                .addGap(0, 0, 0))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 547, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("选课查询", jPanel2);
 
-        jPanel3.setPreferredSize(new java.awt.Dimension(800, 576));
+        jPanel3.setPreferredSize(new java.awt.Dimension(800, 600));
 
-        jScrollPane1.setBounds(new java.awt.Rectangle(0, 0, 0, 0));
-        jScrollPane1.setPreferredSize(new java.awt.Dimension(800, 576));
+        jScrollPane2.setPreferredSize(new java.awt.Dimension(800, 600));
 
         jTable_scores.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
         jTable_scores.setModel(scoreTableModel());
-        jTable_scores.setBounds(new java.awt.Rectangle(0, 0, 0, 0));
         jTable_scores.setGridColor(new java.awt.Color(102, 102, 102));
-        jScrollPane1.setViewportView(jTable_scores);
+        jScrollPane2.setViewportView(jTable_scores);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGap(0, 0, 0)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 798, Short.MAX_VALUE)
+                .addGap(0, 0, 0))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 547, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("成绩查询", jPanel3);
@@ -531,9 +528,9 @@ public class StudentUI extends javax.swing.JFrame {
                     .addComponent(jLabel_logOut)
                     .addComponent(jLabel_account, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel_hello, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 576, Short.MAX_VALUE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 572, Short.MAX_VALUE)
+                .addGap(0, 0, 0))
         );
 
         layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel_account, jLabel_logOut});
