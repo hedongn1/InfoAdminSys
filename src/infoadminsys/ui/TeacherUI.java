@@ -376,14 +376,7 @@ public class TeacherUI extends javax.swing.JFrame {
         jScrollPane2.setViewportView(null);
 
         jTable_courses.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
-        jTable_courses.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-
-            }
-        ));
+        jTable_courses.setModel(SCTableModel());
         jTable_courses.setColumnSelectionAllowed(true);
         jTable_courses.setGridColor(new java.awt.Color(102, 102, 102));
         jTable_courses.setShowGrid(true);
@@ -414,14 +407,7 @@ public class TeacherUI extends javax.swing.JFrame {
         jScrollPane1.setPreferredSize(new java.awt.Dimension(800, 576));
 
         jTable_scores.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
-        jTable_scores.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-
-            }
-        ));
+        jTable_scores.setModel(scoreTableModel());
         jTable_scores.setGridColor(new java.awt.Color(102, 102, 102));
         jScrollPane1.setViewportView(jTable_scores);
 
