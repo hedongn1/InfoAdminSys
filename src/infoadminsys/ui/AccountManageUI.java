@@ -21,13 +21,11 @@ public class AccountManageUI extends javax.swing.JFrame {
      * Creates new form AccoutManageUI
      */
     private String username;
-    private JdbcUtil jU;
 
     public AccountManageUI() {
     }
 
     public AccountManageUI(String id, String type) {
-        jU=new JdbcUtil();
         username = id;
         initComponents();
         jLabel_account2.setText(id);
@@ -163,7 +161,9 @@ public class AccountManageUI extends javax.swing.JFrame {
         List<Object> param=new ArrayList<>();
         param.add(password);
         param.add(username);
-        jU.updateByPreparedStatement(sql, param);
+        JdbcUtil jdbcUtil=new JdbcUtil();
+        jdbcUtil.getConnection();
+        jdbcUtil.updateByPreparedStatement(sql, param);
     }
     
     private void jButton_modifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_modifyActionPerformed
