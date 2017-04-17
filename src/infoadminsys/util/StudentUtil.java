@@ -6,6 +6,10 @@
 package infoadminsys.util;
 
 import infoadminsys.cls.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.lang.reflect.*;
+import java.sql.*;
 import java.util.List;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
@@ -23,6 +27,12 @@ public class StudentUtil {
         jdbcUtil.getConnection();
     }
 
+    public java.sql.Date StringToDate(String str) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        java.util.Date date = sdf.parse(str);
+        return new java.sql.Date(date.getTime());
+    }
+
     public Student downloadData(String id) {
         String sql = "SELECT * FROM student WHERE id=?";
         List<Object> param = new ArrayList<>();
@@ -36,7 +46,25 @@ public class StudentUtil {
         return stu;
     }
 
-    public void uploadData() {
+    public void uploadData(Student student) throws NoSuchFieldException, IllegalAccessException, SQLException {
+        String sql = "UPDATE student SET ";
+        Class<Student> cls = Student.class;
+        int itemNum = Student.Attr.length;
+        List<Object> param = new ArrayList<>();
+        for (int i = 0; i < itemNum; i++) {
+            String attrName = Student.Attr[i];
+            sql = sql + attrName + "=?";
+            if(i+1<itemNum) sql+=", "; else sql+=" ";
+            if (!attrName.equals("birthday")) {
+                Field field = cls.getDeclaredField(attrName);
+                param.add(field.get(student));
+            } else {
+                param.add(student.birthday.toString());
+            }
+        }
+        sql += "WHERE id=?;";
+        param.add(student.id);
+        jdbcUtil.updateByPreparedStatement(sql, param);
     }
 
 }

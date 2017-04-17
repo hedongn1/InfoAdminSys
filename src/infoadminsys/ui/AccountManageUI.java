@@ -5,7 +5,11 @@
  */
 package infoadminsys.ui;
 
-import infoadminsys.cls.Student;
+import javax.swing.JOptionPane;
+import infoadminsys.util.*;
+import infoadminsys.cls.*;
+import java.sql.SQLException;
+import java.util.*;
 
 /**
  *
@@ -16,10 +20,15 @@ public class AccountManageUI extends javax.swing.JFrame {
     /**
      * Creates new form AccoutManageUI
      */
+    private String username;
+    private JdbcUtil jU;
+
     public AccountManageUI() {
     }
-    
-    public AccountManageUI(String id,String type) {
+
+    public AccountManageUI(String id, String type) {
+        jU=new JdbcUtil();
+        username = id;
         initComponents();
         jLabel_account2.setText(id);
         jLabel_type2.setText(type);
@@ -38,14 +47,14 @@ public class AccountManageUI extends javax.swing.JFrame {
         jLabel_account2 = new javax.swing.JLabel();
         jLabel_type1 = new javax.swing.JLabel();
         jLabel_type2 = new javax.swing.JLabel();
-        jTextField_oldPass = new javax.swing.JTextField();
-        jTextField_newPass2 = new javax.swing.JTextField();
         jLabel_oldPass = new javax.swing.JLabel();
         jLabel_newPass1 = new javax.swing.JLabel();
         jLabel_newPass2 = new javax.swing.JLabel();
-        jTextField_newPass1 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        jButton_modify = new javax.swing.JButton();
+        jButton_back = new javax.swing.JButton();
+        jPassword_old = new javax.swing.JPasswordField();
+        jPassword_new1 = new javax.swing.JPasswordField();
+        jPassword_new2 = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -60,15 +69,6 @@ public class AccountManageUI extends javax.swing.JFrame {
 
         jLabel_type2.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
 
-        jTextField_oldPass.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
-
-        jTextField_newPass2.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
-        jTextField_newPass2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField_newPass2ActionPerformed(evt);
-            }
-        });
-
         jLabel_oldPass.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
         jLabel_oldPass.setText("旧密码：");
 
@@ -78,26 +78,25 @@ public class AccountManageUI extends javax.swing.JFrame {
         jLabel_newPass2.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
         jLabel_newPass2.setText("确认新密码 ：");
 
-        jTextField_newPass1.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
-        jTextField_newPass1.addActionListener(new java.awt.event.ActionListener() {
+        jButton_modify.setText("修改密码");
+        jButton_modify.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField_newPass1ActionPerformed(evt);
+                jButton_modifyActionPerformed(evt);
             }
         });
 
-        jButton1.setText("修改密码");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jButton_back.setText("返回");
+        jButton_back.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jButton_backActionPerformed(evt);
             }
         });
 
-        jButton2.setText("返回");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
+        jPassword_old.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
+
+        jPassword_new1.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
+
+        jPassword_new2.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -114,21 +113,18 @@ public class AccountManageUI extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel_account2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField_oldPass, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField_newPass1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField_newPass2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel_type2))
+                    .addComponent(jLabel_type2)
+                    .addComponent(jPassword_old, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPassword_new1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPassword_new2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(120, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addComponent(jButton_modify)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton2)
+                .addComponent(jButton_back)
                 .addGap(120, 120, 120))
         );
-
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jTextField_newPass1, jTextField_newPass2, jTextField_oldPass});
-
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
@@ -141,49 +137,73 @@ public class AccountManageUI extends javax.swing.JFrame {
                     .addComponent(jLabel_type1)
                     .addComponent(jLabel_type2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField_oldPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(jPassword_old, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel_oldPass))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jLabel_newPass1)
-                    .addComponent(jTextField_newPass1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(4, 4, 4)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jPassword_new1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(7, 7, 7)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jLabel_newPass2)
-                    .addComponent(jTextField_newPass2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPassword_new2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(jButton_modify)
+                    .addComponent(jButton_back))
                 .addGap(50, 50, 50))
         );
-
-        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jTextField_newPass1, jTextField_newPass2, jTextField_oldPass});
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void updatePassword(String password) throws SQLException {
+        String sql="UPDATE userpass SET password=? WHERE username=?;";
+        List<Object> param=new ArrayList<>();
+        param.add(password);
+        param.add(username);
+        jU.updateByPreparedStatement(sql, param);
+    }
+    
+    private void jButton_modifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_modifyActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+        String passOld = new String(jPassword_old.getPassword()).trim();
+        String passNew1 = new String(jPassword_new1.getPassword()).trim();
+        String passNew2 = new String(jPassword_new2.getPassword()).trim();
+        //System.err.println(passNew1);
+        //System.err.println(passNew2);
+        if (!passNew1.equals(passNew2)) {
+            JOptionPane.showMessageDialog(this, "两次新密码不一致！", "提示信息", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        LoginUtil loginUtil = new LoginUtil();
+        UserPass result = loginUtil.Login(new UserPass(username, passOld));
+        if (result == null) {
+            JOptionPane.showMessageDialog(this, "旧密码错误！", "提示信息", JOptionPane.WARNING_MESSAGE);
+            return;
+        } else {
+            try {
+                updatePassword(passNew1);
+            }catch (SQLException e) {
+                JOptionPane.showMessageDialog(this,"密码修改失败!\n"+e.getMessage(),"提示信息",JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            JOptionPane.showMessageDialog(this, "密码修改成功!", "提示信息", JOptionPane.WARNING_MESSAGE);
+            jPassword_old.setText("");
+            jPassword_new1.setText("");
+            jPassword_new2.setText("");
+        }
+    }//GEN-LAST:event_jButton_modifyActionPerformed
 
-    private void jTextField_newPass1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField_newPass1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField_newPass1ActionPerformed
-
-    private void jTextField_newPass2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField_newPass2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField_newPass2ActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void jButton_backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_backActionPerformed
         // TODO add your handling code here:
         this.dispose();
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_jButton_backActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton_back;
+    private javax.swing.JButton jButton_modify;
     private javax.swing.JLabel jLabel_account1;
     private javax.swing.JLabel jLabel_account2;
     private javax.swing.JLabel jLabel_newPass1;
@@ -191,8 +211,8 @@ public class AccountManageUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel_oldPass;
     private javax.swing.JLabel jLabel_type1;
     private javax.swing.JLabel jLabel_type2;
-    private javax.swing.JTextField jTextField_newPass1;
-    private javax.swing.JTextField jTextField_newPass2;
-    private javax.swing.JTextField jTextField_oldPass;
+    private javax.swing.JPasswordField jPassword_new1;
+    private javax.swing.JPasswordField jPassword_new2;
+    private javax.swing.JPasswordField jPassword_old;
     // End of variables declaration//GEN-END:variables
 }
