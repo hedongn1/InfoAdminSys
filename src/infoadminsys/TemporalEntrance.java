@@ -12,9 +12,9 @@ import infoadminsys.ui.*;
  * @author lsh
  */
 public class TemporalEntrance {
-    /*
+    
     public static void main(String args[]) {
-        
+        /*
         StudentUI S = new StudentUI("15307130120");
         S.setLocationRelativeTo(null);
         S.setVisible(true);
@@ -22,7 +22,11 @@ public class TemporalEntrance {
         AccountManageUI AM=new AccountManageUI("15307130120","学生");
         AM.setLocationRelativeTo(null);
         AM.setVisible(true);
+        */
+        AdminUI AD=new AdminUI();
+        AD.setLocationRelativeTo(null);
+        AD.setVisible(true);
         
     }
-    */
+    
 }
