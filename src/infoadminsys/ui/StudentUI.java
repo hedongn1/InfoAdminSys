@@ -482,7 +482,7 @@ public class StudentUI extends javax.swing.JFrame {
         jTabbedPane1.addTab("成绩查询", jPanel3);
 
         jLabel_account.setText("账号管理");
-        jLabel_account.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jLabel_account.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel_account.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel_accountMouseClicked(evt);
@@ -498,7 +498,7 @@ public class StudentUI extends javax.swing.JFrame {
         jLabel_hello.setText("您好,");
 
         jLabel_logOut.setText("注销");
-        jLabel_logOut.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jLabel_logOut.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel_logOut.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel_logOutMouseClicked(evt);

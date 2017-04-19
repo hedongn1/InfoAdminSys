@@ -85,13 +85,40 @@ public class AdminUI extends javax.swing.JFrame {
         };
     }
     
+    private void setSearchIcon()
+    {
+        ImageIcon icon=new ImageIcon("/Users/lsh/Desktop/Workspace/NetBeansProjects/InfoAdminSys/image/search.png");
+        icon.setImage(icon.getImage().getScaledInstance(24,24,Image.SCALE_DEFAULT));
+        jLabel_search1.setIcon(icon);
+        jLabel_search2.setIcon(icon);
+    }
+    
+    private void adjust()
+    {
+        jPanel_student.setLayout(null);
+        jLabel_search1.setBounds(20,0,24,24);
+        jTextField_teaID.setBounds(54,3,132,20);
+        jTextField_teaName.setBounds(183,3,138,20);
+        jComboBox_teaDepart.setBounds(317,4,220,20);
+        jTextField_teaMajor.setBounds(531,3,244,20);
+        
+        jPanel_teacher.setLayout(null);
+        jLabel_search2.setBounds(20,0,24,24);
+        jTextField_stuID1.setBounds(54,3,132,20);
+        jTextField_stuName1.setBounds(183,3,138,20);
+        jComboBox_stuDepart1.setBounds(317,4,220,20);
+        jTextField_stuMajor1.setBounds(531,3,244,20);
+        
+        jTable_student.getTableHeader().setFont(new Font("Lucida Grande", 0, 13));
+        jTable_teacher.getTableHeader().setFont(new Font("Lucida Grande", 0, 13));
+
+    }
+    
     public AdminUI() {
         //SCList=SCUtil.downloadData(id);
         initComponents();
-        ImageIcon icon=new ImageIcon("/Users/lsh/Desktop/Workspace/NetBeansProjects/InfoAdminSys/image/search.png");
-        icon.setImage(icon.getImage().getScaledInstance(24,24,Image.SCALE_DEFAULT));
-        jLabel_search.setIcon(icon);
-        jTable_student.getTableHeader().setFont(new Font("Lucida Grande", 0, 13));
+        setSearchIcon();
+        adjust();
     }
 
     /**
@@ -104,17 +131,32 @@ public class AdminUI extends javax.swing.JFrame {
     private void initComponents() {
 
         jTabbedPane1 = new javax.swing.JTabbedPane();
-        jPanel1 = new javax.swing.JPanel();
+        jPanel_student = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable_student = new javax.swing.JTable();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jLabel_search = new javax.swing.JLabel();
-        jPanel2 = new javax.swing.JPanel();
-        jPanel3 = new javax.swing.JPanel();
-        jPanel4 = new javax.swing.JPanel();
+        jTextField_teaID = new javax.swing.JTextField();
+        jTextField_teaName = new javax.swing.JTextField();
+        jTextField_teaMajor = new javax.swing.JTextField();
+        jComboBox_teaDepart = new javax.swing.JComboBox<>();
+        jLabel_search1 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        jPanel_teacher = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable_teacher = new javax.swing.JTable();
+        jTextField_stuID1 = new javax.swing.JTextField();
+        jTextField_stuName1 = new javax.swing.JTextField();
+        jTextField_stuMajor1 = new javax.swing.JTextField();
+        jComboBox_stuDepart1 = new javax.swing.JComboBox<>();
+        jLabel_search2 = new javax.swing.JLabel();
+        jButton5 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
+        jButton7 = new javax.swing.JButton();
+        jButton8 = new javax.swing.JButton();
+        jPanel_course = new javax.swing.JPanel();
+        jPanel_account = new javax.swing.JPanel();
         jLabel_account = new javax.swing.JLabel();
         jLabel_hello = new javax.swing.JLabel();
         jLabel_logOut = new javax.swing.JLabel();
@@ -126,7 +168,7 @@ public class AdminUI extends javax.swing.JFrame {
         jTabbedPane1.setPreferredSize(new java.awt.Dimension(800, 577));
         jTabbedPane1.setRequestFocusEnabled(false);
 
-        jPanel1.setPreferredSize(new java.awt.Dimension(800, 522));
+        jPanel_student.setPreferredSize(new java.awt.Dimension(800, 522));
 
         jTable_student.setFont(new java.awt.Font("Lucida Grande", 0, 13)); // NOI18N
         jTable_student.setModel(new javax.swing.table.DefaultTableModel(
@@ -149,7 +191,9 @@ public class AdminUI extends javax.swing.JFrame {
             }
         });
         jTable_student.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_NEXT_COLUMN);
+        jTable_student.setAutoscrolls(false);
         jTable_student.setColumnSelectionAllowed(true);
+        jTable_student.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jTable_student);
         jTable_student.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         if (jTable_student.getColumnModel().getColumnCount() > 0) {
@@ -165,92 +209,226 @@ public class AdminUI extends javax.swing.JFrame {
             jTable_student.getColumnModel().getColumn(4).setPreferredWidth(300);
         }
 
-        jLabel_search.setToolTipText("");
+        jLabel_search1.setToolTipText("");
+        jLabel_search1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel_search1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel_search1MouseClicked(evt);
+            }
+        });
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        jButton1.setText("导出");
+
+        jButton2.setText("导入");
+
+        jButton3.setText("删除选中");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jButton4.setText("查看详细/修改");
+
+        javax.swing.GroupLayout jPanel_studentLayout = new javax.swing.GroupLayout(jPanel_student);
+        jPanel_student.setLayout(jPanel_studentLayout);
+        jPanel_studentLayout.setHorizontalGroup(
+            jPanel_studentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel_studentLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel_studentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGroup(jPanel_studentLayout.createSequentialGroup()
                         .addGap(24, 24, 24)
-                        .addComponent(jLabel_search)
-                        .addGap(0, 4, Short.MAX_VALUE)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel_search1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jTextField_teaID, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, 0)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jTextField_teaName, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, 0)
-                        .addComponent(jComboBox1, 0, 242, Short.MAX_VALUE)
+                        .addComponent(jComboBox_teaDepart, 0, 223, Short.MAX_VALUE)
                         .addGap(0, 0, 0)
-                        .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)))
+                        .addComponent(jTextField_teaMajor, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel_studentLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1)
+                .addGap(20, 20, 20))
+        );
+        jPanel_studentLayout.setVerticalGroup(
+            jPanel_studentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel_studentLayout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addGroup(jPanel_studentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(jTextField_teaID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField_teaName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBox_teaDepart, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField_teaMajor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel_search1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, 0)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel_studentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(jButton4)
+                    .addComponent(jButton3)
+                    .addComponent(jButton2)
+                    .addComponent(jButton1))
                 .addContainerGap())
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+
+        jTabbedPane1.addTab("学生信息", jPanel_student);
+
+        jPanel_teacher.setPreferredSize(new java.awt.Dimension(800, 522));
+
+        jTable_teacher.setFont(new java.awt.Font("Lucida Grande", 0, 13)); // NOI18N
+        jTable_teacher.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
+            },
+            new String [] {
+                "序号", "工号", "姓名", "学院", "职称"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTable_teacher.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_NEXT_COLUMN);
+        jTable_teacher.setAutoscrolls(false);
+        jTable_teacher.getTableHeader().setReorderingAllowed(false);
+        jScrollPane2.setViewportView(jTable_teacher);
+        jTable_teacher.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        if (jTable_teacher.getColumnModel().getColumnCount() > 0) {
+            jTable_teacher.getColumnModel().getColumn(0).setResizable(false);
+            jTable_teacher.getColumnModel().getColumn(0).setPreferredWidth(60);
+            jTable_teacher.getColumnModel().getColumn(1).setResizable(false);
+            jTable_teacher.getColumnModel().getColumn(1).setPreferredWidth(160);
+            jTable_teacher.getColumnModel().getColumn(2).setResizable(false);
+            jTable_teacher.getColumnModel().getColumn(2).setPreferredWidth(170);
+            jTable_teacher.getColumnModel().getColumn(3).setResizable(false);
+            jTable_teacher.getColumnModel().getColumn(3).setPreferredWidth(270);
+            jTable_teacher.getColumnModel().getColumn(4).setResizable(false);
+            jTable_teacher.getColumnModel().getColumn(4).setPreferredWidth(300);
+        }
+
+        jLabel_search2.setToolTipText("");
+        jLabel_search2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel_search2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel_search2MouseClicked(evt);
+            }
+        });
+
+        jButton5.setText("导出");
+
+        jButton6.setText("导入");
+
+        jButton7.setText("删除选中");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
+
+        jButton8.setText("查看详细/修改");
+
+        javax.swing.GroupLayout jPanel_teacherLayout = new javax.swing.GroupLayout(jPanel_teacher);
+        jPanel_teacher.setLayout(jPanel_teacherLayout);
+        jPanel_teacherLayout.setHorizontalGroup(
+            jPanel_teacherLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel_teacherLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel_teacherLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2)
+                    .addGroup(jPanel_teacherLayout.createSequentialGroup()
+                        .addGap(24, 24, 24)
+                        .addComponent(jLabel_search2, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jTextField_stuID1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
+                        .addComponent(jTextField_stuName1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
+                        .addComponent(jComboBox_stuDepart1, 0, 223, Short.MAX_VALUE)
+                        .addGap(0, 0, 0)
+                        .addComponent(jTextField_stuMajor1, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel_teacherLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton8)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton5)
+                .addGap(20, 20, 20))
+        );
+        jPanel_teacherLayout.setVerticalGroup(
+            jPanel_teacherLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel_teacherLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel_search))
+                .addGroup(jPanel_teacherLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(jTextField_stuID1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField_stuName1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBox_stuDepart1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField_stuMajor1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel_search2, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, 0)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 434, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(90, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel_teacherLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(jButton8)
+                    .addComponent(jButton7)
+                    .addComponent(jButton6)
+                    .addComponent(jButton5))
+                .addContainerGap())
         );
 
-        jTabbedPane1.addTab("学生信息", jPanel1);
+        jTabbedPane1.addTab("教师信息", jPanel_teacher);
 
-        jPanel2.setPreferredSize(new java.awt.Dimension(800, 576));
+        jPanel_course.setPreferredSize(new java.awt.Dimension(800, 576));
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout jPanel_courseLayout = new javax.swing.GroupLayout(jPanel_course);
+        jPanel_course.setLayout(jPanel_courseLayout);
+        jPanel_courseLayout.setHorizontalGroup(
+            jPanel_courseLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 798, Short.MAX_VALUE)
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jPanel_courseLayout.setVerticalGroup(
+            jPanel_courseLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 550, Short.MAX_VALUE)
         );
 
-        jTabbedPane1.addTab("教师信息", jPanel2);
+        jTabbedPane1.addTab("课程信息", jPanel_course);
 
-        jPanel3.setPreferredSize(new java.awt.Dimension(800, 576));
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout jPanel_accountLayout = new javax.swing.GroupLayout(jPanel_account);
+        jPanel_account.setLayout(jPanel_accountLayout);
+        jPanel_accountLayout.setHorizontalGroup(
+            jPanel_accountLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 798, Short.MAX_VALUE)
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jPanel_accountLayout.setVerticalGroup(
+            jPanel_accountLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 550, Short.MAX_VALUE)
         );
 
-        jTabbedPane1.addTab("课程信息", jPanel3);
-
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 798, Short.MAX_VALUE)
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 550, Short.MAX_VALUE)
-        );
-
-        jTabbedPane1.addTab("账号信息", jPanel4);
+        jTabbedPane1.addTab("账号信息", jPanel_account);
 
         jLabel_account.setText("账号管理");
-        jLabel_account.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jLabel_account.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel_account.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel_accountMouseClicked(evt);
@@ -266,7 +444,7 @@ public class AdminUI extends javax.swing.JFrame {
         jLabel_hello.setText("您好,");
 
         jLabel_logOut.setText("注销");
-        jLabel_logOut.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jLabel_logOut.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel_logOut.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel_logOutMouseClicked(evt);
@@ -356,22 +534,53 @@ public class AdminUI extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jLabel_logOutMouseClicked
 
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jLabel_search1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel_search1MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jLabel_search1MouseClicked
+
+    private void jLabel_search2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel_search2MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jLabel_search2MouseClicked
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton7ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButton8;
+    private javax.swing.JComboBox<String> jComboBox_stuDepart1;
+    private javax.swing.JComboBox<String> jComboBox_teaDepart;
     private javax.swing.JLabel jLabel_account;
     private javax.swing.JLabel jLabel_hello;
     private javax.swing.JLabel jLabel_logOut;
-    private javax.swing.JLabel jLabel_search;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
+    private javax.swing.JLabel jLabel_search1;
+    private javax.swing.JLabel jLabel_search2;
+    private javax.swing.JPanel jPanel_account;
+    private javax.swing.JPanel jPanel_course;
+    private javax.swing.JPanel jPanel_student;
+    private javax.swing.JPanel jPanel_teacher;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable_student;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField4;
+    private javax.swing.JTable jTable_teacher;
+    private javax.swing.JTextField jTextField_stuID1;
+    private javax.swing.JTextField jTextField_stuMajor1;
+    private javax.swing.JTextField jTextField_stuName1;
+    private javax.swing.JTextField jTextField_teaID;
+    private javax.swing.JTextField jTextField_teaMajor;
+    private javax.swing.JTextField jTextField_teaName;
     // End of variables declaration//GEN-END:variables
 }
