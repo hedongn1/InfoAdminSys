@@ -5,18 +5,14 @@
  */
 package infoadminsys.ui;
 
-import infoadminsys.*;
 import javax.swing.JOptionPane;
 import infoadminsys.cls.*;
 import infoadminsys.util.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import javax.swing.table.TableModel;
 import java.util.*;
-import java.awt.Font;
 import javax.swing.JFrame;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableCellEditor;
 
 
 /**
@@ -34,9 +30,12 @@ public class TeacherUI extends javax.swing.JFrame {
      */
     private String id;
     private Teacher teacher;
+    //private List<SelectedCourse>  = new ArrayList<>();
+    
     private TeacherUtil teacherUtil = new TeacherUtil();
     
     private GradeInputModel gradeInputModel;
+    private CourseInfoModel courseInfoModel;
 
     private void setText() {
         jLabel_hello.setText("您好, " + teacher.name);
@@ -105,27 +104,81 @@ public class TeacherUI extends javax.swing.JFrame {
     public TeacherUI() {
         initComponents();
         
+        courseInfoModel = new CourseInfoModel();
+        jTable_courses.setModel(gradeInputModel);
         gradeInputModel = new GradeInputModel();
         jTable_scores.setModel(gradeInputModel);
+        
     }
 
     public TeacherUI(String username) {
         id = username;
         initComponents();
-        jTable_courses.getTableHeader().setFont(new Font("Lucida Grande", 0, 13));
-        jTable_scores.getTableHeader().setFont(new Font("Lucida Grande", 0, 13));
+        //jTable_courses.getTableHeader().setFont(new Font("Lucida Grande", 0, 13));
+        //jTable_scores.getTableHeader().setFont(new Font("Lucida Grande", 0, 13));
+        
         displayInfo(true);
+       
+        courseInfoModel = new CourseInfoModel();
+        jTable_courses.setModel(gradeInputModel);
+        gradeInputModel = new GradeInputModel();
+        jTable_scores.setModel(gradeInputModel);
+        
+    }
+    
+    private class CourseInfoModel extends AbstractTableModel {
+
+        private CourseUtil courseUtil = new CourseUtil();
+        private List<Map<String,Object>> list = getAllCourses();
+
+
+        String[] columnStrings = {"id","name","status"};
+        String[] columnShowStrings = {"编号","课程名","提交状态"};
+
+
+        public void update() {
+            list = getAllCourses();
+            fireTableDataChanged();
+
+        }
+
+        private List<Map<String,Object>> getAllCourses() {
+            return courseUtil.findAllCoursesByTeacherId(teacher.id);
+        }
+
+        public int getRowCount() {
+            //System.out.println(list);
+            return list.size();
+        }
+
+        public int getColumnCount() {
+            return columnStrings.length;
+        }
+
+        public Object getValueAt(int rowIndex, int columnIndex) {
+            Map<String,Object> map = list.get(rowIndex);
+
+            return map.get(columnStrings[columnIndex]);
+        }
+
+        public String getColumnName(int column) {
+            return columnShowStrings[column];
+        }
+
+        public boolean isCellEditable(int rowIndex, int columnIndex) {
+            return false;
+        }
     }
     
      private class GradeInputModel extends AbstractTableModel {
 
-        private int courseId;
+        private String courseId;
 
-        public int getCourseId() {
+        public String getCourseId() {
             return courseId;
         }
 
-        public void setCourseId(int courseId) {
+        public void setCourseId(String courseId) {
             this.courseId = courseId;
         }
 
@@ -134,10 +187,10 @@ public class TeacherUI extends javax.swing.JFrame {
         private List<Map<String,Object>> list = new ArrayList<>();
 
 
-        String[] columnStrings = {"id","studentCode","name","score","courseId"};
-        String[] columnShowStrings = {"编号", "学号", "姓名", "成绩"};
+        String[] columnStrings = {"id","student_id","name","score"};
+        String[] columnShowStrings = {"课程编号", "学号", "姓名", "成绩"};
 
-        public List<Map<String,Object>> getAllStudentByCourseId(int courseId, boolean useDraft) {
+        public List<Map<String,Object>> getAllStudentByCourseId(String courseId, boolean useDraft) {
             if (useDraft == true) {
                 return courseUtil.findAllStudentWithGradeDraftByCourseId(courseId);
             } else {
@@ -165,8 +218,7 @@ public class TeacherUI extends javax.swing.JFrame {
             return true;
         }
 
-        public void setStudentByCourseId(int courseId, boolean useDraft) {
-
+        public void setStudentByCourseId(String courseId, boolean useDraft) {
             this.courseId = courseId;
             list = getAllStudentByCourseId(courseId, useDraft);
             fireTableDataChanged();
@@ -239,12 +291,11 @@ public class TeacherUI extends javax.swing.JFrame {
         jTextField_sex = new javax.swing.JTextField();
         jLabel_IDnum = new javax.swing.JLabel();
         jTextField_IDnum = new javax.swing.JTextField();
-        jPanel2 = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTable_courses = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable_scores = new javax.swing.JTable();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTable_courses = new javax.swing.JTable();
         jLabel_account = new javax.swing.JLabel();
         jLabel_hello = new javax.swing.JLabel();
         jLabel_logOut = new javax.swing.JLabel();
@@ -469,45 +520,6 @@ public class TeacherUI extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("个人信息", jPanel1);
 
-        jPanel2.setPreferredSize(new java.awt.Dimension(800, 576));
-
-        jScrollPane2.setPreferredSize(new java.awt.Dimension(800, 576));
-        jScrollPane2.setViewportView(null);
-
-        jTable_courses.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
-        jTable_courses.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-
-            }
-        ));
-        jTable_courses.setColumnSelectionAllowed(true);
-        jTable_courses.setGridColor(new java.awt.Color(102, 102, 102));
-        jTable_courses.setShowGrid(true);
-        jTable_courses.setSurrendersFocusOnKeystroke(true);
-        jScrollPane2.setViewportView(jTable_courses);
-        jTable_courses.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 781, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-
-        jTabbedPane1.addTab("开课查询", jPanel2);
-
         jPanel3.setPreferredSize(new java.awt.Dimension(800, 576));
 
         jScrollPane1.setPreferredSize(new java.awt.Dimension(800, 576));
@@ -524,21 +536,37 @@ public class TeacherUI extends javax.swing.JFrame {
         jTable_scores.setGridColor(new java.awt.Color(102, 102, 102));
         jScrollPane1.setViewportView(jTable_scores);
 
+        jTable_courses.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {},
+                {},
+                {},
+                {}
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane3.setViewportView(jTable_courses);
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 781, Short.MAX_VALUE)
-                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 405, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 363, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(108, 108, 108))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jScrollPane3)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 530, Short.MAX_VALUE)
         );
 
-        jTabbedPane1.addTab("成绩录入", jPanel3);
+        jTabbedPane1.addTab("课程查询／成绩录入", jPanel3);
 
         jLabel_account.setText("账号管理");
         jLabel_account.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -574,7 +602,6 @@ public class TeacherUI extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel_hello)
@@ -583,6 +610,9 @@ public class TeacherUI extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel_logOut, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(19, 19, 19))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -693,10 +723,9 @@ public class TeacherUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel_name;
     private javax.swing.JLabel jLabel_title;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable_courses;
     private javax.swing.JTable jTable_scores;

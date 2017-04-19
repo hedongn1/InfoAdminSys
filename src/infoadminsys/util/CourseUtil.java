@@ -39,11 +39,10 @@ public class CourseUtil {
     }
 
     //根据教师id获得所有课程信息
-    public List<Map<String,Object>> findAllCoursesByTeacherId(int teacherId) {
+    public List<Map<String,Object>> findAllCoursesByTeacherId(String teacherId) {
         String sql = "select * from course where teacher_id = ?";
         List<Object> params = new ArrayList<>();
         params.add(teacherId);
-
         List<Map<String, Object>> list = null;
         try {
             list = jdbcUtil.getCertainResultList(sql, params);
@@ -77,7 +76,7 @@ public class CourseUtil {
         return flag;
     }
 
-    public boolean removeCourse(int id) {
+    public boolean removeCourse(String id) {
         String sql = "delete from course where id = ?";
         List<Object> params = new ArrayList<>();
         params.add(id);
@@ -92,7 +91,7 @@ public class CourseUtil {
 
 
     //根据课程的id查询所有选择该课程的学生及成绩
-    public List<Map<String,Object>> findAllStudentWithGradeByCourseId(int courseId) {
+    public List<Map<String,Object>> findAllStudentWithGradeByCourseId(String courseId) {
         String sql = "select s.id as id, s.name, c.id from student as s, " +
                 " selectedcourse as c where s.id = c.student_id and course_id = ? order by s.id asc";
 
@@ -110,7 +109,7 @@ public class CourseUtil {
     }
 
     //根据课程的id查询所有选择该课程的学生
-    public List<Map<String,Object>> findAllStudentWithGradeDraftByCourseId(int courseId) {
+    public List<Map<String,Object>> findAllStudentWithGradeDraftByCourseId(String courseId) {
         String sql = "select s.id as id, studentCode ,name ,courseId from student as s ," +
                 " chooseCourse as c where s.id = c.studentId and courseId = ? order by s.id asc";
 
@@ -125,6 +124,7 @@ public class CourseUtil {
         }
 
 
+        /*
         // 添加暂存表中的成绩信息
         String sql2 = "select * from gradeDraft where courseId = ? order by id asc";
         List<Map<String, Object>> draftGrades = new ArrayList<>();
@@ -148,12 +148,12 @@ public class CourseUtil {
             }
 
         }
-
+        */
         return list;
     }
 
     //根据课程序号提交课程
-    public boolean commitCourseByCourseId(int courseId) {
+    public boolean commitCourseByCourseId(String courseId) {
         String sql = "update course set commitStatus = '已提交' where id = ?";
         List<Object> params = new ArrayList<>();
         params.add(courseId);
@@ -168,7 +168,7 @@ public class CourseUtil {
 
 
     //暂存课程
-    public boolean draftCourseByCourseId(int courseId) {
+    public boolean draftCourseByCourseId(String courseId) {
         String sql = "update course set commitStatus = '已暂存' where id = ?";
         List<Object> params = new ArrayList<>();
         params.add(courseId);
@@ -182,7 +182,7 @@ public class CourseUtil {
     }
 
 
-    public void clearCommitStautsByCourseId(int courseId) {
+    public void clearCommitStautsByCourseId(String courseId) {
 
         String sql = "update course set commitStatus = '' where id = ?";
         String sql2 = "delete from gradeDraft where courseId = ?";

@@ -26,7 +26,7 @@ public class TemporalEntrance {
         AM.setVisible(true);
         */
         
-        TeacherUI T = new TeacherUI();
+        TeacherUI T = new TeacherUI("123");
         T.setLocationRelativeTo(null);
         T.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         T.setVisible(true);
