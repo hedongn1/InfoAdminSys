@@ -29,7 +29,7 @@ public class TeacherUtil {
         param.add(id);
         Teacher teacher = null;
         try {
-            teacher = jdbcUtil.getSingleResult(sql, param, Teacher.class);
+            teacher = jdbcUtil.getSingleResult(sql,param,Teacher.class);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "数据获取失败\n" + e.getMessage(), "提示信息", JOptionPane.ERROR_MESSAGE);
         }

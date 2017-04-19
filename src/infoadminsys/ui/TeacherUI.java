@@ -105,7 +105,7 @@ public class TeacherUI extends javax.swing.JFrame {
         initComponents();
         
         courseInfoModel = new CourseInfoModel();
-        jTable_courses.setModel(gradeInputModel);
+        jTable_courses.setModel(courseInfoModel);
         gradeInputModel = new GradeInputModel();
         jTable_scores.setModel(gradeInputModel);
         
@@ -120,7 +120,7 @@ public class TeacherUI extends javax.swing.JFrame {
         displayInfo(true);
        
         courseInfoModel = new CourseInfoModel();
-        jTable_courses.setModel(gradeInputModel);
+        jTable_courses.setModel(courseInfoModel);
         gradeInputModel = new GradeInputModel();
         jTable_scores.setModel(gradeInputModel);
         
@@ -133,7 +133,7 @@ public class TeacherUI extends javax.swing.JFrame {
 
 
         String[] columnStrings = {"id","name","status"};
-        String[] columnShowStrings = {"编号","课程名","提交状态"};
+        String[] columnShowStrings = {"课程编号","课程名","提交状态"};
 
 
         public void update() {
@@ -555,9 +555,9 @@ public class TeacherUI extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 405, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 393, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 363, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(108, 108, 108))
         );
         jPanel3Layout.setVerticalGroup(

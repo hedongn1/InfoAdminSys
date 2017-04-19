@@ -25,3 +25,8 @@ CREATE TABLE teacher(
 
 INSERT INTO teacher (id,name,title,sex,depart,hometown)
 VALUES('123','陈阳','青年研究员','男','计算机学院','福建');
+update teacher set birthday = '2000-11-26' where id = '123';
+
+/*
+birthday 不能为空，不然会出错
+*／
