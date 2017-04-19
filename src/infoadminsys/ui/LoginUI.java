@@ -45,7 +45,7 @@ public class LoginUI extends javax.swing.JFrame {
         UserPass result = loginUtil.Login(userpass);
 
         if (result == null) {
-            JOptionPane.showMessageDialog(frame, result, "提示", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(frame, "用户名或密码错误！", "提示", JOptionPane.WARNING_MESSAGE);
             return;
         } else {
             //JOptionPane.showMessageDialog(frame, result, "提示", JOptionPane.WARNING_MESSAGE);

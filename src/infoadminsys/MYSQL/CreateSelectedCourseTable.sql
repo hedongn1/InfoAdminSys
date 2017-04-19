@@ -18,5 +18,5 @@ CREATE TABLE selectedcourse (
     FOREIGN KEY(student_id) REFERENCES student(id)
 )CHARACTER SET=utf8;
 
-INSERT INTO selectedcourse(student_id,course_id)
-VALUE ('15307130120','CS1001',0);
+INSERT INTO selectedcourse
+VALUES ('15307130120','CS1001',0);

@@ -258,7 +258,7 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Lucida Grande" size="14" style="0"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="&#x5b66;&#x53f7;&#xff1a;"/>
+                <Property name="text" type="java.lang.String" value="&#x5de5;&#x53f7;&#xff1a;"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="jTextField_id">
@@ -467,8 +467,8 @@
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-              <JTabbedPaneConstraints tabName="&#x9009;&#x8bfe;&#x67e5;&#x8be2;">
-                <Property name="tabTitle" type="java.lang.String" value="&#x9009;&#x8bfe;&#x67e5;&#x8be2;"/>
+              <JTabbedPaneConstraints tabName="&#x5f00;&#x8bfe;&#x67e5;&#x8be2;">
+                <Property name="tabTitle" type="java.lang.String" value="&#x5f00;&#x8bfe;&#x67e5;&#x8be2;"/>
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>
@@ -542,8 +542,8 @@
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-              <JTabbedPaneConstraints tabName="&#x6210;&#x7ee9;&#x67e5;&#x8be2;">
-                <Property name="tabTitle" type="java.lang.String" value="&#x6210;&#x7ee9;&#x67e5;&#x8be2;"/>
+              <JTabbedPaneConstraints tabName="&#x6210;&#x7ee9;&#x5f55;&#x5165;">
+                <Property name="tabTitle" type="java.lang.String" value="&#x6210;&#x7ee9;&#x5f55;&#x5165;"/>
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>
@@ -606,7 +606,7 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="&#x8d26;&#x53f7;&#x7ba1;&#x7406;"/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
-          <Color id="Default Cursor"/>
+          <Color id="&#x9ed8;&#x8ba4;&#x5149;&#x6807;"/>
         </Property>
       </Properties>
       <Events>
@@ -624,7 +624,7 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="&#x6ce8;&#x9500;"/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
-          <Color id="Default Cursor"/>
+          <Color id="&#x9ed8;&#x8ba4;&#x5149;&#x6807;"/>
         </Property>
       </Properties>
       <Events>

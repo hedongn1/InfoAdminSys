@@ -24,7 +24,7 @@ public class TeacherUtil {
     }
 
     public Teacher downloadData(String id) {
-        String sql = "SELECT * FROM student WHERE id=?";
+        String sql = "SELECT * FROM teacher WHERE id = ?";
         List<Object> param = new ArrayList<>();
         param.add(id);
         Teacher teacher = null;

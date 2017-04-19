@@ -6,15 +6,17 @@
 package infoadminsys;
 
 import infoadminsys.ui.*;
+import javax.swing.WindowConstants;
 
 /**
  *
  * @author lsh
  */
 public class TemporalEntrance {
-    /*
+    
     public static void main(String args[]) {
         
+        /*
         StudentUI S = new StudentUI("15307130120");
         S.setLocationRelativeTo(null);
         S.setVisible(true);
@@ -22,7 +24,12 @@ public class TemporalEntrance {
         AccountManageUI AM=new AccountManageUI("15307130120","学生");
         AM.setLocationRelativeTo(null);
         AM.setVisible(true);
+        */
         
+        TeacherUI T = new TeacherUI();
+        T.setLocationRelativeTo(null);
+        T.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        T.setVisible(true);
     }
-    */
+    
 }
