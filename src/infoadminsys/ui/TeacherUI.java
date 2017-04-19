@@ -10,6 +10,7 @@ import infoadminsys.cls.*;
 import infoadminsys.util.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.sql.SQLException;
 import java.util.*;
 import javax.swing.JFrame;
 import javax.swing.table.AbstractTableModel;
@@ -81,7 +82,7 @@ public class TeacherUI extends javax.swing.JFrame {
         jButton_back.setVisible(false);
     }
 
-    private void saveData() {
+    private void saveData() throws NoSuchFieldException, IllegalAccessException, SQLException {
         teacher.name = jTextField_name.getText();
         teacher.sex = jTextField_sex.getText();
         teacher.id = jTextField_id.getText();
@@ -89,7 +90,7 @@ public class TeacherUI extends javax.swing.JFrame {
         teacher.title = jTextField_title.getText();
         teacher.email = jTextField_email.getText();
         teacher.cell = jTextField_cell.getText();
-        teacherUtil.uploadData();
+        teacherUtil.uploadData(teacher);
     }
 
     private void displayInfo(boolean readDB) {
