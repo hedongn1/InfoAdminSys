@@ -5,7 +5,6 @@
  */
 package infoadminsys.ui;
 
-import infoadminsys.ui.*;
 import infoadminsys.util.*;
 import infoadminsys.cls.*;
 import javax.swing.*;

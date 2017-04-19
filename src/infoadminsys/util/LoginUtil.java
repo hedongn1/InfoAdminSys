@@ -5,7 +5,6 @@
  */
 package infoadminsys.util;
 import infoadminsys.cls.UserPass;
-import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
