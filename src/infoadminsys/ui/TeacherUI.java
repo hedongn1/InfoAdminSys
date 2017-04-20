@@ -10,23 +10,33 @@ import infoadminsys.cls.*;
 import infoadminsys.util.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import javax.swing.table.TableModel;
+import java.sql.SQLException;
 import java.util.*;
-import java.awt.Font;
+import javax.swing.JFrame;
+import javax.swing.table.AbstractTableModel;
+
 
 /**
  *
  * @author hed
  */
+
+
 public class TeacherUI extends javax.swing.JFrame {
+    
+    private static JFrame frame;
 
     /**
      * Creates new form TeacherUI
      */
     private String id;
     private Teacher teacher;
+    //private List<SelectedCourse>  = new ArrayList<>();
+    
     private TeacherUtil teacherUtil = new TeacherUtil();
     
+    private GradeInputModel gradeInputModel;
+    private CourseInfoModel courseInfoModel;
 
     private void setText() {
         jLabel_hello.setText("您好, " + teacher.name);
@@ -72,7 +82,7 @@ public class TeacherUI extends javax.swing.JFrame {
         jButton_back.setVisible(false);
     }
 
-    private void saveData() {
+    private void saveData() throws NoSuchFieldException, IllegalAccessException, SQLException {
         teacher.name = jTextField_name.getText();
         teacher.sex = jTextField_sex.getText();
         teacher.id = jTextField_id.getText();
@@ -80,7 +90,7 @@ public class TeacherUI extends javax.swing.JFrame {
         teacher.title = jTextField_title.getText();
         teacher.email = jTextField_email.getText();
         teacher.cell = jTextField_cell.getText();
-        teacherUtil.uploadData();
+        teacherUtil.uploadData(teacher);
     }
 
     private void displayInfo(boolean readDB) {
@@ -93,14 +103,156 @@ public class TeacherUI extends javax.swing.JFrame {
     }
     
     public TeacherUI() {
+        initComponents();
+        
+        courseInfoModel = new CourseInfoModel();
+        jTable_courses.setModel(courseInfoModel);
+        gradeInputModel = new GradeInputModel();
+        jTable_scores.setModel(gradeInputModel);
+        
     }
 
     public TeacherUI(String username) {
         id = username;
         initComponents();
-        jTable_courses.getTableHeader().setFont(new Font("Lucida Grande", 0, 13));
-        jTable_scores.getTableHeader().setFont(new Font("Lucida Grande", 0, 13));
+        //jTable_courses.getTableHeader().setFont(new Font("Lucida Grande", 0, 13));
+        //jTable_scores.getTableHeader().setFont(new Font("Lucida Grande", 0, 13));
+        
         displayInfo(true);
+       
+        courseInfoModel = new CourseInfoModel();
+        jTable_courses.setModel(courseInfoModel);
+        gradeInputModel = new GradeInputModel();
+        jTable_scores.setModel(gradeInputModel);
+        
+    }
+    
+    private class CourseInfoModel extends AbstractTableModel {
+
+        private CourseUtil courseUtil = new CourseUtil();
+        private List<Map<String,Object>> list = getAllCourses();
+
+
+        String[] columnStrings = {"id","name","status"};
+        String[] columnShowStrings = {"课程编号","课程名","提交状态"};
+
+
+        public void update() {
+            list = getAllCourses();
+            fireTableDataChanged();
+
+        }
+
+        private List<Map<String,Object>> getAllCourses() {
+            return courseUtil.findAllCoursesByTeacherId(teacher.id);
+        }
+
+        public int getRowCount() {
+            //System.out.println(list);
+            return list.size();
+        }
+
+        public int getColumnCount() {
+            return columnStrings.length;
+        }
+
+        public Object getValueAt(int rowIndex, int columnIndex) {
+            Map<String,Object> map = list.get(rowIndex);
+
+            return map.get(columnStrings[columnIndex]);
+        }
+
+        public String getColumnName(int column) {
+            return columnShowStrings[column];
+        }
+
+        public boolean isCellEditable(int rowIndex, int columnIndex) {
+            return false;
+        }
+    }
+    
+     private class GradeInputModel extends AbstractTableModel {
+
+        private String courseId;
+
+        public String getCourseId() {
+            return courseId;
+        }
+
+        public void setCourseId(String courseId) {
+            this.courseId = courseId;
+        }
+
+        private CourseUtil courseUtil = new CourseUtil();
+        private GradeUtil gradeUtil = new GradeUtil();
+        private List<Map<String,Object>> list = new ArrayList<>();
+
+
+        String[] columnStrings = {"id","student_id","name","score"};
+        String[] columnShowStrings = {"课程编号", "学号", "姓名", "成绩"};
+
+        public List<Map<String,Object>> getAllStudentByCourseId(String courseId, boolean useDraft) {
+            if (useDraft == true) {
+                return courseUtil.findAllStudentWithGradeDraftByCourseId(courseId);
+            } else {
+                return courseUtil.findAllStudentWithGradeByCourseId(courseId);
+            }
+
+        }
+
+        public boolean commitGrades() {
+
+            for (int i = 0; i < list.size(); i++) {
+                Map<String,Object> map = list.get(i);
+                if (map.get("score") == null || map.get("score") == "") {
+                    JOptionPane.showMessageDialog(frame, "请将成绩填写完整后再提交", "提示", JOptionPane.INFORMATION_MESSAGE);
+                    return false;
+                }
+            }
+
+            for (int i = 0; i < list.size(); i++) {
+                Map<String, Object> map = list.get(i);
+                gradeUtil.saveGrade(map);
+                courseUtil.commitCourseByCourseId(courseId);
+
+            }
+            return true;
+        }
+
+        public void setStudentByCourseId(String courseId, boolean useDraft) {
+            this.courseId = courseId;
+            list = getAllStudentByCourseId(courseId, useDraft);
+            fireTableDataChanged();
+
+        }
+
+        public int getRowCount() {
+            return list.size();
+        }
+
+        public int getColumnCount() {
+            return columnShowStrings.length;
+        }
+
+        public Object getValueAt(int rowIndex, int columnIndex) {
+            Map<String, Object> map = list.get(rowIndex);
+            return map.get(columnStrings[columnIndex]);
+        }
+
+        public String getColumnName(int column) {
+            return columnShowStrings[column];
+        }
+
+        public boolean isCellEditable(int rowIndex, int columnIndex) {
+            return columnIndex == columnShowStrings.length - 1;
+        }
+
+        public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+            Map<String, Object> map = list.get(rowIndex);
+            map.put(columnStrings[columnIndex], aValue);
+
+        }
+
     }
 
     /**
@@ -140,12 +292,11 @@ public class TeacherUI extends javax.swing.JFrame {
         jTextField_sex = new javax.swing.JTextField();
         jLabel_IDnum = new javax.swing.JLabel();
         jTextField_IDnum = new javax.swing.JTextField();
-        jPanel2 = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTable_courses = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable_scores = new javax.swing.JTable();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTable_courses = new javax.swing.JTable();
         jLabel_account = new javax.swing.JLabel();
         jLabel_hello = new javax.swing.JLabel();
         jLabel_logOut = new javax.swing.JLabel();
@@ -167,7 +318,7 @@ public class TeacherUI extends javax.swing.JFrame {
         jTextField_name.setToolTipText("");
 
         jLabel_id.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
-        jLabel_id.setText("学号：");
+        jLabel_id.setText("工号：");
 
         jTextField_id.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
 
@@ -370,45 +521,6 @@ public class TeacherUI extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("个人信息", jPanel1);
 
-        jPanel2.setPreferredSize(new java.awt.Dimension(800, 576));
-
-        jScrollPane2.setPreferredSize(new java.awt.Dimension(800, 576));
-        jScrollPane2.setViewportView(null);
-
-        jTable_courses.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
-        jTable_courses.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-
-            }
-        ));
-        jTable_courses.setColumnSelectionAllowed(true);
-        jTable_courses.setGridColor(new java.awt.Color(102, 102, 102));
-        jTable_courses.setShowGrid(true);
-        jTable_courses.setSurrendersFocusOnKeystroke(true);
-        jScrollPane2.setViewportView(jTable_courses);
-        jTable_courses.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 781, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-
-        jTabbedPane1.addTab("选课查询", jPanel2);
-
         jPanel3.setPreferredSize(new java.awt.Dimension(800, 576));
 
         jScrollPane1.setPreferredSize(new java.awt.Dimension(800, 576));
@@ -425,21 +537,37 @@ public class TeacherUI extends javax.swing.JFrame {
         jTable_scores.setGridColor(new java.awt.Color(102, 102, 102));
         jScrollPane1.setViewportView(jTable_scores);
 
+        jTable_courses.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {},
+                {},
+                {},
+                {}
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane3.setViewportView(jTable_courses);
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 781, Short.MAX_VALUE)
-                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 393, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(108, 108, 108))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jScrollPane3)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 530, Short.MAX_VALUE)
         );
 
-        jTabbedPane1.addTab("成绩查询", jPanel3);
+        jTabbedPane1.addTab("课程查询／成绩录入", jPanel3);
 
         jLabel_account.setText("账号管理");
         jLabel_account.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -475,7 +603,6 @@ public class TeacherUI extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel_hello)
@@ -484,6 +611,9 @@ public class TeacherUI extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel_logOut, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(19, 19, 19))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -503,31 +633,6 @@ public class TeacherUI extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jButton_modifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_modifyActionPerformed
-        // TODO add your handling code here:
-        setEdit(true);
-        buttonModify();
-    }//GEN-LAST:event_jButton_modifyActionPerformed
-
-    private void jButton_backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_backActionPerformed
-        // TODO add your handling code here:
-        int result = JOptionPane.showConfirmDialog(this, "确定退出？未保存的内容将丢失！", "提示信息", JOptionPane.YES_NO_OPTION);
-        if (result == 0) { //YES
-            displayInfo(false);
-        }
-    }//GEN-LAST:event_jButton_backActionPerformed
-
-    private void jButton_saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_saveActionPerformed
-        // TODO add your handling code here:
-        try {
-            saveData();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "保存失败！\n" + e.getMessage(), "提示信息", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        JOptionPane.showMessageDialog(this, "保存成功！", "提示信息", JOptionPane.INFORMATION_MESSAGE);
-    }//GEN-LAST:event_jButton_saveActionPerformed
 
     private void jLabel_accountMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel_accountMouseClicked
         // TODO add your handling code here:
@@ -573,6 +678,31 @@ public class TeacherUI extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jLabel_logOutMouseClicked
 
+    private void jButton_modifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_modifyActionPerformed
+        // TODO add your handling code here:
+        setEdit(true);
+        buttonModify();
+    }//GEN-LAST:event_jButton_modifyActionPerformed
+
+    private void jButton_backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_backActionPerformed
+        // TODO add your handling code here:
+        int result = JOptionPane.showConfirmDialog(this, "确定退出？未保存的内容将丢失！", "提示信息", JOptionPane.YES_NO_OPTION);
+        if (result == 0) { //YES
+            displayInfo(false);
+        }
+    }//GEN-LAST:event_jButton_backActionPerformed
+
+    private void jButton_saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_saveActionPerformed
+        // TODO add your handling code here:
+        try {
+            saveData();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "保存失败！\n" + e.getMessage(), "提示信息", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        JOptionPane.showMessageDialog(this, "保存成功！", "提示信息", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_jButton_saveActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton_back;
@@ -594,10 +724,9 @@ public class TeacherUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel_name;
     private javax.swing.JLabel jLabel_title;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable_courses;
     private javax.swing.JTable jTable_scores;

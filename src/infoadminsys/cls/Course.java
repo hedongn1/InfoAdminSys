@@ -10,9 +10,11 @@ package infoadminsys.cls;
  * @author hed
  */
 public class Course {
-    private int id;
+    private String id;
     private String name;
-    private int tid;
+    private String tid;
     private int capacity;
     private int selecedcnt;
+    private String status;
+    
 }

@@ -24,4 +24,5 @@ public class Teacher {
     public String cell;
     public String IDnum;
     final public String type = "teacher";
+    static public String[] Attr={"id","name","sex","depart","title","hometown","birthday","email","address","cell","IDnum"};
 }
