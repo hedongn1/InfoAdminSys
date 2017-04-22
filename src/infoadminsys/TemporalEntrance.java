@@ -15,9 +15,15 @@ import javax.swing.WindowConstants;
 public class TemporalEntrance {
     
     public static void main(String args[]) {
+        /*
         AdminUI AD=new AdminUI();
         AD.setLocationRelativeTo(null);
         AD.setVisible(true);
+*/
+        TeacherUI T = new TeacherUI("123");
+        T.setLocationRelativeTo(null);
+        T.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        T.setVisible(true);
     }
     
 }

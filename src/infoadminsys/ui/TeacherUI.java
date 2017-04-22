@@ -8,10 +8,13 @@ package infoadminsys.ui;
 import javax.swing.JOptionPane;
 import infoadminsys.cls.*;
 import infoadminsys.util.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.SQLException;
 import java.util.*;
+import static java.util.Collections.list;
 import javax.swing.JFrame;
 import javax.swing.table.AbstractTableModel;
 
@@ -125,6 +128,24 @@ public class TeacherUI extends javax.swing.JFrame {
         gradeInputModel = new GradeInputModel();
         jTable_scores.setModel(gradeInputModel);
         
+        jTable_courses.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                // System.out.println(table2.getSelectedRow());
+                String courseId = courseInfoModel.getValueAt(jTable_courses.getSelectedRow(), 0).toString().trim();
+                /*
+                boolean useDraft = !courseInfoModel.getValueAt(jTable_courses.getSelectedRow(), 4).toString().equals("已提交");
+                if (useDraft) {
+                    makeRightAble();
+                } else {
+                    makeRightDisable();
+
+                }
+                */
+                gradeInputModel.setStudentByCourseId(courseId);
+                super.mouseClicked(e);
+            }
+        });
+        
     }
     
     private class CourseInfoModel extends AbstractTableModel {
@@ -188,17 +209,13 @@ public class TeacherUI extends javax.swing.JFrame {
         private List<Map<String,Object>> list = new ArrayList<>();
 
 
-        String[] columnStrings = {"id","student_id","name","score"};
-        String[] columnShowStrings = {"课程编号", "学号", "姓名", "成绩"};
+        String[] columnStrings = {"id","course_id", "name","score"};
+        String[] columnShowStrings = {"学号", "课程编号","姓名", "成绩"};
 
-        public List<Map<String,Object>> getAllStudentByCourseId(String courseId, boolean useDraft) {
-            if (useDraft == true) {
-                return courseUtil.findAllStudentWithGradeDraftByCourseId(courseId);
-            } else {
-                return courseUtil.findAllStudentWithGradeByCourseId(courseId);
-            }
-
+        public List<Map<String,Object>> getAllStudentByCourseId(String courseId) {
+            return courseUtil.findAllStudentWithGradeByCourseId(courseId);
         }
+
 
         public boolean commitGrades() {
 
@@ -219,9 +236,9 @@ public class TeacherUI extends javax.swing.JFrame {
             return true;
         }
 
-        public void setStudentByCourseId(String courseId, boolean useDraft) {
+        public void setStudentByCourseId(String courseId) {
             this.courseId = courseId;
-            list = getAllStudentByCourseId(courseId, useDraft);
+            list = getAllStudentByCourseId(courseId);
             fireTableDataChanged();
 
         }
@@ -548,6 +565,11 @@ public class TeacherUI extends javax.swing.JFrame {
 
             }
         ));
+        jTable_courses.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable_coursesMouseClicked(evt);
+            }
+        });
         jScrollPane3.setViewportView(jTable_courses);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -702,6 +724,11 @@ public class TeacherUI extends javax.swing.JFrame {
         }
         JOptionPane.showMessageDialog(this, "保存成功！", "提示信息", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jButton_saveActionPerformed
+
+    private void jTable_coursesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable_coursesMouseClicked
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_jTable_coursesMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
