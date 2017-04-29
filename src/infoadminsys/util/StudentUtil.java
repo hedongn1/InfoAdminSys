@@ -10,8 +10,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.lang.reflect.*;
 import java.sql.*;
-import java.util.List;
-import java.util.ArrayList;
+import java.util.*;
 import javax.swing.JOptionPane;
 
 /**
@@ -34,7 +33,7 @@ public class StudentUtil {
     }
 
     public Student downloadData(String id) {
-        String sql = "SELECT * FROM student WHERE id=?";
+        String sql = "SELECT * FROM student WHERE id=?;";
         List<Object> param = new ArrayList<>();
         param.add(id);
         Student stu = null;
@@ -66,5 +65,13 @@ public class StudentUtil {
         param.add(student.id);
         jdbcUtil.updateByPreparedStatement(sql, param);
     }
+    
+    protected void finalize() throws Throwable {
+        super.finalize();
+        if (jdbcUtil != null) {
+            jdbcUtil.releaseConn();
+            jdbcUtil = null;
 
+        }
+    }
 }

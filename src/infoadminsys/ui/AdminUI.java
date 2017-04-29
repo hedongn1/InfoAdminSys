@@ -5,6 +5,8 @@
  */
 package infoadminsys.ui;
 
+import com.csvreader.CsvReader;
+import com.csvreader.CsvWriter;
 import javax.swing.JOptionPane;
 import infoadminsys.cls.*;
 import infoadminsys.util.*;
@@ -14,8 +16,16 @@ import javax.swing.table.TableModel;
 import java.util.*;
 import java.awt.Font;
 import java.awt.Image;
+import java.io.File;
+import java.io.FileReader;
+import java.nio.charset.Charset;
 import java.text.ParseException;
+import javax.swing.JTable;
+import javax.swing.table.*;
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -28,20 +38,21 @@ public class AdminUI extends javax.swing.JFrame {
      */
     private String id;
     private Administrator admin;
+    private AdminUtil adminUtil = new AdminUtil();
     private List<SelectedCourse> SCList = new ArrayList<>();
     final private SelectedCourseUtil SCUtil = new SelectedCourseUtil();
-    
-    private Object[][] getCourses(){
-        int rowNum=SCList.size();
-        Object[][] courses=new Object[rowNum][3];
-        for(int i=0;i<rowNum;i++) {
-            courses[i][0]=SCList.get(i).course_id;
-            courses[i][1]=SCList.get(i).course_name;
-            courses[i][2]=SCList.get(i).teacher_name;
+
+    private Object[][] getCourses() {
+        int rowNum = SCList.size();
+        Object[][] courses = new Object[rowNum][3];
+        for (int i = 0; i < rowNum; i++) {
+            courses[i][0] = SCList.get(i).course_id;
+            courses[i][1] = SCList.get(i).course_name;
+            courses[i][2] = SCList.get(i).teacher_name;
         }
         return courses;
     }
-    
+
     private TableModel SCTableModel() {
         return new javax.swing.table.DefaultTableModel(getCourses(),
                 new String[]{
@@ -57,63 +68,45 @@ public class AdminUI extends javax.swing.JFrame {
             }
         };
     }
-    
-    private Object[][] getScores(){
-        int rowNum=SCList.size();
-        Object[][] scores=new Object[rowNum][3];
-        for(int i=0;i<rowNum;i++) {
-            scores[i][0]=SCList.get(i).course_id;
-            scores[i][1]=SCList.get(i).course_name;
-            scores[i][2]=SCList.get(i).score;
+
+    private Object[][] getScores() {
+        int rowNum = SCList.size();
+        Object[][] scores = new Object[rowNum][3];
+        for (int i = 0; i < rowNum; i++) {
+            scores[i][0] = SCList.get(i).course_id;
+            scores[i][1] = SCList.get(i).course_name;
+            scores[i][2] = SCList.get(i).score;
         }
         return scores;
     }
-    
-    private TableModel scoreTableModel() {
-        return new javax.swing.table.DefaultTableModel(getScores(),
-                new String[]{
-                    "课程号", "课程名称", "成绩"
-                }
-        ) {
-            boolean[] canEdit = new boolean[]{
-                false, false, false
-            };
 
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit[columnIndex];
-            }
-        };
-    }
-    
-    private void setSearchIcon()
-    {
-        ImageIcon icon=new ImageIcon("/Users/lsh/Desktop/Workspace/NetBeansProjects/InfoAdminSys/image/search.png");
-        icon.setImage(icon.getImage().getScaledInstance(24,24,Image.SCALE_DEFAULT));
+    private void setSearchIcon() {
+        ImageIcon icon = new ImageIcon("/Users/lsh/Desktop/Workspace/NetBeansProjects/InfoAdminSys/image/search.png");
+        icon.setImage(icon.getImage().getScaledInstance(24, 24, Image.SCALE_DEFAULT));
         jLabel_search1.setIcon(icon);
         jLabel_search2.setIcon(icon);
     }
-    
-    private void adjust()
-    {
+
+    private void adjust() {
         jPanel_student.setLayout(null);
-        jLabel_search1.setBounds(20,0,24,24);
-        jTextField_teaID.setBounds(54,3,132,20);
-        jTextField_teaName.setBounds(183,3,138,20);
-        jComboBox_teaDepart.setBounds(317,4,220,20);
-        jTextField_teaMajor.setBounds(531,3,244,20);
-        
+        jLabel_search1.setBounds(20, 0, 24, 24);
+        jTextField_stuID.setBounds(54, 3, 132, 20);
+        jTextField_stuName.setBounds(183, 3, 138, 20);
+        jComboBox_stuDepart.setBounds(317, 4, 220, 20);
+        jTextField_stuMajor.setBounds(531, 3, 244, 20);
+
         jPanel_teacher.setLayout(null);
-        jLabel_search2.setBounds(20,0,24,24);
-        jTextField_stuID1.setBounds(54,3,132,20);
-        jTextField_stuName1.setBounds(183,3,138,20);
-        jComboBox_stuDepart1.setBounds(317,4,220,20);
-        jTextField_stuMajor1.setBounds(531,3,244,20);
-        
+        jLabel_search2.setBounds(20, 0, 24, 24);
+        jTextField_teaID.setBounds(54, 3, 132, 20);
+        jTextField_teaName.setBounds(183, 3, 138, 20);
+        jComboBox_teaDepart.setBounds(317, 4, 220, 20);
+        jTextField_teaMajor.setBounds(531, 3, 244, 20);
+
         jTable_student.getTableHeader().setFont(new Font("Lucida Grande", 0, 13));
         jTable_teacher.getTableHeader().setFont(new Font("Lucida Grande", 0, 13));
 
     }
-    
+
     public AdminUI() {
         //SCList=SCUtil.downloadData(id);
         initComponents();
@@ -134,25 +127,25 @@ public class AdminUI extends javax.swing.JFrame {
         jPanel_student = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable_student = new javax.swing.JTable();
-        jTextField_teaID = new javax.swing.JTextField();
-        jTextField_teaName = new javax.swing.JTextField();
-        jTextField_teaMajor = new javax.swing.JTextField();
-        jComboBox_teaDepart = new javax.swing.JComboBox<>();
+        jTextField_stuID = new javax.swing.JTextField();
+        jTextField_stuName = new javax.swing.JTextField();
+        jTextField_stuMajor = new javax.swing.JTextField();
+        jComboBox_stuDepart = new javax.swing.JComboBox<>();
         jLabel_search1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        jButton_stuExport = new javax.swing.JButton();
+        jButton_stuImport = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jPanel_teacher = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable_teacher = new javax.swing.JTable();
-        jTextField_stuID1 = new javax.swing.JTextField();
-        jTextField_stuName1 = new javax.swing.JTextField();
-        jTextField_stuMajor1 = new javax.swing.JTextField();
-        jComboBox_stuDepart1 = new javax.swing.JComboBox<>();
+        jTextField_teaID = new javax.swing.JTextField();
+        jTextField_teaName = new javax.swing.JTextField();
+        jTextField_teaMajor = new javax.swing.JTextField();
+        jComboBox_teaDepart = new javax.swing.JComboBox<>();
         jLabel_search2 = new javax.swing.JLabel();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
+        jButton_teaExport = new javax.swing.JButton();
+        jButton_teaImport = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
         jButton8 = new javax.swing.JButton();
         jPanel_course = new javax.swing.JPanel();
@@ -173,8 +166,6 @@ public class AdminUI extends javax.swing.JFrame {
         jTable_student.setFont(new java.awt.Font("Lucida Grande", 0, 13)); // NOI18N
         jTable_student.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
                 {null, null, null, null, null},
                 {null, null, null, null, null}
             },
@@ -216,10 +207,28 @@ public class AdminUI extends javax.swing.JFrame {
                 jLabel_search1MouseClicked(evt);
             }
         });
+        jLabel_search1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jLabel_search1KeyPressed(evt);
+            }
+        });
 
-        jButton1.setText("导出");
+        jButton_stuExport.setText("导出");
+        jButton_stuExport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_stuExportActionPerformed(evt);
+            }
+        });
 
-        jButton2.setText("导入");
+        jButton_stuImport.setText("导入");
+        jButton_stuImport.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton_stuImportMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jButton_stuImportMouseEntered(evt);
+            }
+        });
 
         jButton3.setText("删除选中");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -242,13 +251,13 @@ public class AdminUI extends javax.swing.JFrame {
                         .addGap(24, 24, 24)
                         .addComponent(jLabel_search1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jTextField_teaID, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jTextField_stuID, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, 0)
-                        .addComponent(jTextField_teaName, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jTextField_stuName, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, 0)
-                        .addComponent(jComboBox_teaDepart, 0, 223, Short.MAX_VALUE)
+                        .addComponent(jComboBox_stuDepart, 0, 223, Short.MAX_VALUE)
                         .addGap(0, 0, 0)
-                        .addComponent(jTextField_teaMajor, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jTextField_stuMajor, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel_studentLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -256,9 +265,9 @@ public class AdminUI extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2)
+                .addComponent(jButton_stuImport)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
+                .addComponent(jButton_stuExport)
                 .addGap(20, 20, 20))
         );
         jPanel_studentLayout.setVerticalGroup(
@@ -266,10 +275,10 @@ public class AdminUI extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel_studentLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
                 .addGroup(jPanel_studentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(jTextField_teaID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField_teaName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox_teaDepart, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField_teaMajor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField_stuID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField_stuName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBox_stuDepart, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField_stuMajor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel_search1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, 0)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE)
@@ -277,8 +286,8 @@ public class AdminUI extends javax.swing.JFrame {
                 .addGroup(jPanel_studentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jButton4)
                     .addComponent(jButton3)
-                    .addComponent(jButton2)
-                    .addComponent(jButton1))
+                    .addComponent(jButton_stuImport)
+                    .addComponent(jButton_stuExport))
                 .addContainerGap())
         );
 
@@ -308,6 +317,7 @@ public class AdminUI extends javax.swing.JFrame {
         });
         jTable_teacher.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_NEXT_COLUMN);
         jTable_teacher.setAutoscrolls(false);
+        jTable_teacher.setColumnSelectionAllowed(true);
         jTable_teacher.getTableHeader().setReorderingAllowed(false);
         jScrollPane2.setViewportView(jTable_teacher);
         jTable_teacher.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
@@ -332,9 +342,14 @@ public class AdminUI extends javax.swing.JFrame {
             }
         });
 
-        jButton5.setText("导出");
+        jButton_teaExport.setText("导出");
 
-        jButton6.setText("导入");
+        jButton_teaImport.setText("导入");
+        jButton_teaImport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_teaImportActionPerformed(evt);
+            }
+        });
 
         jButton7.setText("删除选中");
         jButton7.addActionListener(new java.awt.event.ActionListener() {
@@ -357,13 +372,13 @@ public class AdminUI extends javax.swing.JFrame {
                         .addGap(24, 24, 24)
                         .addComponent(jLabel_search2, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jTextField_stuID1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jTextField_teaID, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, 0)
-                        .addComponent(jTextField_stuName1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jTextField_teaName, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, 0)
-                        .addComponent(jComboBox_stuDepart1, 0, 223, Short.MAX_VALUE)
+                        .addComponent(jComboBox_teaDepart, 0, 223, Short.MAX_VALUE)
                         .addGap(0, 0, 0)
-                        .addComponent(jTextField_stuMajor1, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jTextField_teaMajor, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel_teacherLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -371,9 +386,9 @@ public class AdminUI extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton6)
+                .addComponent(jButton_teaImport)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton5)
+                .addComponent(jButton_teaExport)
                 .addGap(20, 20, 20))
         );
         jPanel_teacherLayout.setVerticalGroup(
@@ -381,10 +396,10 @@ public class AdminUI extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel_teacherLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
                 .addGroup(jPanel_teacherLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(jTextField_stuID1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField_stuName1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox_stuDepart1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField_stuMajor1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField_teaID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField_teaName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBox_teaDepart, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField_teaMajor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel_search2, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, 0)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE)
@@ -392,8 +407,8 @@ public class AdminUI extends javax.swing.JFrame {
                 .addGroup(jPanel_teacherLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jButton8)
                     .addComponent(jButton7)
-                    .addComponent(jButton6)
-                    .addComponent(jButton5))
+                    .addComponent(jButton_teaImport)
+                    .addComponent(jButton_teaExport))
                 .addContainerGap())
         );
 
@@ -540,6 +555,30 @@ public class AdminUI extends javax.swing.JFrame {
 
     private void jLabel_search1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel_search1MouseClicked
         // TODO add your handling code here:
+        Map<String, Object> condition = new HashMap<>();
+        if (jTextField_stuID.getText().length() > 0) {
+            condition.put("id", jTextField_stuID.getText());
+        }
+        if (jTextField_stuName.getText().length() > 0) {
+            condition.put("name", jTextField_stuName.getText());
+        }
+        if (jComboBox_stuDepart.getSelectedItem() != null) {
+            condition.put("name", jComboBox_stuDepart.getSelectedItem());
+        }
+        if (jTextField_stuMajor.getText().length() > 0) {
+            condition.put("major", jTextField_stuMajor.getText());
+        }
+        List<Student> results = adminUtil.downloadData("student", condition);
+        DefaultTableModel tableModel = (DefaultTableModel) jTable_student.getModel();
+        tableModel.setRowCount(results.size());
+        for (int i = 0; i < results.size(); i++) {
+            Student student = results.get(i);
+            jTable_student.setValueAt(i + 1, i, 0);
+            jTable_student.setValueAt(student.id, i, 1);
+            jTable_student.setValueAt(student.name, i, 2);
+            jTable_student.setValueAt(student.depart, i, 3);
+            jTable_student.setValueAt(student.major, i, 4);
+        }
     }//GEN-LAST:event_jLabel_search1MouseClicked
 
     private void jLabel_search2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel_search2MouseClicked
@@ -550,17 +589,76 @@ public class AdminUI extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton7ActionPerformed
 
+    private void jLabel_search1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jLabel_search1KeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jLabel_search1KeyPressed
+
+    private void jButton_teaImportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_teaImportActionPerformed
+        // TODO add your handling code here:
+        JFileChooser chooser = new JFileChooser();
+        chooser.showOpenDialog(this);
+        File file = chooser.getSelectedFile();
+    }//GEN-LAST:event_jButton_teaImportActionPerformed
+
+    private void jButton_stuImportMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_stuImportMouseClicked
+        // TODO add your handling code here:
+        JFileChooser chooser = new JFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("csv文件", "csv");
+        chooser.setFileFilter(filter);
+        int result = chooser.showOpenDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File file = chooser.getSelectedFile();
+            try {
+                CsvReader reader = new CsvReader(file.getAbsolutePath(), ',', Charset.defaultCharset());
+                String[] columnName=reader.getHeaders();
+                List<Map<String,Object>> stuList=new ArrayList<>();
+                while (reader.readRecord()) {                   
+                    Map<String,Object> student=new HashMap<>();
+                    for(int i=0;i<columnName.length;i++) {
+                        student.put(columnName[i],reader.get(columnName[i]));
+                    }
+                    stuList.add(student);
+                }
+                adminUtil.insertData("student",stuList);
+                reader.close();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "导入失败！\n" + e.getMessage(), "提示信息", JOptionPane.WARNING_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_jButton_stuImportMouseClicked
+
+    private void jButton_stuImportMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_stuImportMouseEntered
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton_stuImportMouseEntered
+
+    private void jButton_stuExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_stuExportActionPerformed
+        // TODO add your handling code here:
+        JFileChooser chooser = new JFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("csv文件", "csv");
+        chooser.setFileFilter(filter);
+        int result = chooser.showSaveDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File file = chooser.getSelectedFile();
+            try {
+                CsvWriter writer = new CsvWriter(file.getAbsolutePath(), ',', Charset.defaultCharset());
+                writer.writeRecord(new String[]{"学号", "姓名", "院系", "专业"});
+                writer.close();
+            } catch (Exception e) {
+            }
+        }
+    }//GEN-LAST:event_jButton_stuExportActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
-    private javax.swing.JComboBox<String> jComboBox_stuDepart1;
+    private javax.swing.JButton jButton_stuExport;
+    private javax.swing.JButton jButton_stuImport;
+    private javax.swing.JButton jButton_teaExport;
+    private javax.swing.JButton jButton_teaImport;
+    private javax.swing.JComboBox<String> jComboBox_stuDepart;
     private javax.swing.JComboBox<String> jComboBox_teaDepart;
     private javax.swing.JLabel jLabel_account;
     private javax.swing.JLabel jLabel_hello;
@@ -576,9 +674,9 @@ public class AdminUI extends javax.swing.JFrame {
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable_student;
     private javax.swing.JTable jTable_teacher;
-    private javax.swing.JTextField jTextField_stuID1;
-    private javax.swing.JTextField jTextField_stuMajor1;
-    private javax.swing.JTextField jTextField_stuName1;
+    private javax.swing.JTextField jTextField_stuID;
+    private javax.swing.JTextField jTextField_stuMajor;
+    private javax.swing.JTextField jTextField_stuName;
     private javax.swing.JTextField jTextField_teaID;
     private javax.swing.JTextField jTextField_teaMajor;
     private javax.swing.JTextField jTextField_teaName;

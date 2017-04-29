@@ -36,5 +36,13 @@ public class SelectedCourseUtil {
         }
         return results;
     }
+    
+    protected void finalize() throws Throwable {
+        super.finalize();
+        if (jdbcUtil != null) {
+            jdbcUtil.releaseConn();
+            jdbcUtil = null;
 
+        }
+    }
 }
