@@ -40,7 +40,7 @@ public class TeacherUtil {
     }
     
     public void uploadData(Teacher teacher) throws NoSuchFieldException, IllegalAccessException, SQLException {
-        String sql = "UPDATE student SET ";
+        String sql = "UPDATE teacher SET ";
         Class<Teacher> cls = Teacher.class;
         int itemNum = Teacher.Attr.length;
         List<Object> param = new ArrayList<>();

@@ -92,8 +92,8 @@ public class CourseUtil {
 
     //根据课程的id查询所有选择该课程的学生及成绩
     public List<Map<String,Object>> findAllStudentWithGradeByCourseId(String courseId) {
-        String sql = "select s.id as id, s.name, c.id from student as s, " +
-                " selectedcourse as c where s.id = c.student_id and course_id = ? order by s.id asc";
+        String sql = "select s.id as id, s.name, c.course_id, c.score from student as s, " +
+                " selectedcourse as c where id = student_id and course_id = ? order by id asc";
 
         List<Object> param = new ArrayList<>();
         param.add(courseId);
@@ -104,62 +104,17 @@ public class CourseUtil {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        return list;
-    }
-
-    //根据课程的id查询所有选择该课程的学生
-    public List<Map<String,Object>> findAllStudentWithGradeDraftByCourseId(String courseId) {
-        String sql = "select s.id as id, studentCode ,name ,courseId from student as s ," +
-                " chooseCourse as c where s.id = c.studentId and courseId = ? order by s.id asc";
-
-        List<Object> params = new ArrayList<>();
-        params.add(courseId);
-        List<Map<String, Object>> list = new ArrayList<>();
-
-        try {
-            list = jdbcUtil.getCertainResultList(sql, params);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
-        /*
-        // 添加暂存表中的成绩信息
-        String sql2 = "select * from gradeDraft where courseId = ? order by id asc";
-        List<Map<String, Object>> draftGrades = new ArrayList<>();
-
-        try {
-            draftGrades = jdbcUtil.getCertainResultList(sql2, params);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        for (int i = 0; i < list.size(); i++) {
-            Map<String, Object> willReturnMap = list.get(i);
-            if (draftGrades.size() == 0) {
-                willReturnMap.put("score", null);
-            } else {
-                for (int j = 0; j < draftGrades.size(); j++) {
-                    Map<String, Object> map = draftGrades.get(j);
-                    if (map != null && map.get("studentId").equals(willReturnMap.get("id"))) {
-                        willReturnMap.put("score", map.get("score"));
-                    }
-                }
-            }
-
-        }
-        */
         return list;
     }
 
     //根据课程序号提交课程
     public boolean commitCourseByCourseId(String courseId) {
         String sql = "update course set commitStatus = '已提交' where id = ?";
-        List<Object> params = new ArrayList<>();
-        params.add(courseId);
+        List<Object> param = new ArrayList<>();
+        param.add(courseId);
         boolean flag = false;
         try {
-            flag = jdbcUtil.updateByPreparedStatement(sql,params);
+            flag = jdbcUtil.updateByPreparedStatement(sql,param);
         } catch (Exception e) {
             e.printStackTrace();
         }
