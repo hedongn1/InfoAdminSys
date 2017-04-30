@@ -15,16 +15,16 @@ import javax.swing.WindowConstants;
 public class TemporalEntrance {
     
     public static void main(String args[]) {
-       /*
+       
         AdminUI AD=new AdminUI();
         AD.setLocationRelativeTo(null);
         AD.setVisible(true);
-       */
        
+       /*
        StudentUI S=new StudentUI("132");
        S.setLocationRelativeTo(null);
        S.setVisible(true);
-       
+       */
        
     }
     
