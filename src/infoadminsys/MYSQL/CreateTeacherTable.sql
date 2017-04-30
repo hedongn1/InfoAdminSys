@@ -12,14 +12,14 @@ CREATE TABLE teacher(
     id CHAR(20) NOT NULL,
     name CHAR(20) NOT NULL,
     title CHAR(20),
-    sex enum('男','女') NOT NULL,
+    sex enum('男','女'),
     depart CHAR(30),
     hometown CHAR(30),
     birthday DATE,
     IDnum CHAR(20),
     address CHAR(100),
     email CHAR(30),
-   	cell CHAR(20),
+    cell CHAR(20),
     PRIMARY KEY(id)
 )CHARACTER SET=utf8;
 

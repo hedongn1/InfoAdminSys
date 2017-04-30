@@ -11,7 +11,7 @@ USE InfoAdminSys;
 CREATE TABLE student(
     id CHAR(20) NOT NULL,
     name CHAR(20) NOT NULL,
-    sex enum('男','女') NOT NULL,
+    sex enum('男','女'),
     depart CHAR(30),
     major CHAR(30),
     hometown CHAR(30),

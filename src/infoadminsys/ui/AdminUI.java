@@ -17,11 +17,8 @@ import java.util.*;
 import java.awt.Font;
 import java.awt.Image;
 import java.io.File;
-import java.io.FileReader;
+import java.lang.reflect.Field;
 import java.nio.charset.Charset;
-import java.text.ParseException;
-import javax.swing.JTable;
-import javax.swing.table.*;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -39,6 +36,8 @@ public class AdminUI extends javax.swing.JFrame {
     private String id;
     private Administrator admin;
     private AdminUtil adminUtil = new AdminUtil();
+    private List<Student> stuList = new ArrayList<>();
+    private List<Teacher> teaList = new ArrayList<>();
     private List<SelectedCourse> SCList = new ArrayList<>();
     final private SelectedCourseUtil SCUtil = new SelectedCourseUtil();
 
@@ -100,13 +99,109 @@ public class AdminUI extends javax.swing.JFrame {
         jTextField_teaID.setBounds(54, 3, 132, 20);
         jTextField_teaName.setBounds(183, 3, 138, 20);
         jComboBox_teaDepart.setBounds(317, 4, 220, 20);
-        jTextField_teaMajor.setBounds(531, 3, 244, 20);
+        jTextField_teaTitle.setBounds(531, 3, 244, 20);
 
         jTable_student.getTableHeader().setFont(new Font("Lucida Grande", 0, 13));
         jTable_teacher.getTableHeader().setFont(new Font("Lucida Grande", 0, 13));
 
     }
+    
+    private <T> void Export(List<T> objList, Class<T> cls) {
+        JFileChooser chooser = new JFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("csv文件", "csv");
+        chooser.setFileFilter(filter);
+        int result = chooser.showSaveDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File file = chooser.getSelectedFile();
+            try {
+                T obj=cls.newInstance();
+                String[] Attr = (String[])cls.getDeclaredField("Attr").get(obj);
+                String[] row = new String[Attr.length];
+                CsvWriter writer = new CsvWriter(file.getPath(), ',', Charset.defaultCharset());
+                writer.writeRecord(Attr);
+                Field field;
+                int n = objList.size();
+                for (int i = 0; i < n; i++) {
+                    for (int j = 0; j < Attr.length; j++) {
+                        field = cls.getDeclaredField(Attr[j]);
+                        System.out.println(field.get(objList.get(i)));
+                        Object value = field.get(objList.get(i));
+                        if (value != null) {
+                            row[j] = field.get(objList.get(i)).toString();
+                        } else {
+                            row[j] = "";
+                        }
+                    }
+                    writer.writeRecord(row);
+                }
+                writer.close();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "导出失败！\n" + e.getMessage(), "提示信息", JOptionPane.WARNING_MESSAGE);
+            }
+        }
+    }
+    
+    private <T> void Import(List<T> objList, Class<T> cls) {
+        JFileChooser chooser = new JFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("csv文件", "csv");
+        chooser.setFileFilter(filter);
+        int result = chooser.showOpenDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File file = chooser.getSelectedFile();
+            try {
+                CsvReader reader = new CsvReader(file.getPath(), ',', Charset.defaultCharset());
+                reader.readHeaders();
+                String[] columnName = reader.getHeaders();
+                objList.clear();
+                Field field;
+                while (reader.readRecord()) {
+                    T obj=cls.newInstance();
+                    for (int i = 0; i < columnName.length; i++) {
+                        String col = columnName[i];
+                        field = cls.getDeclaredField(col);
+                        if (field.getType().equals(java.sql.Date.class)) {
+                            field.set(obj, StudentUtil.StringToDate(reader.get(col)));
+                        } else {
+                            field.set(obj, reader.get(columnName[i]));
+                        }
+                    }
+                    objList.add(obj);
+                }
+                adminUtil.insertData(objList, columnName, cls);
+                reader.close();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "导入失败！\n" + e.getMessage(), "提示信息", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+        }
+    }
+    
+    private void studentDisplay() {
+        DefaultTableModel tableModel = (DefaultTableModel) jTable_student.getModel();
+        tableModel.setRowCount(stuList.size());
+        for (int i = 0; i < stuList.size(); i++) {
+            Student student = stuList.get(i);
+            jTable_student.setValueAt(i + 1, i, 0);
+            jTable_student.setValueAt(student.id, i, 1);
+            jTable_student.setValueAt(student.name, i, 2);
+            jTable_student.setValueAt(student.depart, i, 3);
+            jTable_student.setValueAt(student.major, i, 4);
+        }
+    }
 
+    private void teacherDisplay() {
+        DefaultTableModel tableModel = (DefaultTableModel) jTable_teacher.getModel();
+        tableModel.setRowCount(teaList.size());
+        for (int i = 0; i < teaList.size(); i++) {
+            Teacher teacher = teaList.get(i);
+            jTable_teacher.setValueAt(i + 1, i, 0);
+            jTable_teacher.setValueAt(teacher.id, i, 1);
+            jTable_teacher.setValueAt(teacher.name, i, 2);
+            jTable_teacher.setValueAt(teacher.depart, i, 3);
+            jTable_teacher.setValueAt(teacher.title, i, 4);
+        }
+    }
+    
     public AdminUI() {
         //SCList=SCUtil.downloadData(id);
         initComponents();
@@ -141,7 +236,7 @@ public class AdminUI extends javax.swing.JFrame {
         jTable_teacher = new javax.swing.JTable();
         jTextField_teaID = new javax.swing.JTextField();
         jTextField_teaName = new javax.swing.JTextField();
-        jTextField_teaMajor = new javax.swing.JTextField();
+        jTextField_teaTitle = new javax.swing.JTextField();
         jComboBox_teaDepart = new javax.swing.JComboBox<>();
         jLabel_search2 = new javax.swing.JLabel();
         jButton_teaExport = new javax.swing.JButton();
@@ -224,9 +319,6 @@ public class AdminUI extends javax.swing.JFrame {
         jButton_stuImport.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jButton_stuImportMouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                jButton_stuImportMouseEntered(evt);
             }
         });
 
@@ -343,6 +435,11 @@ public class AdminUI extends javax.swing.JFrame {
         });
 
         jButton_teaExport.setText("导出");
+        jButton_teaExport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_teaExportActionPerformed(evt);
+            }
+        });
 
         jButton_teaImport.setText("导入");
         jButton_teaImport.addActionListener(new java.awt.event.ActionListener() {
@@ -378,7 +475,7 @@ public class AdminUI extends javax.swing.JFrame {
                         .addGap(0, 0, 0)
                         .addComponent(jComboBox_teaDepart, 0, 223, Short.MAX_VALUE)
                         .addGap(0, 0, 0)
-                        .addComponent(jTextField_teaMajor, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jTextField_teaTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel_teacherLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -399,7 +496,7 @@ public class AdminUI extends javax.swing.JFrame {
                     .addComponent(jTextField_teaID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextField_teaName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jComboBox_teaDepart, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField_teaMajor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField_teaTitle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel_search2, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, 0)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE)
@@ -563,26 +660,40 @@ public class AdminUI extends javax.swing.JFrame {
             condition.put("name", jTextField_stuName.getText());
         }
         if (jComboBox_stuDepart.getSelectedItem() != null) {
-            condition.put("name", jComboBox_stuDepart.getSelectedItem());
+            condition.put("depart", jComboBox_stuDepart.getSelectedItem());
         }
         if (jTextField_stuMajor.getText().length() > 0) {
             condition.put("major", jTextField_stuMajor.getText());
         }
-        List<Student> results = adminUtil.downloadData("student", condition);
-        DefaultTableModel tableModel = (DefaultTableModel) jTable_student.getModel();
-        tableModel.setRowCount(results.size());
-        for (int i = 0; i < results.size(); i++) {
-            Student student = results.get(i);
-            jTable_student.setValueAt(i + 1, i, 0);
-            jTable_student.setValueAt(student.id, i, 1);
-            jTable_student.setValueAt(student.name, i, 2);
-            jTable_student.setValueAt(student.depart, i, 3);
-            jTable_student.setValueAt(student.major, i, 4);
+        try {
+            stuList = adminUtil.downloadData(condition, Student.class);
+            studentDisplay();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "数据获取失败！\n" + e.getMessage(), "提示信息", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_jLabel_search1MouseClicked
 
     private void jLabel_search2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel_search2MouseClicked
         // TODO add your handling code here:
+        Map<String, Object> condition = new HashMap<>();
+        if (jTextField_teaID.getText().length() > 0) {
+            condition.put("id", jTextField_teaID.getText());
+        }
+        if (jTextField_teaName.getText().length() > 0) {
+            condition.put("name", jTextField_teaName.getText());
+        }
+        if (jComboBox_stuDepart.getSelectedItem() != null) {
+            condition.put("depart", jComboBox_teaDepart.getSelectedItem());
+        }
+        if (jTextField_teaTitle.getText().length() > 0) {
+            condition.put("title", jTextField_teaTitle.getText());
+        }
+        try {
+            teaList = adminUtil.downloadData(condition, Teacher.class);
+            teacherDisplay();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "数据获取失败！\n" + e.getMessage(), "提示信息", JOptionPane.WARNING_MESSAGE);
+        }
     }//GEN-LAST:event_jLabel_search2MouseClicked
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
@@ -595,59 +706,26 @@ public class AdminUI extends javax.swing.JFrame {
 
     private void jButton_teaImportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_teaImportActionPerformed
         // TODO add your handling code here:
-        JFileChooser chooser = new JFileChooser();
-        chooser.showOpenDialog(this);
-        File file = chooser.getSelectedFile();
+        Import(teaList,Teacher.class);
+        teacherDisplay();
     }//GEN-LAST:event_jButton_teaImportActionPerformed
 
     private void jButton_stuImportMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_stuImportMouseClicked
         // TODO add your handling code here:
-        JFileChooser chooser = new JFileChooser();
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("csv文件", "csv");
-        chooser.setFileFilter(filter);
-        int result = chooser.showOpenDialog(this);
-        if (result == JFileChooser.APPROVE_OPTION) {
-            File file = chooser.getSelectedFile();
-            try {
-                CsvReader reader = new CsvReader(file.getAbsolutePath(), ',', Charset.defaultCharset());
-                String[] columnName=reader.getHeaders();
-                List<Map<String,Object>> stuList=new ArrayList<>();
-                while (reader.readRecord()) {                   
-                    Map<String,Object> student=new HashMap<>();
-                    for(int i=0;i<columnName.length;i++) {
-                        student.put(columnName[i],reader.get(columnName[i]));
-                    }
-                    stuList.add(student);
-                }
-                adminUtil.insertData("student",stuList);
-                reader.close();
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "导入失败！\n" + e.getMessage(), "提示信息", JOptionPane.WARNING_MESSAGE);
-            }
-        }
+        Import(stuList,Student.class);
+        studentDisplay();
     }//GEN-LAST:event_jButton_stuImportMouseClicked
-
-    private void jButton_stuImportMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_stuImportMouseEntered
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton_stuImportMouseEntered
 
     private void jButton_stuExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_stuExportActionPerformed
         // TODO add your handling code here:
-        JFileChooser chooser = new JFileChooser();
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("csv文件", "csv");
-        chooser.setFileFilter(filter);
-        int result = chooser.showSaveDialog(this);
-        if (result == JFileChooser.APPROVE_OPTION) {
-            File file = chooser.getSelectedFile();
-            try {
-                CsvWriter writer = new CsvWriter(file.getAbsolutePath(), ',', Charset.defaultCharset());
-                writer.writeRecord(new String[]{"学号", "姓名", "院系", "专业"});
-                writer.close();
-            } catch (Exception e) {
-            }
-        }
+        Export(stuList,Student.class);
     }//GEN-LAST:event_jButton_stuExportActionPerformed
 
+    private void jButton_teaExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_teaExportActionPerformed
+        // TODO add your handling code here:
+        Export(teaList,Teacher.class);
+    }//GEN-LAST:event_jButton_teaExportActionPerformed
+ 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton3;
@@ -678,7 +756,7 @@ public class AdminUI extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField_stuMajor;
     private javax.swing.JTextField jTextField_stuName;
     private javax.swing.JTextField jTextField_teaID;
-    private javax.swing.JTextField jTextField_teaMajor;
     private javax.swing.JTextField jTextField_teaName;
+    private javax.swing.JTextField jTextField_teaTitle;
     // End of variables declaration//GEN-END:variables
 }

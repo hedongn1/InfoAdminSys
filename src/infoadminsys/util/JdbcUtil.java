@@ -101,12 +101,12 @@ public class JdbcUtil {
             for(int i = 0; i<cols_len; i++){
                 String cols_name = metaData.getColumnLabel(i+1);
                 Object cols_value = resultSet.getObject(cols_name);
-                if(cols_value == null){
+                /*if(cols_value == null){
                     cols_value = "";
-                }
+                }*/
                 Field field = cls.getDeclaredField(cols_name);
                 if (field.getType() == int.class) {
-                    if (cols_value == "") {
+                    if (cols_value == null) {
                         cols_value = 0;
                     } else {
                         cols_value = Integer.parseInt(cols_value.toString());
@@ -114,7 +114,7 @@ public class JdbcUtil {
 
                 } else
                 if (field.getType() == double.class) {
-                    if (cols_value == "") {
+                    if (cols_value == null) {
                         cols_value = 0.0;
                     } else {
                         cols_value = Double.parseDouble(cols_value.toString());

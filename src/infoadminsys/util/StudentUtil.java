@@ -26,7 +26,8 @@ public class StudentUtil {
         jdbcUtil.getConnection();
     }
 
-    public java.sql.Date StringToDate(String str) throws ParseException {
+    static public java.sql.Date StringToDate(String str) throws ParseException {
+        if(str.equals("")) return null;
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         java.util.Date date = sdf.parse(str);
         return new java.sql.Date(date.getTime());
