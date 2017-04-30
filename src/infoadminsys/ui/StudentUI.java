@@ -39,7 +39,10 @@ public class StudentUI extends javax.swing.JFrame {
         jTextField_depart.setText(student.depart);
         jTextField_major.setText(student.major);
         jTextField_hometown.setText(student.hometown);
-        jTextField_birthday.setText(student.birthday.toString());
+        if(student.birthday!=null)
+            jTextField_birthday.setText(student.birthday.toString());
+        else
+            jTextField_birthday.setText("");
         jTextField_IDnum.setText(student.IDnum);
         jTextField_address.setText(student.address);
         jTextField_email.setText(student.email);
@@ -81,7 +84,7 @@ public class StudentUI extends javax.swing.JFrame {
         student.depart = jTextField_depart.getText();
         student.major = jTextField_major.getText();
         student.hometown = jTextField_hometown.getText();
-        student.birthday= studentUtil.StringToDate(jTextField_birthday.getText());
+        student.birthday= StudentUtil.StringToDate(jTextField_birthday.getText());
         student.IDnum = jTextField_IDnum.getText();
         student.address = jTextField_address.getText();
         student.email = jTextField_email.getText();
