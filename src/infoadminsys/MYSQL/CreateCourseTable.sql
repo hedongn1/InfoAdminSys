@@ -17,5 +17,12 @@ CREATE TABLE course(
     FOREIGN KEY(teacher_id) REFERENCES teacher(id)
 )CHARACTER SET=utf8;
 
+ALTER TABLE course DROP FOREIGN KEY course_ibfk_1;
+
+ALTER TABLE course ADD FOREIGN KEY(teacher_id) REFERENCES teacher(id)
+ON UPDATE CASCADE ON DELETE CASCADE;
+
+ALTER TABLE course ADD status CHAR(30);
+
 INSERT INTO course
 VALUE ('CS1001','MATLAB程序设计','123','未给分');

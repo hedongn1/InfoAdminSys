@@ -17,3 +17,6 @@ CREATE TABLE userpass(
 
 INSERT INTO userpass
 VALUE ('15307130120','lsh','student');
+
+INSERT INTO userpass
+VALUE ('admin','123','admin');

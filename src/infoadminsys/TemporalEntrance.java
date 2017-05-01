@@ -16,10 +16,15 @@ public class TemporalEntrance {
     
     public static void main(String args[]) {
        
-        AdminUI AD=new AdminUI();
+        AdminUI AD=new AdminUI("admin");
         AD.setLocationRelativeTo(null);
         AD.setVisible(true);
        
+       /*
+       TeacherUI T=new TeacherUI("123");
+       T.setLocationRelativeTo(null);
+       T.setVisible(true);
+       */
        /*
        StudentUI S=new StudentUI("132");
        S.setLocationRelativeTo(null);

@@ -25,6 +25,7 @@ public class StudentUI extends javax.swing.JFrame {
      * Creates new form StudentUI
      */
     private String id;
+    private boolean sudo;
     private Student student;
     final private StudentUtil studentUtil = new StudentUtil();
     private List<SelectedCourse> SCList = new ArrayList<>();
@@ -50,16 +51,16 @@ public class StudentUI extends javax.swing.JFrame {
     }
 
     private void setEdit(boolean edit) {
-        jTextField_name.setEditable(false);
+        jTextField_name.setEditable(edit&sudo);
         jTextField_sex.setEditable(edit);
         jTextField_sex.setVisible(!edit);
         jComboBox_sex.setVisible(edit);
         jTextField_id.setEditable(false);
-        jTextField_depart.setEditable(false);
-        jTextField_major.setEditable(false);
+        jTextField_depart.setEditable(edit&sudo);
+        jTextField_major.setEditable(edit&sudo);
         jTextField_hometown.setEditable(edit);
         jTextField_birthday.setEditable(edit);
-        jTextField_IDnum.setEditable(false);
+        jTextField_IDnum.setEditable(edit&sudo);
         jTextField_address.setEditable(edit);;
         jTextField_email.setEditable(edit);
         jTextField_NO.setEditable(edit);
@@ -77,6 +78,13 @@ public class StudentUI extends javax.swing.JFrame {
         jButton_back.setVisible(false);
     }
 
+    private void setVis(boolean vis)
+    {
+        jLabel_hello.setVisible(vis);
+        jLabel_account.setVisible(vis);
+        jLabel_logOut.setVisible(vis);
+    }
+    
     private void saveData() throws ParseException,Exception {
         student.name = jTextField_name.getText();
         student.sex = jComboBox_sex.getSelectedItem().toString();
@@ -99,6 +107,7 @@ public class StudentUI extends javax.swing.JFrame {
         setText();
         setEdit(false);
         buttonReadonly();
+        setVis(!sudo);
     }
     
     private Object[][] getCourses(){
@@ -158,8 +167,8 @@ public class StudentUI extends javax.swing.JFrame {
     public StudentUI() {
     }
 
-    public StudentUI(String username) {
-        id = username;
+    public StudentUI(String username,boolean status) {
+        id = username; sudo=status;
         SCList=SCUtil.downloadData(id);
         initComponents();
         jTable_courses.getTableHeader().setFont(new Font("Lucida Grande", 0, 13));

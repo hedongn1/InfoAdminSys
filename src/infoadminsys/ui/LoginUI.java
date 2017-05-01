@@ -49,7 +49,7 @@ public class LoginUI extends javax.swing.JFrame {
         } else {
             //JOptionPane.showMessageDialog(frame, result, "提示", JOptionPane.WARNING_MESSAGE);
             if ("student".equals(result.type)) {
-                StudentUI S = new StudentUI(username);
+                StudentUI S = new StudentUI(username,false);
                 S.setLocationRelativeTo(this);
                 S.setVisible(true);
                 return;

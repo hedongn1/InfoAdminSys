@@ -171,8 +171,6 @@ public class AccountManageUI extends javax.swing.JFrame {
         String passOld = new String(jPassword_old.getPassword()).trim();
         String passNew1 = new String(jPassword_new1.getPassword()).trim();
         String passNew2 = new String(jPassword_new2.getPassword()).trim();
-        //System.err.println(passNew1);
-        //System.err.println(passNew2);
         if (!passNew1.equals(passNew2)) {
             JOptionPane.showMessageDialog(this, "两次新密码不一致！", "提示信息", JOptionPane.WARNING_MESSAGE);
             return;

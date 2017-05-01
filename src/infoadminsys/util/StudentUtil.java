@@ -59,7 +59,10 @@ public class StudentUtil {
                 Field field = cls.getDeclaredField(attrName);
                 param.add(field.get(student));
             } else {
-                param.add(student.birthday.toString());
+                if(student.birthday!=null)
+                    param.add(student.birthday.toString());
+                else
+                    param.add(null);
             }
         }
         sql += "WHERE id=?;";

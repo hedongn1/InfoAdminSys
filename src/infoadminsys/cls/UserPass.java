@@ -29,5 +29,22 @@ public class UserPass {
     public String getpassword(){
         return this.password;
     }
+    
+    static public String getTypeCHN(String typeENG)
+    {
+        String res="";
+        switch(typeENG)
+        {
+            case "student":
+                res="学生";
+                break;
+            case "teacher":
+                res="教师";
+                break;
+            case "admin":
+                res="管理员";
+                break;
+        }
+        return res;
+    }
 }
-

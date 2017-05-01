@@ -38,7 +38,6 @@ public class AdminUtil {
                 if (count + 1 < condition.size()) {
                     sql += ", ";
                 }
-                System.err.println(key + " " + value.toString());
             }
         }
         sql += ";";
@@ -53,7 +52,6 @@ public class AdminUtil {
 
     public <T> void insertData(List<T> dataList, String[] Attr, Class<T> cls) throws Exception {
         String table=cls.getSimpleName().toLowerCase();
-        System.out.println(table);
         String sql = "INSERT INTO " + table + "(", duplicate = " ON DUPLICATE KEY UPDATE ";
         for (int i = 0; i < Attr.length; i++) {
             sql += Attr[i];
@@ -87,7 +85,15 @@ public class AdminUtil {
         sql += duplicate;
         jdbcUtil.updateByPreparedStatement(sql, new ArrayList<Object>());
     }
-
+    
+    public void deleteData(String table,String key,String value) throws Exception
+    {
+        String sql="DELETE FROM "+table+" WHERE "+key+"=?;";
+        List<Object> param=new ArrayList<>();
+        param.add(value);
+        jdbcUtil.updateByPreparedStatement(sql,param);
+    }
+    
     protected void finalize() throws Throwable {
         super.finalize();
         if (jdbcUtil != null) {

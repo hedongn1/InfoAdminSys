@@ -14,8 +14,8 @@ CREATE TABLE selectedcourse (
     course_id CHAR(20) NOT NULL,
     score DOUBLE,
     PRIMARY KEY(student_id,course_id),
-    FOREIGN KEY(course_id) REFERENCES course(id),
-    FOREIGN KEY(student_id) REFERENCES student(id)
+    FOREIGN KEY(course_id) REFERENCES course(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY(student_id) REFERENCES student(id) ON UPDATE CASCADE ON DELETE CASCADE
 )CHARACTER SET=utf8;
 
 INSERT INTO selectedcourse
