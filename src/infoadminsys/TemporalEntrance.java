@@ -20,7 +20,8 @@ public class TemporalEntrance {
         AdminUI AD=new AdminUI("admin");
         AD.setLocationRelativeTo(null);
         AD.setVisible(true);
-       */
+       
+        */
        
        TeacherUI T=new TeacherUI("123");
        T.setLocationRelativeTo(null);

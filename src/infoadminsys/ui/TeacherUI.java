@@ -50,7 +50,10 @@ public class TeacherUI extends javax.swing.JFrame {
         jTextField_depart.setText(teacher.depart);
         jTextField_title.setText(teacher.title);
         jTextField_hometown.setText(teacher.hometown);
-        jTextField_birthday.setText(teacher.birthday.toString());
+        if(teacher.birthday!=null)
+           jTextField_birthday.setText(teacher.birthday.toString());
+        else 
+           jTextField_birthday.setText("");
         jTextField_IDnum.setText(teacher.IDnum);
         jTextField_address.setText(teacher.address);
         jTextField_email.setText(teacher.email);
