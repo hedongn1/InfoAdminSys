@@ -92,7 +92,7 @@ public class StudentUI extends javax.swing.JFrame {
         student.depart = jTextField_depart.getText();
         student.major = jTextField_major.getText();
         student.hometown = jTextField_hometown.getText();
-        student.birthday= StudentUtil.StringToDate(jTextField_birthday.getText());
+        student.birthday= Utility.StringToDate(jTextField_birthday.getText());
         student.IDnum = jTextField_IDnum.getText();
         student.address = jTextField_address.getText();
         student.email = jTextField_email.getText();
@@ -587,7 +587,7 @@ public class StudentUI extends javax.swing.JFrame {
     private void jLabel_accountMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel_accountMouseClicked
         // TODO add your handling code here:
         setEnabled(false);
-        AccountManageUI AM = new AccountManageUI(student.id, student.type);
+        AccountManageUI AM = new AccountManageUI(student.id, student.type, false);
         AM.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         AM.setLocationRelativeTo(this);
         AM.setAlwaysOnTop(true);

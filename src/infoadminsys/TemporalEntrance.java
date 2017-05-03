@@ -20,13 +20,18 @@ public class TemporalEntrance {
         AdminUI AD=new AdminUI("admin");
         AD.setLocationRelativeTo(null);
         AD.setVisible(true);
-       
         */
        
+        LoginUI T = new LoginUI();
+        T.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        T.setLocationRelativeTo(null);
+        T.setVisible(true);
+        
+       /*
        TeacherUI T=new TeacherUI("123");
        T.setLocationRelativeTo(null);
        T.setVisible(true);
-       
+       */
        /*
        StudentUI S=new StudentUI("132");
        S.setLocationRelativeTo(null);

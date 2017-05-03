@@ -157,7 +157,7 @@ public class JdbcUtil {
         int col_len = metaData.getColumnCount();
         if (resultSet.next()){
             for(int i=0; i<col_len; i++ ){
-                String cols_name = metaData.getColumnName(i+1);
+                String cols_name = metaData.getColumnLabel(i+1);
                 Object cols_value = resultSet.getObject(cols_name);
                 if(cols_value == null){
                     cols_value = "";
@@ -183,7 +183,7 @@ public class JdbcUtil {
         while(resultSet.next()){
             Map<String, Object> map = new HashMap<String,Object>();
             for(int i=0; i<cols_len; i++){
-                String cols_name = metaData.getColumnName(i+1);
+                String cols_name = metaData.getColumnLabel(i+1);
                 Object cols_value = resultSet.getObject(cols_name);
                 if(cols_value == null){
                     cols_value = "";

@@ -44,46 +44,7 @@ public class AdminUI extends javax.swing.JFrame {
     private List<UserPass> accList = new ArrayList<>();
     private StudentUtil studentUtil = new StudentUtil();
     private TeacherUtil teacherUtil = new TeacherUtil();
-    private List<SelectedCourse> SCList = new ArrayList<>();
-    final private SelectedCourseUtil SCUtil = new SelectedCourseUtil();
-
-    private Object[][] getCourses() {
-        int rowNum = SCList.size();
-        Object[][] courses = new Object[rowNum][3];
-        for (int i = 0; i < rowNum; i++) {
-            courses[i][0] = SCList.get(i).course_id;
-            courses[i][1] = SCList.get(i).course_name;
-            courses[i][2] = SCList.get(i).teacher_name;
-        }
-        return courses;
-    }
-
-    private TableModel SCTableModel() {
-        return new javax.swing.table.DefaultTableModel(getCourses(),
-                new String[]{
-                    "课程号", "课程名称", "教师"
-                }
-        ) {
-            boolean[] canEdit = new boolean[]{
-                false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit[columnIndex];
-            }
-        };
-    }
-
-    private Object[][] getScores() {
-        int rowNum = SCList.size();
-        Object[][] scores = new Object[rowNum][3];
-        for (int i = 0; i < rowNum; i++) {
-            scores[i][0] = SCList.get(i).course_id;
-            scores[i][1] = SCList.get(i).course_name;
-            scores[i][2] = SCList.get(i).score;
-        }
-        return scores;
-    }
+    private CourseUtil courseUtil = new CourseUtil();
 
     private void setSearchIcon() {
         ImageIcon icon = new ImageIcon("/Users/lsh/Desktop/Workspace/NetBeansProjects/InfoAdminSys/image/search.png");
@@ -95,6 +56,7 @@ public class AdminUI extends javax.swing.JFrame {
     }
 
     private void adjust() {
+        jLabel_hello.setText("您好，" + admin.id);
         jPanel_student.setLayout(null);
         jScrollPane1.setBounds(6, 27, 767, 480);
         jTable_student.setBounds(6, 27, 767, 440);
@@ -189,10 +151,16 @@ public class AdminUI extends javax.swing.JFrame {
                     for (int i = 0; i < columnName.length; i++) {
                         String col = columnName[i];
                         field = cls.getDeclaredField(col);
-                        if (field.getType().equals(java.sql.Date.class)) {
-                            field.set(obj, StudentUtil.StringToDate(reader.get(col)));
+                        Class<?> t = field.getType();
+                        String value = reader.get(columnName[i]).trim();
+                        if (t.equals(java.sql.Date.class)) {
+                            field.set(obj, Utility.StringToDate(value));
+                        } else if (t.equals(int.class)) {
+                            field.set(obj, Utility.StringToInt(value));
+                        } else if (t.equals(double.class)) {
+                            field.set(obj, Utility.StringToDouble(value));
                         } else {
-                            field.set(obj, reader.get(columnName[i]));
+                            field.set(obj, value);
                         }
                     }
                     objList.add(obj);
@@ -240,7 +208,7 @@ public class AdminUI extends javax.swing.JFrame {
             jTable_course.setValueAt(i + 1, i, 0);
             jTable_course.setValueAt(course.id, i, 1);
             jTable_course.setValueAt(course.name, i, 2);
-            jTable_course.setValueAt(course.teacher_id, i, 3);
+            jTable_course.setValueAt(course.teacher_name, i, 3);
             jTable_course.setValueAt(course.getProportionString(), i, 4);
         }
     }
@@ -303,18 +271,21 @@ public class AdminUI extends javax.swing.JFrame {
     private void courseSearch() {
         Map<String, Object> condition = new HashMap<>();
         if (jTextField_courID.getText().length() > 0) {
-            condition.put("id", jTextField_courID.getText());
+            condition.put("c.id", jTextField_courID.getText());
         }
         if (jTextField_courName.getText().length() > 0) {
-            condition.put("name", jTextField_courName.getText());
+            condition.put("c.name", jTextField_courName.getText());
         }
-        /*
         if (jTextField_courTea.getText().length() > 0) {
-            condition.put("name", jTextField_courTea.getText());
+            condition.put("t.name", jTextField_courTea.getText());
         }
-         */
         try {
-            courList = adminUtil.downloadData(condition, Course.class);
+            courList.clear();
+            List<Map<String, Object>> mapList = courseUtil.findAllCourse(condition);
+            int n = mapList.size();
+            for (int i = 0; i < n; i++) {
+                courList.add(Utility.MapToClass(mapList.get(i), Course.class));
+            }
             courseDisplay();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "数据获取失败！\n" + e.getMessage(), "提示信息", JOptionPane.WARNING_MESSAGE);
@@ -326,8 +297,8 @@ public class AdminUI extends javax.swing.JFrame {
         if (jTextField_accUsername.getText().length() > 0) {
             condition.put("username", jTextField_accUsername.getText());
         }
-        if (jComboBox_accType.getSelectedItem() != null) {
-            condition.put("type", jComboBox_accType.getSelectedItem());
+        if (jComboBox_accType.getSelectedIndex() > 0) {
+            condition.put("type", UserPass.getTypeENG(jComboBox_accType.getSelectedItem().toString()));
         }
         try {
             accList = adminUtil.downloadData(condition, UserPass.class);
@@ -341,7 +312,6 @@ public class AdminUI extends javax.swing.JFrame {
     }
 
     public AdminUI(String username) {
-        //SCList=SCUtil.downloadData(id);
         admin.id = username;
         initComponents();
         setSearchIcon();
@@ -670,9 +640,9 @@ public class AdminUI extends javax.swing.JFrame {
         });
 
         jButton_teaModify.setText("查看详细/修改");
-        jButton_teaModify.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton_teaModifyActionPerformed(evt);
+        jButton_teaModify.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton_teaModifyMouseClicked(evt);
             }
         });
 
@@ -735,23 +705,23 @@ public class AdminUI extends javax.swing.JFrame {
         jButton_courModify.setText("查看详细/修改");
 
         jButton_courDelete.setText("删除选中");
-        jButton_courDelete.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton_courDeleteActionPerformed(evt);
+        jButton_courDelete.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton_courDeleteMouseClicked(evt);
             }
         });
 
         jButton_courImport.setText("导入");
-        jButton_courImport.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton_courImportActionPerformed(evt);
+        jButton_courImport.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton_courImportMouseClicked(evt);
             }
         });
 
         jButton_courExport.setText("导出");
-        jButton_courExport.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton_courExportActionPerformed(evt);
+        jButton_courExport.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton_courExportMouseClicked(evt);
             }
         });
 
@@ -917,6 +887,11 @@ public class AdminUI extends javax.swing.JFrame {
         }
 
         jButton_accModify.setText("重置密码");
+        jButton_accModify.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton_accModifyMouseClicked(evt);
+            }
+        });
 
         jButton_accDelete.setText("删除选中");
         jButton_accDelete.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -926,16 +901,16 @@ public class AdminUI extends javax.swing.JFrame {
         });
 
         jButton_accImport.setText("导入");
-        jButton_accImport.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton_accImportActionPerformed(evt);
+        jButton_accImport.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton_accImportMouseClicked(evt);
             }
         });
 
         jButton_accExport.setText("导出");
-        jButton_accExport.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton_accExportActionPerformed(evt);
+        jButton_accExport.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton_accExportMouseClicked(evt);
             }
         });
 
@@ -945,8 +920,7 @@ public class AdminUI extends javax.swing.JFrame {
             }
         });
 
-        jComboBox_accType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "学生", "教师", "管理员" }));
-        jComboBox_accType.setSelectedIndex(-1);
+        jComboBox_accType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " ", "学生", "教师", "管理员" }));
         jComboBox_accType.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jComboBox_accTypeKeyPressed(evt);
@@ -1068,7 +1042,7 @@ public class AdminUI extends javax.swing.JFrame {
     private void jLabel_accountMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel_accountMouseClicked
         // TODO add your handling code here:
         setEnabled(false);
-        AccountManageUI AM = new AccountManageUI(admin.id, admin.type);
+        AccountManageUI AM = new AccountManageUI(admin.id, admin.type, false);
         AM.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         AM.setLocationRelativeTo(this);
         AM.setAlwaysOnTop(true);
@@ -1122,7 +1096,7 @@ public class AdminUI extends javax.swing.JFrame {
             for (int i = 0; i < n; i++) {
                 String id = jTable_student.getValueAt(rows[i], 1).toString();
                 try {
-                    adminUtil.deleteData("student","id",id);
+                    adminUtil.deleteData("student", "id", id);
                 } catch (Exception e) {
                     count++;
                     rows[i] = -1;
@@ -1162,7 +1136,7 @@ public class AdminUI extends javax.swing.JFrame {
             for (int i = 0; i < n; i++) {
                 String id = jTable_teacher.getValueAt(rows[i], 1).toString();
                 try {
-                    adminUtil.deleteData("teacher","id",id);
+                    adminUtil.deleteData("teacher", "id", id);
                 } catch (Exception e) {
                     count++;
                     rows[i] = -1;
@@ -1205,18 +1179,6 @@ public class AdminUI extends javax.swing.JFrame {
         Export(teaList, Teacher.class);
     }//GEN-LAST:event_jButton_teaExportActionPerformed
 
-    private void jButton_courDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_courDeleteActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton_courDeleteActionPerformed
-
-    private void jButton_courImportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_courImportActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton_courImportActionPerformed
-
-    private void jButton_courExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_courExportActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton_courExportActionPerformed
-
     private void jLabel_search3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel_search3MouseClicked
         // TODO add your handling code here:
         courseSearch();
@@ -1244,10 +1206,6 @@ public class AdminUI extends javax.swing.JFrame {
             S.setVisible(true);
         }
     }//GEN-LAST:event_jButton_stuModifyMouseClicked
-
-    private void jButton_teaModifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_teaModifyActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton_teaModifyActionPerformed
 
     private void jLabel_search2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jLabel_search2KeyPressed
         // TODO add your handling code here:
@@ -1364,7 +1322,7 @@ public class AdminUI extends javax.swing.JFrame {
             for (int i = 0; i < n; i++) {
                 String username = jTable_account.getValueAt(rows[i], 1).toString();
                 try {
-                    adminUtil.deleteData("userpass","username",username);
+                    adminUtil.deleteData("userpass", "username", username);
                 } catch (Exception e) {
                     count++;
                     rows[i] = -1;
@@ -1376,20 +1334,100 @@ public class AdminUI extends javax.swing.JFrame {
                     accList.remove(rows[i]);
                 }
             }
-            teacherDisplay();
+            accountDisplay();
         }
     }//GEN-LAST:event_jButton_accDeleteMouseClicked
 
-    private void jButton_accImportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_accImportActionPerformed
+    private void jButton_teaModifyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_teaModifyMouseClicked
+        // TODO add your handling code here:
+        int row = jTable_teacher.getSelectedRow();
+        if (row >= 0) {
+            setEnabled(false);
+            String username = jTable_teacher.getValueAt(row, 1).toString();
+            TeacherUI T = new TeacherUI(username);
+            T.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            T.setLocationRelativeTo(this);
+            T.setAlwaysOnTop(true);
+            T.addWindowListener(new WindowAdapter() {
+                public void windowClosed(WindowEvent e) {
+                    setEnabled(true);
+                }
+            });
+            T.setVisible(true);
+        }
+    }//GEN-LAST:event_jButton_teaModifyMouseClicked
+
+    private void jButton_courImportMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_courImportMouseClicked
+        // TODO add your handling code here:
+        Import(courList, Course.class);
+        courseDisplay();
+    }//GEN-LAST:event_jButton_courImportMouseClicked
+
+    private void jButton_courExportMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_courExportMouseClicked
+        // TODO add your handling code here:
+        Export(courList, Course.class);
+    }//GEN-LAST:event_jButton_courExportMouseClicked
+
+    private void jButton_courDeleteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_courDeleteMouseClicked
+        // TODO add your handling code here:
+        int rows[] = jTable_course.getSelectedRows();
+        int n = rows.length;
+        if (n > 0) {
+            int res = JOptionPane.showConfirmDialog(this, "确定删除？此操作不可撤回!", "提示信息", JOptionPane.YES_NO_OPTION);
+            if (res == JOptionPane.NO_OPTION) {
+                return;
+            }
+            Arrays.sort(rows);
+            int count = 0;
+            for (int i = 0; i < n; i++) {
+                String id = jTable_course.getValueAt(rows[i], 1).toString();
+                try {
+                    adminUtil.deleteData("course", "id", id);
+                } catch (Exception e) {
+                    count++;
+                    rows[i] = -1;
+                }
+            }
+            JOptionPane.showMessageDialog(this, "删除完毕，共" + Integer.toString(n) + "个，失败" + Integer.toString(count) + "个!", "提示信息", JOptionPane.WARNING_MESSAGE);
+            for (int i = n - 1; i >= 0; i--) {
+                if (rows[i] >= 0) {
+                    courList.remove(rows[i]);
+                }
+            }
+            courseDisplay();
+        }
+    }//GEN-LAST:event_jButton_courDeleteMouseClicked
+
+    private void jButton_accImportMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_accImportMouseClicked
         // TODO add your handling code here:
         Import(accList, UserPass.class);
         accountDisplay();
-    }//GEN-LAST:event_jButton_accImportActionPerformed
+    }//GEN-LAST:event_jButton_accImportMouseClicked
 
-    private void jButton_accExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_accExportActionPerformed
+    private void jButton_accExportMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_accExportMouseClicked
         // TODO add your handling code here:
         Export(accList, UserPass.class);
-    }//GEN-LAST:event_jButton_accExportActionPerformed
+    }//GEN-LAST:event_jButton_accExportMouseClicked
+
+    private void jButton_accModifyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_accModifyMouseClicked
+        // TODO add your handling code here:
+        int row = jTable_account.getSelectedRow();
+        if (row >= 0) {
+            setEnabled(false);
+            String username = jTable_account.getValueAt(row, 1).toString();
+            String type = jTable_account.getValueAt(row, 2).toString();
+            AccountManageUI AM = new AccountManageUI(username, type, true);
+            AM.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            AM.setLocationRelativeTo(this);
+            AM.setAlwaysOnTop(true);
+            AM.addWindowListener(new WindowAdapter() {
+                public void windowClosed(WindowEvent e) {
+                    setEnabled(true);
+                }
+            });
+            AM.setVisible(true);
+        }
+    }//GEN-LAST:event_jButton_accModifyMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

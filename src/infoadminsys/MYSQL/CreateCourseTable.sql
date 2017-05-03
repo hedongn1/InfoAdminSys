@@ -12,6 +12,8 @@ CREATE TABLE course(
     id CHAR(20) NOT NULL,
     name CHAR(30) NOT NULL,
     teacher_id CHAR(20) NOT NULL,
+    capacity INTEGER,
+    selectedcnt INTEGER,
     status CHAR(30),
     PRIMARY KEY(id),
     FOREIGN KEY(teacher_id) REFERENCES teacher(id)
@@ -22,7 +24,9 @@ ALTER TABLE course DROP FOREIGN KEY course_ibfk_1;
 ALTER TABLE course ADD FOREIGN KEY(teacher_id) REFERENCES teacher(id)
 ON UPDATE CASCADE ON DELETE CASCADE;
 
-ALTER TABLE course ADD status CHAR(30);
+ALTER TABLE course CHANGE status commitStatus CHAR(30);
+ALTER TABLE course ADD capacity INTEGER;
+ALTER TABLE course ADD selectedcnt INTEGER;
 
 INSERT INTO course
 VALUE ('CS1001','MATLAB程序设计','123','未给分');

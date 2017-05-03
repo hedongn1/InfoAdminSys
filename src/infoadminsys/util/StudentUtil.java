@@ -26,13 +26,6 @@ public class StudentUtil {
         jdbcUtil.getConnection();
     }
 
-    static public java.sql.Date StringToDate(String str) throws ParseException {
-        if(str.equals("")) return null;
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        java.util.Date date = sdf.parse(str);
-        return new java.sql.Date(date.getTime());
-    }
-
     public Student downloadData(String id) {
         String sql = "SELECT * FROM student WHERE id=?;";
         List<Object> param = new ArrayList<>();

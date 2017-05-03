@@ -15,8 +15,6 @@ import javax.swing.*;
  */
 public class LoginUI extends javax.swing.JFrame {
 
-    private static JFrame frame;
-
     /**
      * Creates new form Login
      */
@@ -29,11 +27,11 @@ public class LoginUI extends javax.swing.JFrame {
     private void LoginAction()
     {
         if (txtusername.getText() == null || txtusername.getText().length() <= 0) {
-            JOptionPane.showMessageDialog(frame, "请输入用户名", "提示", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "请输入用户名", "提示", JOptionPane.WARNING_MESSAGE);
             return;
         }
         if (txtpassword.getText() == null || txtpassword.getText().length() <= 0) {
-            JOptionPane.showMessageDialog(frame, "请输入密码", "提示", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "请输入密码", "提示", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
@@ -44,20 +42,29 @@ public class LoginUI extends javax.swing.JFrame {
         UserPass result = loginUtil.Login(userpass);
 
         if (result == null) {
-            JOptionPane.showMessageDialog(frame, "用户名或密码错误！", "提示", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "用户名或密码错误！", "提示", JOptionPane.WARNING_MESSAGE);
             return;
         } else {
-            //JOptionPane.showMessageDialog(frame, result, "提示", JOptionPane.WARNING_MESSAGE);
-            if ("student".equals(result.type)) {
-                StudentUI S = new StudentUI(username,false);
-                S.setLocationRelativeTo(this);
-                S.setVisible(true);
-                return;
-            } else
-            if ("teacher".equals(result.type)) {
-                
-            } else {
-                
+            switch(result.type)
+            {
+                case "student":
+                    StudentUI S = new StudentUI(username,false);
+                    S.setLocationRelativeTo(null);
+                    S.setVisible(true);
+                    this.dispose();
+                    break;
+                case "teacher":
+                    TeacherUI T = new TeacherUI(username);
+                    T.setLocationRelativeTo(null);
+                    T.setVisible(true);
+                    this.dispose();
+                    break;
+                case "admin":
+                    AdminUI AD=new AdminUI("admin");
+                    AD.setLocationRelativeTo(null);
+                    AD.setVisible(true);
+                    this.dispose();
+                    break;
             }
         }
     }

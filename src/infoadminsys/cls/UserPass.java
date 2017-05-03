@@ -10,9 +10,10 @@ package infoadminsys.cls;
  * @author hed
  */
 public class UserPass {
-    private String username;
-    private String password;
+    public String username;
+    public String password;
     public String type;
+    static public String[] Attr={"username","type"};
     
     public UserPass(){
     }
@@ -43,6 +44,24 @@ public class UserPass {
                 break;
             case "admin":
                 res="管理员";
+                break;
+        }
+        return res;
+    }
+    
+    static public String getTypeENG(String typeCHN)
+    {
+        String res="";
+        switch(typeCHN)
+        {
+            case "学生":
+                res="student";
+                break;
+            case "教师":
+                res="teacher";
+                break;
+            case "管理员":
+                res="admin";
                 break;
         }
         return res;

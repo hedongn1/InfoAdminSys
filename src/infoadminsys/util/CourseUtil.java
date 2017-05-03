@@ -7,8 +7,10 @@ package infoadminsys.util;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -25,13 +27,25 @@ public class CourseUtil {
 
 
     //获得所有课程信息
-    public List<Map<String,Object>> findAllCourse() {
-        String sql = "select c.id as id, c.name, " +
-                "teacher_id,t.name, commitStatus from course as c, teacher as t where teacher_id = t.id";
+    public List<Map<String,Object>> findAllCourse(Map<String, Object> condition) {
+        String sql = "select c.id as id, c.name as name, teacher_id, t.name as teacher_name, capacity, selectedcnt, commitStatus "
+               +"from course as c, teacher as t where teacher_id = t.id";
+        List<Object> param=new ArrayList<>();
+        if (condition.size() > 0) {
+            Set set = condition.entrySet();
+            for (Iterator iter = set.iterator(); iter.hasNext();) {
+                Map.Entry entry = (Map.Entry) iter.next();
+                String key = (String) entry.getKey();
+                Object value = entry.getValue();
+                sql += " AND "+key + "=?";
+                param.add(value);
+            }
+        }
+        sql+=";";
+        System.out.println(sql);
         List<Map<String,Object>> list = new ArrayList<>();
         try {
-            list = jdbcUtil.getCertainResultList(sql,null);
-           // System.out.println(list);
+            list = jdbcUtil.getCertainResultList(sql,param);
         } catch (Exception e) {
             e.printStackTrace();
         }

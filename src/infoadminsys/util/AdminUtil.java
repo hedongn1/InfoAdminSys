@@ -35,11 +35,13 @@ public class AdminUtil {
                 Object value = entry.getValue();
                 sql += key + "=?";
                 param.add(value);
-                if (count + 1 < condition.size()) {
-                    sql += ", ";
+                count++;
+                if (count < condition.size()) {
+                    sql += " AND ";
                 }
             }
         }
+        //System.out.println(sql);
         sql += ";";
         List<T> result = new ArrayList<>();
         try {
@@ -50,13 +52,13 @@ public class AdminUtil {
         return result;
     }
 
-    public <T> void insertData(List<T> dataList, String[] Attr, Class<T> cls) throws Exception {
+    public <T> void insertData(List<T> dataList, String[] col, Class<T> cls) throws Exception {
         String table=cls.getSimpleName().toLowerCase();
         String sql = "INSERT INTO " + table + "(", duplicate = " ON DUPLICATE KEY UPDATE ";
-        for (int i = 0; i < Attr.length; i++) {
-            sql += Attr[i];
-            duplicate += Attr[i] + "=VALUES(" + Attr[i] + ")";
-            if (i + 1 < Attr.length) {
+        for (int i = 0; i < col.length; i++) {
+            sql += col[i];
+            duplicate += col[i] + "=VALUES(" + col[i] + ")";
+            if (i + 1 < col.length) {
                 sql += ",";
                 duplicate += ",";
             } else {
@@ -66,14 +68,17 @@ public class AdminUtil {
         }
         sql += "VALUE ";
         int n = dataList.size();
+        List<Object> param=new ArrayList<Object>();
         for (int i = 0; i < n; i++) {
             T data = dataList.get(i);
             sql += "(";
-            for (int j = 0; j < Attr.length; j++) {
-                Object value = cls.getDeclaredField(Attr[j]).get(data);
-                if(value!=null) sql += "'" + value.toString() + "'";
-                else sql+="null";
-                if (j + 1 < Attr.length) {
+            for (int j = 0; j < col.length; j++) {
+                Object value = cls.getDeclaredField(col[j]).get(data);
+                param.add(value);
+                sql+="?";
+                //if(value!=null) sql += "'" + value.toString() + "'";
+                //else sql+="null";
+                if (j + 1 < col.length) {
                     sql += ", ";
                 }
             }
@@ -83,7 +88,7 @@ public class AdminUtil {
             }
         }
         sql += duplicate;
-        jdbcUtil.updateByPreparedStatement(sql, new ArrayList<Object>());
+        jdbcUtil.updateByPreparedStatement(sql, param);
     }
     
     public void deleteData(String table,String key,String value) throws Exception

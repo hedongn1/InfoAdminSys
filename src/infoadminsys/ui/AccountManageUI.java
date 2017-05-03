@@ -21,15 +21,18 @@ public class AccountManageUI extends javax.swing.JFrame {
      * Creates new form AccoutManageUI
      */
     private String username;
+    private boolean sudo;
 
     public AccountManageUI() {
     }
 
-    public AccountManageUI(String id, String type) {
-        username = id;
+    public AccountManageUI(String id, String type, boolean status) {
+        username = id; sudo=status;
         initComponents();
         jLabel_account2.setText(id);
         jLabel_type2.setText(type);
+        jLabel_oldPass.setVisible(!sudo);
+        jPassword_old.setVisible(!sudo);
     }
 
     /**
@@ -146,7 +149,7 @@ public class AccountManageUI extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jLabel_newPass2)
                     .addComponent(jPassword_new2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(18, 18, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton_modify)
                     .addComponent(jButton_back))
@@ -175,9 +178,13 @@ public class AccountManageUI extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "两次新密码不一致！", "提示信息", JOptionPane.WARNING_MESSAGE);
             return;
         }
+        if (passOld.length()==0 || passNew1.length()==0) {
+            JOptionPane.showMessageDialog(this, "密码不能为空！", "提示信息", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
         LoginUtil loginUtil = new LoginUtil();
         UserPass result = loginUtil.Login(new UserPass(username, passOld));
-        if (result == null) {
+        if (!sudo && result == null) {
             JOptionPane.showMessageDialog(this, "旧密码错误！", "提示信息", JOptionPane.WARNING_MESSAGE);
             return;
         } else {

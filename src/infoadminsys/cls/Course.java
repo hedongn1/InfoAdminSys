@@ -12,14 +12,16 @@ package infoadminsys.cls;
 public class Course {
     public String id;
     public String name;
+    public String teacher_name;
     public String teacher_id;
     public int capacity;
-    public int selecedcnt;
-    public String status;
+    public int selectedcnt;
+    public String commitStatus;
+    static public String[] Attr={"id","name","teacher_id","capacity","selectedcnt","commitStatus"};
     //use teacher_id instead of tid, or it would go wrong in database
     //use public instead of private for convenience
     
     public String getProportionString() {
-        return Integer.toString(selecedcnt)+"/"+Integer.toString(capacity);
+        return Integer.toString(selectedcnt)+"/"+Integer.toString(capacity);
     }
 }

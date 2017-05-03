@@ -472,7 +472,7 @@
                 <Property name="text" type="java.lang.String" value="&#x67e5;&#x770b;&#x8be6;&#x7ec6;/&#x4fee;&#x6539;"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_teaModifyActionPerformed"/>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jButton_teaModifyMouseClicked"/>
               </Events>
             </Component>
           </SubComponents>
@@ -558,7 +558,7 @@
                 <Property name="text" type="java.lang.String" value="&#x5220;&#x9664;&#x9009;&#x4e2d;"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_courDeleteActionPerformed"/>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jButton_courDeleteMouseClicked"/>
               </Events>
             </Component>
             <Component class="javax.swing.JButton" name="jButton_courImport">
@@ -566,7 +566,7 @@
                 <Property name="text" type="java.lang.String" value="&#x5bfc;&#x5165;"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_courImportActionPerformed"/>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jButton_courImportMouseClicked"/>
               </Events>
             </Component>
             <Component class="javax.swing.JButton" name="jButton_courExport">
@@ -574,7 +574,7 @@
                 <Property name="text" type="java.lang.String" value="&#x5bfc;&#x51fa;"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_courExportActionPerformed"/>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jButton_courExportMouseClicked"/>
               </Events>
             </Component>
             <Component class="javax.swing.JTextField" name="jTextField_courID">
@@ -795,6 +795,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="&#x91cd;&#x7f6e;&#x5bc6;&#x7801;"/>
               </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jButton_accModifyMouseClicked"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="jButton_accDelete">
               <Properties>
@@ -809,7 +812,7 @@
                 <Property name="text" type="java.lang.String" value="&#x5bfc;&#x5165;"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_accImportActionPerformed"/>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jButton_accImportMouseClicked"/>
               </Events>
             </Component>
             <Component class="javax.swing.JButton" name="jButton_accExport">
@@ -817,7 +820,7 @@
                 <Property name="text" type="java.lang.String" value="&#x5bfc;&#x51fa;"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_accExportActionPerformed"/>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jButton_accExportMouseClicked"/>
               </Events>
             </Component>
             <Component class="javax.swing.JTextField" name="jTextField_accUsername">
@@ -828,13 +831,13 @@
             <Component class="javax.swing.JComboBox" name="jComboBox_accType">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="3">
-                    <StringItem index="0" value="&#x5b66;&#x751f;"/>
-                    <StringItem index="1" value="&#x6559;&#x5e08;"/>
-                    <StringItem index="2" value="&#x7ba1;&#x7406;&#x5458;"/>
+                  <StringArray count="4">
+                    <StringItem index="0" value=" "/>
+                    <StringItem index="1" value="&#x5b66;&#x751f;"/>
+                    <StringItem index="2" value="&#x6559;&#x5e08;"/>
+                    <StringItem index="3" value="&#x7ba1;&#x7406;&#x5458;"/>
                   </StringArray>
                 </Property>
-                <Property name="selectedIndex" type="int" value="-1"/>
               </Properties>
               <Events>
                 <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jComboBox_accTypeKeyPressed"/>
