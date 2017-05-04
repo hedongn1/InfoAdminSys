@@ -5,9 +5,9 @@
  */
 package infoadminsys.ui;
 
-import javax.swing.JOptionPane;
 import infoadminsys.util.*;
 import infoadminsys.cls.*;
+import javax.swing.JOptionPane;
 import java.sql.SQLException;
 import java.util.*;
 

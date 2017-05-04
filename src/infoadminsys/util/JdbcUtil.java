@@ -14,25 +14,26 @@ import java.util.*;
  * @author hed
  */
 public class JdbcUtil {
+
     private Connection connection = null;
     private PreparedStatement preparedStatement = null;
     private ResultSet resultSet = null;
-    
-    private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
+
+    private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
     private static final String DB_URL = "jdbc:mysql://localhost/InfoAdminSys?useSSL=false&characterEncoding=utf8";
-    
+
     private static final String DB_USERNAME = "root";
     private static final String DB_PASSWORD = "hedong";
-    
-    public JdbcUtil(){
+
+    public JdbcUtil() {
         try {
             Class.forName(JDBC_DRIVER);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    
-    public Connection getConnection(){
+
+    public Connection getConnection() {
         try {
             connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
         } catch (SQLException e) {
@@ -40,27 +41,24 @@ public class JdbcUtil {
         }
         return connection;
     }
-    
-    public <T> T getSingleResult(String sql,List<Object> param,Class<T> cls)throws Exception {
+
+    public <T> T getSingleResult(String sql, List<Object> param, Class<T> cls) throws Exception {
         T resultObject = null;
         int index = 1;
         preparedStatement = connection.prepareStatement(sql);
-        if(param != null && !param.isEmpty()){
-            for(int i = 0; i<param.size(); i++){
+        if (param != null && !param.isEmpty()) {
+            for (int i = 0; i < param.size(); i++) {
                 preparedStatement.setObject(index++, param.get(i));
             }
         }
         resultSet = preparedStatement.executeQuery();
-        ResultSetMetaData metaData  = resultSet.getMetaData();
+        ResultSetMetaData metaData = resultSet.getMetaData();
         int cols_len = metaData.getColumnCount();
         if (resultSet.next()) {
             resultObject = cls.newInstance();
             for (int i = 0; i < cols_len; i++) {
                 String cols_name = metaData.getColumnLabel(i + 1);
                 Object cols_value = resultSet.getObject(cols_name);
-                /*if (cols_value == null) {
-                    cols_value = "";
-                }*/
                 Field field = cls.getDeclaredField(cols_name);
                 if (field.getType() == int.class) {
                     if (cols_value == null) {
@@ -68,8 +66,7 @@ public class JdbcUtil {
                     } else {
                         cols_value = Integer.parseInt(cols_value.toString());
                     }
-                }  else
-                if (field.getType() == double.class) {
+                } else if (field.getType() == double.class) {
                     if (cols_value == null) {
                         cols_value = 0.0;
                     } else {
@@ -84,26 +81,23 @@ public class JdbcUtil {
 
     }
 
-    public <T> List<T> getMultipleResult(String sql,List<Object> param,Class<T> cls )throws Exception {
+    public <T> List<T> getMultipleResult(String sql, List<Object> param, Class<T> cls) throws Exception {
         List<T> list = new ArrayList<T>();
         int index = 1;
         preparedStatement = connection.prepareStatement(sql);
-        if(param != null && !param.isEmpty()){
-            for(int i = 0; i<param.size(); i++){
+        if (param != null && !param.isEmpty()) {
+            for (int i = 0; i < param.size(); i++) {
                 preparedStatement.setObject(index++, param.get(i));
             }
         }
         resultSet = preparedStatement.executeQuery();
-        ResultSetMetaData metaData  = resultSet.getMetaData();
+        ResultSetMetaData metaData = resultSet.getMetaData();
         int cols_len = metaData.getColumnCount();
-        while(resultSet.next()) {
+        while (resultSet.next()) {
             T resultObject = cls.newInstance();
-            for(int i = 0; i<cols_len; i++){
-                String cols_name = metaData.getColumnLabel(i+1);
+            for (int i = 0; i < cols_len; i++) {
+                String cols_name = metaData.getColumnLabel(i + 1);
                 Object cols_value = resultSet.getObject(cols_name);
-                /*if(cols_value == null){
-                    cols_value = "";
-                }*/
                 Field field = cls.getDeclaredField(cols_name);
                 if (field.getType() == int.class) {
                     if (cols_value == null) {
@@ -112,8 +106,7 @@ public class JdbcUtil {
                         cols_value = Integer.parseInt(cols_value.toString());
                     }
 
-                } else
-                if (field.getType() == double.class) {
+                } else if (field.getType() == double.class) {
                     if (cols_value == null) {
                         cols_value = 0.0;
                     } else {
@@ -121,14 +114,14 @@ public class JdbcUtil {
                     }
                 }
                 field.setAccessible(true);
-                field.set(resultObject,cols_value);
+                field.set(resultObject, cols_value);
             }
             list.add(resultObject);
         }
         return list;
     }
-    
-    public boolean updateByPreparedStatement(String sql,List<Object> param) throws SQLException {
+
+    public boolean updateByPreparedStatement(String sql, List<Object> param) throws SQLException {
         boolean flag = false;
         int result = -1;
         preparedStatement = connection.prepareStatement(sql);
@@ -142,9 +135,9 @@ public class JdbcUtil {
         flag = result > 0 ? true : false;
         return flag;
     }
-    
-    public Map<String,Object> getCertainResult(String sql,List<Object> param) throws SQLException {
-        Map<String,Object> map = new HashMap<String,Object>();
+
+    public Map<String, Object> getCertainResult(String sql, List<Object> param) throws SQLException {
+        Map<String, Object> map = new HashMap<String, Object>();
         int index = 1;
         preparedStatement = connection.prepareStatement(sql);
         if (param != null && !param.isEmpty()) {
@@ -155,11 +148,11 @@ public class JdbcUtil {
         resultSet = preparedStatement.executeQuery();
         ResultSetMetaData metaData = resultSet.getMetaData();
         int col_len = metaData.getColumnCount();
-        if (resultSet.next()){
-            for(int i=0; i<col_len; i++ ){
-                String cols_name = metaData.getColumnLabel(i+1);
+        if (resultSet.next()) {
+            for (int i = 0; i < col_len; i++) {
+                String cols_name = metaData.getColumnLabel(i + 1);
                 Object cols_value = resultSet.getObject(cols_name);
-                if(cols_value == null){
+                if (cols_value == null) {
                     cols_value = "";
                 }
                 map.put(cols_name, cols_value);
@@ -167,25 +160,25 @@ public class JdbcUtil {
         }
         return map;
     }
-    
-    public List<Map<String,Object>> getCertainResultList(String sql,List<Object> param) throws SQLException{
-        List<Map<String,Object>> list = new ArrayList<Map<String, Object>>();
+
+    public List<Map<String, Object>> getCertainResultList(String sql, List<Object> param) throws SQLException {
+        List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
         int index = 1;
         preparedStatement = connection.prepareStatement(sql);
-        if(param != null && !param.isEmpty()){
-            for(int i = 0; i<param.size(); i++){
+        if (param != null && !param.isEmpty()) {
+            for (int i = 0; i < param.size(); i++) {
                 preparedStatement.setObject(index++, param.get(i));
             }
         }
         resultSet = preparedStatement.executeQuery();
         ResultSetMetaData metaData = resultSet.getMetaData();
         int cols_len = metaData.getColumnCount();
-        while(resultSet.next()){
-            Map<String, Object> map = new HashMap<String,Object>();
-            for(int i=0; i<cols_len; i++){
-                String cols_name = metaData.getColumnLabel(i+1);
+        while (resultSet.next()) {
+            Map<String, Object> map = new HashMap<String, Object>();
+            for (int i = 0; i < cols_len; i++) {
+                String cols_name = metaData.getColumnLabel(i + 1);
                 Object cols_value = resultSet.getObject(cols_name);
-                if(cols_value == null){
+                if (cols_value == null) {
                     cols_value = "";
                 }
                 map.put(cols_name, cols_value);
@@ -195,14 +188,12 @@ public class JdbcUtil {
 
         return list;
     }
-    
+
     public void releaseConn() {
-        if (resultSet != null)
-        {
+        if (resultSet != null) {
             try {
                 resultSet.close();
-            } catch(SQLException e)
-            {
+            } catch (SQLException e) {
                 e.printStackTrace();
             } finally {
                 resultSet = null;
@@ -224,7 +215,7 @@ public class JdbcUtil {
                 connection.close();
             } catch (SQLException e) {
                 e.printStackTrace();
-            }finally {
+            } finally {
                 connection = null;
             }
         }

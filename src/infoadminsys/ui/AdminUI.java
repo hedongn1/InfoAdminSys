@@ -5,14 +5,12 @@
  */
 package infoadminsys.ui;
 
-import com.csvreader.CsvReader;
-import com.csvreader.CsvWriter;
-import javax.swing.JOptionPane;
 import infoadminsys.cls.*;
 import infoadminsys.util.*;
+import com.csvreader.CsvReader;
+import com.csvreader.CsvWriter;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import javax.swing.table.TableModel;
 import java.util.*;
 import java.awt.Font;
 import java.awt.Image;
@@ -21,7 +19,7 @@ import java.lang.reflect.Field;
 import java.nio.charset.Charset;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JLabel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
@@ -1349,7 +1347,7 @@ public class AdminUI extends javax.swing.JFrame {
         if (row >= 0) {
             setEnabled(false);
             String username = jTable_teacher.getValueAt(row, 1).toString();
-            TeacherUI T = new TeacherUI(username,true);
+            TeacherUI T = new TeacherUI(username, true);
             T.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             T.setLocationRelativeTo(this);
             T.setAlwaysOnTop(true);

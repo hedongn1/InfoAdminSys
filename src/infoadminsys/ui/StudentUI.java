@@ -5,15 +5,17 @@
  */
 package infoadminsys.ui;
 
-import javax.swing.JOptionPane;
 import infoadminsys.cls.*;
 import infoadminsys.util.*;
+import javax.swing.JOptionPane;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import javax.swing.table.TableModel;
 import java.util.*;
 import java.awt.Font;
 import java.text.ParseException;
+import javax.swing.JLabel;
+import javax.swing.table.TableModel;
+import sun.swing.table.DefaultTableCellHeaderRenderer;
 
 /**
  *
@@ -158,6 +160,15 @@ public class StudentUI extends javax.swing.JFrame {
         };
     }
 
+    void adjust() {
+        DefaultTableCellHeaderRenderer hr = new DefaultTableCellHeaderRenderer();
+        hr.setHorizontalAlignment(JLabel.CENTER);
+        jTable_courses.getTableHeader().setFont(new Font("Lucida Grande", 0, 13));
+        jTable_courses.getTableHeader().setDefaultRenderer(hr);
+        jTable_scores.getTableHeader().setFont(new Font("Lucida Grande", 0, 13));
+        jTable_scores.getTableHeader().setDefaultRenderer(hr);
+    }
+
     public StudentUI() {
     }
 
@@ -166,9 +177,8 @@ public class StudentUI extends javax.swing.JFrame {
         sudo = status;
         SCList = SCUtil.downloadData(id);
         initComponents();
-        jTable_courses.getTableHeader().setFont(new Font("Lucida Grande", 0, 13));
-        jTable_scores.getTableHeader().setFont(new Font("Lucida Grande", 0, 13));
         displayInfo(true);
+        adjust();
     }
 
     /**
