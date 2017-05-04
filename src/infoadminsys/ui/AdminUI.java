@@ -42,8 +42,8 @@ public class AdminUI extends javax.swing.JFrame {
     private CourseUtil courseUtil = new CourseUtil();
 
     private void setSearchIcon() {
-        //if(getClass().getResource("/icon/search.png")==null)
-            //JOptionPane.showMessageDialog(this, "找不到图标!", "提示信息",JOptionPane.WARNING_MESSAGE);
+        if(getClass().getResource("/icon/search.png")==null)
+            JOptionPane.showMessageDialog(this, "找不到图标!", "提示信息",JOptionPane.WARNING_MESSAGE);
         ImageIcon icon = new ImageIcon(getClass().getResource("/icon/search.png"));
         icon.setImage(icon.getImage().getScaledInstance(24, 24, Image.SCALE_DEFAULT));
         jLabel_search1.setIcon(icon);
