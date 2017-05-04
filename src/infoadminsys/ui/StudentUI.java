@@ -40,10 +40,11 @@ public class StudentUI extends javax.swing.JFrame {
         jTextField_depart.setText(student.depart);
         jTextField_major.setText(student.major);
         jTextField_hometown.setText(student.hometown);
-        if(student.birthday!=null)
+        if (student.birthday != null) {
             jTextField_birthday.setText(student.birthday.toString());
-        else
+        } else {
             jTextField_birthday.setText("");
+        }
         jTextField_IDnum.setText(student.IDnum);
         jTextField_address.setText(student.address);
         jTextField_email.setText(student.email);
@@ -51,42 +52,41 @@ public class StudentUI extends javax.swing.JFrame {
     }
 
     private void setEdit(boolean edit) {
-        jTextField_name.setEditable(edit&sudo);
+        jTextField_name.setEditable(edit & sudo);
         jTextField_sex.setEditable(edit);
         jTextField_sex.setVisible(!edit);
         jComboBox_sex.setVisible(edit);
         jTextField_id.setEditable(false);
-        jTextField_depart.setEditable(edit&sudo);
-        jTextField_major.setEditable(edit&sudo);
+        jTextField_depart.setEditable(edit & sudo);
+        jTextField_major.setEditable(edit & sudo);
         jTextField_hometown.setEditable(edit);
         jTextField_birthday.setEditable(edit);
-        jTextField_IDnum.setEditable(edit&sudo);
+        jTextField_IDnum.setEditable(edit & sudo);
         jTextField_address.setEditable(edit);;
         jTextField_email.setEditable(edit);
         jTextField_NO.setEditable(edit);
     }
-    
-    private void buttonVisible(boolean  vis) {
+
+    private void buttonVisible(boolean vis) {
         jButton_modify.setVisible(!vis);
         jButton_save.setVisible(vis);
         jButton_back.setVisible(vis);
     }
 
-    private void setVis(boolean vis)
-    {
+    private void setVis(boolean vis) {
         jLabel_hello.setVisible(vis);
         jLabel_account.setVisible(vis);
         jLabel_logOut.setVisible(vis);
     }
-    
-    private void saveData() throws ParseException,Exception {
+
+    private void saveData() throws ParseException, Exception {
         student.name = jTextField_name.getText();
         student.sex = jComboBox_sex.getSelectedItem().toString();
         student.id = jTextField_id.getText();
         student.depart = jTextField_depart.getText();
         student.major = jTextField_major.getText();
         student.hometown = jTextField_hometown.getText();
-        student.birthday= Utility.StringToDate(jTextField_birthday.getText());
+        student.birthday = Utility.StringToDate(jTextField_birthday.getText());
         student.IDnum = jTextField_IDnum.getText();
         student.address = jTextField_address.getText();
         student.email = jTextField_email.getText();
@@ -103,18 +103,18 @@ public class StudentUI extends javax.swing.JFrame {
         buttonVisible(false);
         setVis(!sudo);
     }
-    
-    private Object[][] getCourses(){
-        int rowNum=SCList.size();
-        Object[][] courses=new Object[rowNum][3];
-        for(int i=0;i<rowNum;i++) {
-            courses[i][0]=SCList.get(i).course_id;
-            courses[i][1]=SCList.get(i).course_name;
-            courses[i][2]=SCList.get(i).teacher_name;
+
+    private Object[][] getCourses() {
+        int rowNum = SCList.size();
+        Object[][] courses = new Object[rowNum][3];
+        for (int i = 0; i < rowNum; i++) {
+            courses[i][0] = SCList.get(i).course_id;
+            courses[i][1] = SCList.get(i).course_name;
+            courses[i][2] = SCList.get(i).teacher_name;
         }
         return courses;
     }
-    
+
     private TableModel SCTableModel() {
         return new javax.swing.table.DefaultTableModel(getCourses(),
                 new String[]{
@@ -130,18 +130,18 @@ public class StudentUI extends javax.swing.JFrame {
             }
         };
     }
-    
-    private Object[][] getScores(){
-        int rowNum=SCList.size();
-        Object[][] scores=new Object[rowNum][3];
-        for(int i=0;i<rowNum;i++) {
-            scores[i][0]=SCList.get(i).course_id;
-            scores[i][1]=SCList.get(i).course_name;
-            scores[i][2]=SCList.get(i).score;
+
+    private Object[][] getScores() {
+        int rowNum = SCList.size();
+        Object[][] scores = new Object[rowNum][3];
+        for (int i = 0; i < rowNum; i++) {
+            scores[i][0] = SCList.get(i).course_id;
+            scores[i][1] = SCList.get(i).course_name;
+            scores[i][2] = SCList.get(i).score;
         }
         return scores;
     }
-    
+
     private TableModel scoreTableModel() {
         return new javax.swing.table.DefaultTableModel(getScores(),
                 new String[]{
@@ -157,13 +157,14 @@ public class StudentUI extends javax.swing.JFrame {
             }
         };
     }
-    
+
     public StudentUI() {
     }
 
-    public StudentUI(String username,boolean status) {
-        id = username; sudo=status;
-        SCList=SCUtil.downloadData(id);
+    public StudentUI(String username, boolean status) {
+        id = username;
+        sudo = status;
+        SCList = SCUtil.downloadData(id);
         initComponents();
         jTable_courses.getTableHeader().setFont(new Font("Lucida Grande", 0, 13));
         jTable_scores.getTableHeader().setFont(new Font("Lucida Grande", 0, 13));
@@ -330,7 +331,7 @@ public class StudentUI extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jTextField_email, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(51, 51, 51)
+                                .addGap(50, 50, 50)
                                 .addComponent(jLabel_NO)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jTextField_NO, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -348,8 +349,8 @@ public class StudentUI extends javax.swing.JFrame {
                             .addComponent(jTextField_address, javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField_name, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jTextField_hometown, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTextField_name, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTextField_hometown, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jTextField_id, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(6, 6, 6)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -418,12 +419,12 @@ public class StudentUI extends javax.swing.JFrame {
                     .addComponent(jTextField_email, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel_NO)
                     .addComponent(jTextField_NO, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 332, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 327, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jButton_back)
                     .addComponent(jButton_modify)
                     .addComponent(jButton_save))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(12, 12, 12))
         );
 
         jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel_email, jTextField_email});
@@ -457,7 +458,7 @@ public class StudentUI extends javax.swing.JFrame {
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 551, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 552, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("选课查询", jPanel2);
@@ -482,7 +483,7 @@ public class StudentUI extends javax.swing.JFrame {
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 552, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("成绩查询", jPanel3);
@@ -523,13 +524,13 @@ public class StudentUI extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(20, 20, 20)
                 .addComponent(jLabel_hello)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel_account, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel_logOut, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(19, 19, 19))
+                .addGap(20, 20, 20))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -540,8 +541,7 @@ public class StudentUI extends javax.swing.JFrame {
                     .addComponent(jLabel_account, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel_hello, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 576, Short.MAX_VALUE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel_account, jLabel_logOut});
@@ -568,7 +568,7 @@ public class StudentUI extends javax.swing.JFrame {
         // TODO add your handling code here:
         try {
             saveData();
-        } catch(ParseException e) {
+        } catch (ParseException e) {
             JOptionPane.showMessageDialog(this, "请按照yyyy-MM-dd的格式输入日期！\n如：1996-01-01", "提示信息", JOptionPane.WARNING_MESSAGE);
             return;
         } catch (Exception e) {

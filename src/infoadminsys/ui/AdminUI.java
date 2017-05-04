@@ -1349,7 +1349,7 @@ public class AdminUI extends javax.swing.JFrame {
         if (row >= 0) {
             setEnabled(false);
             String username = jTable_teacher.getValueAt(row, 1).toString();
-            TeacherUI T = new TeacherUI(username);
+            TeacherUI T = new TeacherUI(username,true);
             T.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             T.setLocationRelativeTo(this);
             T.setAlwaysOnTop(true);

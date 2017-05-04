@@ -54,7 +54,7 @@ public class LoginUI extends javax.swing.JFrame {
                     this.dispose();
                     break;
                 case "teacher":
-                    TeacherUI T = new TeacherUI(username);
+                    TeacherUI T = new TeacherUI(username,false);
                     T.setLocationRelativeTo(null);
                     T.setVisible(true);
                     this.dispose();

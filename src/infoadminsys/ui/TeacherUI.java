@@ -13,31 +13,30 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.*;
 import static java.util.Collections.list;
 import javax.swing.JFrame;
 import javax.swing.table.AbstractTableModel;
 
-
 /**
  *
  * @author hed
  */
-
-
 public class TeacherUI extends javax.swing.JFrame {
-    
+
     private static JFrame frame;
 
     /**
      * Creates new form TeacherUI
      */
     private String id;
+    private boolean sudo;
     private Teacher teacher;
     //private List<SelectedCourse>  = new ArrayList<>();
-    
+
     private TeacherUtil teacherUtil = new TeacherUtil();
-    
+
     private GradeInputModel gradeInputModel;
     private CourseInfoModel courseInfoModel;
 
@@ -50,10 +49,11 @@ public class TeacherUI extends javax.swing.JFrame {
         jTextField_depart.setText(teacher.depart);
         jTextField_title.setText(teacher.title);
         jTextField_hometown.setText(teacher.hometown);
-        if(teacher.birthday!=null)
-           jTextField_birthday.setText(teacher.birthday.toString());
-        else 
-           jTextField_birthday.setText("");
+        if (teacher.birthday != null) {
+            jTextField_birthday.setText(teacher.birthday.toString());
+        } else {
+            jTextField_birthday.setText("");
+        }
         jTextField_IDnum.setText(teacher.IDnum);
         jTextField_address.setText(teacher.address);
         jTextField_email.setText(teacher.email);
@@ -61,39 +61,43 @@ public class TeacherUI extends javax.swing.JFrame {
     }
 
     private void setEdit(boolean edit) {
-        jTextField_name.setEditable(false);
+        jTextField_name.setEditable(edit & sudo);
         jTextField_sex.setEditable(edit);
         jTextField_sex.setVisible(!edit);
         jComboBox_sex.setVisible(edit);
         jTextField_id.setEditable(false);
-        jTextField_depart.setEditable(false);
-        jTextField_title.setEditable(false);
+        jTextField_depart.setEditable(edit & sudo);
+        jTextField_title.setEditable(edit & sudo);
         jTextField_hometown.setEditable(edit);
         jTextField_birthday.setEditable(edit);
-        jTextField_IDnum.setEditable(false);
+        jTextField_IDnum.setEditable(edit & sudo);
         jTextField_address.setEditable(edit);;
         jTextField_email.setEditable(edit);
         jTextField_cell.setEditable(edit);
     }
 
-    private void buttonModify() {
-        jButton_modify.setVisible(false);
-        jButton_save.setVisible(true);
-        jButton_back.setVisible(true);
+    private void buttonVisible(boolean vis) {
+        jButton_modify.setVisible(!vis);
+        jButton_save.setVisible(vis);
+        jButton_back.setVisible(vis);
     }
 
-    private void buttonReadonly() {
-        jButton_modify.setVisible(true);
-        jButton_save.setVisible(false);
-        jButton_back.setVisible(false);
+    private void setVis(boolean vis) {
+        jLabel_hello.setVisible(vis);
+        jLabel_account.setVisible(vis);
+        jLabel_logOut.setVisible(vis);
     }
 
-    private void saveData() throws NoSuchFieldException, IllegalAccessException, SQLException {
+    private void saveData() throws ParseException, Exception {
         teacher.name = jTextField_name.getText();
         teacher.sex = jTextField_sex.getText();
         teacher.id = jTextField_id.getText();
         teacher.depart = jTextField_depart.getText();
         teacher.title = jTextField_title.getText();
+        teacher.hometown = jTextField_hometown.getText();
+        teacher.birthday = Utility.StringToDate(jTextField_birthday.getText());
+        teacher.address = jTextField_address.getText();
+        teacher.IDnum = jTextField_IDnum.getText();
         teacher.email = jTextField_email.getText();
         teacher.cell = jTextField_cell.getText();
         teacherUtil.uploadData(teacher);
@@ -105,32 +109,27 @@ public class TeacherUI extends javax.swing.JFrame {
         }
         setText();
         setEdit(false);
-        buttonReadonly();
-    }
-    
-    public TeacherUI() {
-        initComponents();
-        
-        courseInfoModel = new CourseInfoModel();
-        jTable_courses.setModel(courseInfoModel);
-        gradeInputModel = new GradeInputModel();
-        jTable_scores.setModel(gradeInputModel);
-        
+        buttonVisible(false);
+        setVis(!sudo);
     }
 
-    public TeacherUI(String username) {
+    public TeacherUI() {
+    }
+
+    public TeacherUI(String username, boolean status) {
         id = username;
+        sudo = status;
         initComponents();
         //jTable_courses.getTableHeader().setFont(new Font("Lucida Grande", 0, 13));
         //jTable_scores.getTableHeader().setFont(new Font("Lucida Grande", 0, 13));
-        
+
         displayInfo(true);
-       
+
         courseInfoModel = new CourseInfoModel();
         jTable_courses.setModel(courseInfoModel);
         gradeInputModel = new GradeInputModel();
         jTable_scores.setModel(gradeInputModel);
-        
+
         jTable_courses.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 // System.out.println(table2.getSelectedRow());
@@ -143,35 +142,33 @@ public class TeacherUI extends javax.swing.JFrame {
                     makeRightDisable();
 
                 }
-                */
+                 */
                 gradeInputModel.setStudentByCourseId(courseId);
                 jTable_scores.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
                 super.mouseClicked(e);
             }
         });
-        
+
     }
-    
+
     private class CourseInfoModel extends AbstractTableModel {
 
         private CourseUtil courseUtil = new CourseUtil();
-        private List<Map<String,Object>> list = getAllCourses();
+        private List<Map<String, Object>> list = getAllCourses();
 
-
-        String[] columnStrings = {"id","name","status"};
-        String[] columnShowStrings = {"课程编号","课程名","提交状态"};
+        String[] columnStrings = {"id", "name", "status"};
+        String[] columnShowStrings = {"课程编号", "课程名", "提交状态"};
 
         public void update() {
             list = getAllCourses();
             fireTableDataChanged();
         }
 
-        private List<Map<String,Object>> getAllCourses() {
+        private List<Map<String, Object>> getAllCourses() {
             return courseUtil.findAllCoursesByTeacherId(teacher.id);
         }
 
         public int getRowCount() {
-            //System.out.println(list);
             return list.size();
         }
 
@@ -180,7 +177,7 @@ public class TeacherUI extends javax.swing.JFrame {
         }
 
         public Object getValueAt(int rowIndex, int columnIndex) {
-            Map<String,Object> map = list.get(rowIndex);
+            Map<String, Object> map = list.get(rowIndex);
             return map.get(columnStrings[columnIndex]);
         }
 
@@ -192,8 +189,8 @@ public class TeacherUI extends javax.swing.JFrame {
             return false;
         }
     }
-    
-     private class GradeInputModel extends AbstractTableModel {
+
+    private class GradeInputModel extends AbstractTableModel {
 
         private String courseId;
 
@@ -207,23 +204,22 @@ public class TeacherUI extends javax.swing.JFrame {
 
         private CourseUtil courseUtil = new CourseUtil();
         private GradeUtil gradeUtil = new GradeUtil();
-        private List<Map<String,Object>> list = new ArrayList<>();
+        private List<Map<String, Object>> list = new ArrayList<>();
 
-        String[] columnStrings = {"id","course_id","name","score"};
-        String[] columnShowStrings = {"学号", "课程编号","姓名", "成绩"};
- 
+        String[] columnStrings = {"id", "course_id", "name", "score"};
+        String[] columnShowStrings = {"学号", "课程编号", "姓名", "成绩"};
+
         boolean[] canEdit = new boolean[]{
-                false, false, false, true
-            };
-        
-        public List<Map<String,Object>> getAllStudentByCourseId(String courseId) {
+            false, false, false, true
+        };
+
+        public List<Map<String, Object>> getAllStudentByCourseId(String courseId) {
             return courseUtil.findAllStudentWithGradeByCourseId(courseId);
         }
 
         public boolean commitGrades() {
             for (int i = 0; i < list.size(); i++) {
-                Map<String,Object> map = list.get(i);
-                //map.put("score", getValueAt(i, 3));
+                Map<String, Object> map = list.get(i);
                 if (map.get("score") == null || map.get("score") == "") {
                     JOptionPane.showMessageDialog(frame, "请将成绩填写完整后再提交", "提示", JOptionPane.INFORMATION_MESSAGE);
                     return false;
@@ -231,7 +227,7 @@ public class TeacherUI extends javax.swing.JFrame {
             }
 
             for (int i = 0; i < list.size(); i++) {
-                Map<String,Object> map = list.get(i);
+                Map<String, Object> map = list.get(i);
                 gradeUtil.saveGrade(map);
                 courseUtil.commitCourseByCourseId(courseId);
             }
@@ -253,7 +249,7 @@ public class TeacherUI extends javax.swing.JFrame {
         }
 
         public Object getValueAt(int rowIndex, int columnIndex) {
-            Map<String,Object> map = list.get(rowIndex);
+            Map<String, Object> map = list.get(rowIndex);
             return map.get(columnStrings[columnIndex]);
         }
 
@@ -266,7 +262,7 @@ public class TeacherUI extends javax.swing.JFrame {
         }
 
         public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-            Map<String,Object> map = list.get(rowIndex);
+            Map<String, Object> map = list.get(rowIndex);
             map.put(columnStrings[columnIndex], aValue);
         }
 
@@ -320,7 +316,6 @@ public class TeacherUI extends javax.swing.JFrame {
         jLabel_logOut = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(800, 600));
         setResizable(false);
 
         jTabbedPane1.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
@@ -389,7 +384,7 @@ public class TeacherUI extends javax.swing.JFrame {
         jTextField_hometown.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
 
         jLabel_cell.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
-        jLabel_cell.setText("电话：");
+        jLabel_cell.setText("联系电话：");
 
         jTextField_cell.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
 
@@ -418,71 +413,63 @@ public class TeacherUI extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton_modify)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton_save)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton_back)
+                .addGap(20, 20, 20))
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(24, 24, 24)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel_email, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel_address, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel_hometown, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel_id, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel_name, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jTextField_hometown, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jTextField_id, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jTextField_name, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabel_depart, javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabel_birthday, javax.swing.GroupLayout.Alignment.TRAILING))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addComponent(jTextField_sex, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jComboBox_sex, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                            .addComponent(jTextField_birthday, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(jLabel_IDnum))
+                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                            .addComponent(jTextField_depart, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(28, 28, 28)
+                                            .addComponent(jLabel_title)))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jTextField_title, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jTextField_IDnum, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addComponent(jTextField_address, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 678, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel_email)
+                        .addComponent(jTextField_email, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(50, 50, 50)
+                        .addComponent(jLabel_cell)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(jTextField_id, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
-                                            .addComponent(jTextField_name)
-                                            .addComponent(jTextField_hometown))
-                                        .addGap(18, 18, 18)
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel_birthday, javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(jLabel_depart, javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                                .addComponent(jTextField_sex, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jComboBox_sex, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                    .addComponent(jTextField_birthday)
-                                                    .addComponent(jTextField_depart, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(jLabel_title, javax.swing.GroupLayout.Alignment.TRAILING)
-                                                    .addComponent(jLabel_IDnum, javax.swing.GroupLayout.Alignment.TRAILING))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(jTextField_title, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(jTextField_IDnum, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                                    .addComponent(jTextField_address))
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(jButton_modify)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton_save)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton_back)
-                                .addGap(20, 20, 20))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jTextField_email, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 16, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel_name, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel_id, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel_hometown, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel_address, javax.swing.GroupLayout.Alignment.TRAILING))
-                                .addGap(722, 722, 722))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel_cell)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField_cell, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(427, 427, 427))))))
+                        .addComponent(jTextField_cell, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(31, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -490,47 +477,42 @@ public class TeacherUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jLabel_name)
-                    .addComponent(jTextField_name, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1)
+                    .addComponent(jTextField_sex, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jComboBox_sex, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField_sex, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextField_name, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(jLabel_id)
+                    .addComponent(jTextField_id, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel_depart)
                     .addComponent(jTextField_depart, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel_id)
-                        .addComponent(jTextField_id, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel_depart))
                     .addComponent(jLabel_title)
                     .addComponent(jTextField_title, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jTextField_birthday, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel_birthday)
-                        .addComponent(jLabel_IDnum)
-                        .addComponent(jTextField_IDnum, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel_hometown)
-                        .addComponent(jTextField_hometown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(jLabel_hometown)
+                    .addComponent(jTextField_hometown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel_birthday)
+                    .addComponent(jTextField_birthday, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel_IDnum)
+                    .addComponent(jTextField_IDnum, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(13, 13, 13)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jLabel_address)
                     .addComponent(jTextField_address, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jLabel_email)
-                    .addComponent(jTextField_email, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextField_email, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel_cell)
                     .addComponent(jTextField_cell, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(230, 230, 230)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 327, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jButton_back)
                     .addComponent(jButton_modify)
                     .addComponent(jButton_save))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(12, 12, 12))
         );
 
         jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel_email, jTextField_email});
@@ -607,13 +589,13 @@ public class TeacherUI extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 479, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(saveButton)
-                .addGap(0, 40, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("课程查询／成绩录入", jPanel3);
 
         jLabel_account.setText("账号管理");
-        jLabel_account.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jLabel_account.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel_account.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel_accountMouseClicked(evt);
@@ -629,7 +611,7 @@ public class TeacherUI extends javax.swing.JFrame {
         jLabel_hello.setText("您好,");
 
         jLabel_logOut.setText("注销");
-        jLabel_logOut.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jLabel_logOut.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel_logOut.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel_logOutMouseClicked(evt);
@@ -647,30 +629,27 @@ public class TeacherUI extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel_hello)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel_account, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel_logOut, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(19, 19, 19))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(jLabel_hello)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel_account, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel_logOut, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(6, 6, 6)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(jLabel_logOut)
+                    .addComponent(jLabel_hello, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel_account, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel_hello, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 600, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                    .addComponent(jLabel_logOut))
+                .addGap(0, 0, 0)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 578, Short.MAX_VALUE))
         );
 
         layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel_account, jLabel_logOut});
@@ -682,7 +661,7 @@ public class TeacherUI extends javax.swing.JFrame {
     private void jLabel_accountMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel_accountMouseClicked
         // TODO add your handling code here:
         setEnabled(false);
-        AccountManageUI AM = new AccountManageUI(teacher.id, teacher.type,false);
+        AccountManageUI AM = new AccountManageUI(teacher.id, teacher.type, false);
         AM.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         AM.setLocationRelativeTo(this);
         AM.setAlwaysOnTop(true);
@@ -726,7 +705,7 @@ public class TeacherUI extends javax.swing.JFrame {
     private void jButton_modifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_modifyActionPerformed
         // TODO add your handling code here:
         setEdit(true);
-        buttonModify();
+        buttonVisible(true);
     }//GEN-LAST:event_jButton_modifyActionPerformed
 
     private void jButton_backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_backActionPerformed
@@ -746,11 +725,12 @@ public class TeacherUI extends javax.swing.JFrame {
             return;
         }
         JOptionPane.showMessageDialog(this, "保存成功！", "提示信息", JOptionPane.INFORMATION_MESSAGE);
+        displayInfo(false);
     }//GEN-LAST:event_jButton_saveActionPerformed
 
     private void jTable_coursesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable_coursesMouseClicked
         // TODO add your handling code here:
-        
+
     }//GEN-LAST:event_jTable_coursesMouseClicked
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
@@ -759,7 +739,7 @@ public class TeacherUI extends javax.swing.JFrame {
 
     private void saveButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_saveButtonMouseClicked
         // TODO add your handling code here:
-        
+
         boolean flag = gradeInputModel.commitGrades();
         if (flag == true) {
             courseInfoModel.update();

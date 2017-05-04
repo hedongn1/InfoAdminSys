@@ -16,7 +16,7 @@ public class InfoAdminSys {
     /**
      * @param args the command line arguments
      */
-    /*
+    
     public static void main(String[] args) {
         // TODO code application logic here
         LoginUI T = new LoginUI();
@@ -24,5 +24,5 @@ public class InfoAdminSys {
         T.setLocationRelativeTo(null);
         T.setVisible(true);
     }
-    */
+  
 }

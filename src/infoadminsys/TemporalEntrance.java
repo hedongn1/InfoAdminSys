@@ -14,13 +14,13 @@ import javax.swing.WindowConstants;
  */
 public class TemporalEntrance {
     
-    public static void main(String args[]) {
+   // public static void main(String args[]) {
        
-        
+        /*
         AdminUI AD=new AdminUI("admin");
         AD.setLocationRelativeTo(null);
         AD.setVisible(true);
-        
+        */
       /*
         LoginUI T = new LoginUI();
         T.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -43,6 +43,6 @@ public class TemporalEntrance {
        S.setVisible(true);
        */
        
-    }
+   // }
     
 }
