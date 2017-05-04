@@ -22,8 +22,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JLabel;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.table.DefaultTableModel;
-import sun.swing.table.DefaultTableCellHeaderRenderer;
+import javax.swing.table.*;
 
 /**
  *
@@ -40,12 +39,12 @@ public class AdminUI extends javax.swing.JFrame {
     private List<Teacher> teaList = new ArrayList<>();
     private List<Course> courList = new ArrayList<>();
     private List<UserPass> accList = new ArrayList<>();
-    private StudentUtil studentUtil = new StudentUtil();
-    private TeacherUtil teacherUtil = new TeacherUtil();
     private CourseUtil courseUtil = new CourseUtil();
 
     private void setSearchIcon() {
-        ImageIcon icon = new ImageIcon("/Users/lsh/Desktop/Workspace/NetBeansProjects/InfoAdminSys/image/search.png");
+        //if(getClass().getResource("/icon/search.png")==null)
+            //JOptionPane.showMessageDialog(this, "找不到图标!", "提示信息",JOptionPane.WARNING_MESSAGE);
+        ImageIcon icon = new ImageIcon(getClass().getResource("/icon/search.png"));
         icon.setImage(icon.getImage().getScaledInstance(24, 24, Image.SCALE_DEFAULT));
         jLabel_search1.setIcon(icon);
         jLabel_search2.setIcon(icon);
@@ -85,10 +84,10 @@ public class AdminUI extends javax.swing.JFrame {
         jTextField_accUsername.setBounds(54, 3, 360, 20);
         jComboBox_accType.setBounds(410, 3, 365, 20);
 
-        DefaultTableCellHeaderRenderer hr = new DefaultTableCellHeaderRenderer();
+        DefaultTableCellRenderer hr=(DefaultTableCellRenderer) jTable_student.getTableHeader().getDefaultRenderer();
         hr.setHorizontalAlignment(JLabel.CENTER);
         jTable_student.getTableHeader().setFont(new Font("Lucida Grande", 0, 13));
-        jTable_student.getTableHeader().setDefaultRenderer(hr);
+        jTable_teacher.getTableHeader().setDefaultRenderer(hr);
         jTable_teacher.getTableHeader().setFont(new Font("Lucida Grande", 0, 13));
         jTable_teacher.getTableHeader().setDefaultRenderer(hr);
         jTable_course.getTableHeader().setFont(new Font("Lucida Grande", 0, 13));

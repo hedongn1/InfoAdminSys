@@ -14,8 +14,7 @@ import java.util.*;
 import java.awt.Font;
 import java.text.ParseException;
 import javax.swing.JLabel;
-import javax.swing.table.TableModel;
-import sun.swing.table.DefaultTableCellHeaderRenderer;
+import javax.swing.table.*;
 
 /**
  *
@@ -160,8 +159,8 @@ public class StudentUI extends javax.swing.JFrame {
         };
     }
 
-    void adjust() {
-        DefaultTableCellHeaderRenderer hr = new DefaultTableCellHeaderRenderer();
+    private void adjust() {
+        DefaultTableCellRenderer hr=(DefaultTableCellRenderer) jTable_courses.getTableHeader().getDefaultRenderer();
         hr.setHorizontalAlignment(JLabel.CENTER);
         jTable_courses.getTableHeader().setFont(new Font("Lucida Grande", 0, 13));
         jTable_courses.getTableHeader().setDefaultRenderer(hr);

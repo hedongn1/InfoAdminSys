@@ -47,7 +47,7 @@ public class CourseUtil {
     
     //获得所有课程信息
     public List<Map<String,Object>> findAllCourse(Map<String, Object> condition) {
-        String sql = "select c.id as id, c.name as name, teacher_id, t.name as teacher_name, capacity, selectedcnt, commitStatus "
+        String sql = "select c.id as id, c.name as name, teacher_id, t.name as teacher_name, capacity, selectedcnt, status "
                +"from course as c, teacher as t where teacher_id = t.id";
         List<Object> param=new ArrayList<>();
         if (condition.size() > 0) {
@@ -171,7 +171,7 @@ public class CourseUtil {
 
     public void clearCommitStautsByCourseId(String courseId) {
 
-        String sql = "update course set commitStatus = '' where id = ?";
+        String sql = "update course set status = '' where id = ?";
         String sql2 = "delete from gradeDraft where courseId = ?";
         String sql3 = "delete from grade where courseId = ?";
 

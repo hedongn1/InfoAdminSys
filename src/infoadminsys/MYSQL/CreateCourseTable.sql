@@ -24,7 +24,6 @@ ALTER TABLE course DROP FOREIGN KEY course_ibfk_1;
 ALTER TABLE course ADD FOREIGN KEY(teacher_id) REFERENCES teacher(id)
 ON UPDATE CASCADE ON DELETE CASCADE;
 
-ALTER TABLE course CHANGE status commitStatus CHAR(30);
 ALTER TABLE course ADD capacity INTEGER;
 ALTER TABLE course ADD selectedcnt INTEGER;
 

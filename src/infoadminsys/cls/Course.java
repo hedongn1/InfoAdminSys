@@ -16,8 +16,8 @@ public class Course {
     public String teacher_id;
     public int capacity;
     public int selectedcnt;
-    public String commitStatus;
-    static public String[] Attr={"id","name","teacher_id","capacity","selectedcnt","commitStatus"};
+    public String status;
+    static public String[] Attr={"id","name","teacher_id","capacity","selectedcnt","status"};
     //use teacher_id instead of tid, or it would go wrong in database
     //use public instead of private for convenience
     

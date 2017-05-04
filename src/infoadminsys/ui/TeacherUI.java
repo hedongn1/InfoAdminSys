@@ -17,8 +17,7 @@ import java.util.*;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.table.AbstractTableModel;
-import sun.swing.table.DefaultTableCellHeaderRenderer;
+import javax.swing.table.*;
 
 /**
  *
@@ -34,8 +33,6 @@ public class TeacherUI extends javax.swing.JFrame {
     private String id;
     private boolean sudo;
     private Teacher teacher;
-    //private List<SelectedCourse>  = new ArrayList<>();
-
     private TeacherUtil teacherUtil = new TeacherUtil();
 
     private GradeInputModel gradeInputModel;
@@ -114,8 +111,8 @@ public class TeacherUI extends javax.swing.JFrame {
         setVis(!sudo);
     }
 
-    void adjust() {
-        DefaultTableCellHeaderRenderer hr = new DefaultTableCellHeaderRenderer();
+    private void adjust() {
+        DefaultTableCellRenderer hr=(DefaultTableCellRenderer) jTable_courses.getTableHeader().getDefaultRenderer();
         hr.setHorizontalAlignment(JLabel.CENTER);
         jTable_courses.getTableHeader().setFont(new Font("Lucida Grande", 0, 13));
         jTable_courses.getTableHeader().setDefaultRenderer(hr);

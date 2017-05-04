@@ -15,10 +15,7 @@ import java.util.List;
 import java.util.Map;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
-import sun.swing.table.DefaultTableCellHeaderRenderer;
+import javax.swing.table.*;
 
 /**
  *
@@ -47,7 +44,7 @@ public class CourseUI extends javax.swing.JFrame {
         jTextField_capacity.setText(Integer.toString(course.capacity));
         jTextField_selectedcnt.setText(Integer.toString(course.selectedcnt));
     }
-    
+
     private void setEdit(boolean edit) {
         EDIT = edit;
         jTextField_id.setEditable(false);
@@ -76,13 +73,12 @@ public class CourseUI extends javax.swing.JFrame {
         courseUtil.uploadData(course);
     }
 
-    private void selectedcntInc(int x)
-    {
-        course.selectedcnt=Utility.StringToInt(jTextField_selectedcnt.getText());
-        course.selectedcnt+=x;
+    private void selectedcntInc(int x) {
+        course.selectedcnt = Utility.StringToInt(jTextField_selectedcnt.getText());
+        course.selectedcnt += x;
         jTextField_selectedcnt.setText(Integer.toString(course.selectedcnt));
     }
-    
+
     Object[][] getStudents() {
         List<Map<String, Object>> mapList = courseUtil.findAllStudentWithGradeByCourseId(course.id);
         int n = mapList.size();
@@ -116,7 +112,7 @@ public class CourseUI extends javax.swing.JFrame {
 
     void tableLoad() {
         jTable_select.setModel(SCTableModel());
-        DefaultTableCellHeaderRenderer hr = new DefaultTableCellHeaderRenderer();
+        DefaultTableCellRenderer hr = (DefaultTableCellRenderer) jTable_select.getTableHeader().getDefaultRenderer();
         hr.setHorizontalAlignment(JLabel.CENTER);
         jTable_select.getTableHeader().setFont(new Font("Lucida Grande", 0, 13));
         if (jTable_select.getColumnModel().getColumnCount() > 0) {
@@ -145,6 +141,7 @@ public class CourseUI extends javax.swing.JFrame {
         setEdit(false);
         buttonVisible(false);
         tableLoad();
+        jTable_select.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
     }
 
     public CourseUI() {
@@ -379,8 +376,7 @@ public class CourseUI extends javax.swing.JFrame {
 
     private void jButton_insertMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_insertMouseClicked
         // TODO add your handling code here:
-        if(course.selectedcnt>=course.capacity)
-        {
+        if (course.selectedcnt >= course.capacity) {
             JOptionPane.showMessageDialog(this, "选课人数已达上限！\n", "提示信息", JOptionPane.WARNING_MESSAGE);
             return;
         }
@@ -399,7 +395,7 @@ public class CourseUI extends javax.swing.JFrame {
                 return;
             }
             Arrays.sort(rows);
-            for (int i = n-1; i >=0; i--) {
+            for (int i = n - 1; i >= 0; i--) {
                 Object obj = jTable_select.getValueAt(rows[i], 1);
                 if (obj != null) {
                     String student_id = obj.toString();
@@ -429,14 +425,13 @@ public class CourseUI extends javax.swing.JFrame {
                     continue;
                 }
                 SC.student_id = obj.toString().trim();
-                if(SC.student_id.length()<=0)
-                {
+                if (SC.student_id.length() <= 0) {
                     selectedcntInc(-1);
                     continue;
                 }
                 obj = jTable_select.getValueAt(i, 3);
                 if (obj != null) {
-                    SC.score = (double) obj;
+                    SC.score = Utility.StringToDouble(obj.toString());
                 } else {
                     SC.score = 0.0;
                 }
