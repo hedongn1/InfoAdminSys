@@ -19,7 +19,7 @@ import java.util.Set;
 public class Utility {
 
     static public java.sql.Date StringToDate(String str) throws ParseException {
-        if (str.equals("")) {
+        if (str==null || str.equals("")) {
             return null;
         }
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

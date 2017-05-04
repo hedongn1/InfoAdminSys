@@ -552,6 +552,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="&#x67e5;&#x770b;&#x8be6;&#x7ec6;/&#x4fee;&#x6539;"/>
               </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jButton_courModifyMouseClicked"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="jButton_courDelete">
               <Properties>

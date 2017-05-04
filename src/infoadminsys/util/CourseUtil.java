@@ -5,12 +5,15 @@
  */
 package infoadminsys.util;
 
+import infoadminsys.cls.*;
+import java.lang.reflect.Field;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -24,8 +27,24 @@ public class CourseUtil {
         jdbcUtil = new JdbcUtil();
         jdbcUtil.getConnection();
     }
-
-
+    
+    public void uploadData(Course course) throws Exception {
+        String sql = "UPDATE course SET ";
+        Class<Course> cls = Course.class;
+        int itemNum = Course.Attr.length;
+        List<Object> param = new ArrayList<>();
+        for (int i = 0; i < itemNum; i++) {
+            String attrName = Course.Attr[i];
+            sql = sql + attrName + "=?";
+            if(i+1<itemNum) sql+=", "; else sql+=" ";
+            Field field = cls.getDeclaredField(attrName);
+            param.add(field.get(course));
+        }
+        sql += "WHERE id=?;";
+        param.add(course.id);
+        jdbcUtil.updateByPreparedStatement(sql, param);
+    }
+    
     //获得所有课程信息
     public List<Map<String,Object>> findAllCourse(Map<String, Object> condition) {
         String sql = "select c.id as id, c.name as name, teacher_id, t.name as teacher_name, capacity, selectedcnt, commitStatus "
@@ -42,7 +61,6 @@ public class CourseUtil {
             }
         }
         sql+=";";
-        System.out.println(sql);
         List<Map<String,Object>> list = new ArrayList<>();
         try {
             list = jdbcUtil.getCertainResultList(sql,param);
@@ -65,7 +83,7 @@ public class CourseUtil {
         }
         return list;
     }
-
+    
 
     public boolean saveCourse(Map<String,Object> map) {
         String sql = "";

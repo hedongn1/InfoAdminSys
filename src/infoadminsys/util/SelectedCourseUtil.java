@@ -37,6 +37,14 @@ public class SelectedCourseUtil {
         return results;
     }
     
+    public void deleteData(String student_id,String course_id) throws Exception
+    {
+        String sql="DELETE FROM selectedcourse WHERE student_id=? AND course_id=?";
+        List<Object> param = new ArrayList<>();
+        param.add(student_id); param.add(course_id);
+        jdbcUtil.updateByPreparedStatement(sql, param);
+    }
+    
     protected void finalize() throws Throwable {
         super.finalize();
         if (jdbcUtil != null) {

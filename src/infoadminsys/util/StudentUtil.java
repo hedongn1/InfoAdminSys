@@ -39,7 +39,7 @@ public class StudentUtil {
         return stu;
     }
 
-    public void uploadData(Student student) throws NoSuchFieldException, IllegalAccessException, SQLException {
+    public void uploadData(Student student) throws Exception {
         String sql = "UPDATE student SET ";
         Class<Student> cls = Student.class;
         int itemNum = Student.Attr.length;

@@ -10,8 +10,10 @@ package infoadminsys.cls;
  * @author hed
  */
 public class SelectedCourse {
+    public String student_id;
     public String course_id;
     public String course_name;
     public String teacher_name;
     public double score;
+    String[] Attr={"course_id","teacher_id","score"};
 }

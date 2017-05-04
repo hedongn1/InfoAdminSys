@@ -703,6 +703,11 @@ public class AdminUI extends javax.swing.JFrame {
         jPanel_course.setPreferredSize(new java.awt.Dimension(800, 500));
 
         jButton_courModify.setText("查看详细/修改");
+        jButton_courModify.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton_courModifyMouseClicked(evt);
+            }
+        });
 
         jButton_courDelete.setText("删除选中");
         jButton_courDelete.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -1428,6 +1433,25 @@ public class AdminUI extends javax.swing.JFrame {
             AM.setVisible(true);
         }
     }//GEN-LAST:event_jButton_accModifyMouseClicked
+
+    private void jButton_courModifyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_courModifyMouseClicked
+        // TODO add your handling code here:
+        int row = jTable_course.getSelectedRow();
+        if (row >= 0) {
+            setEnabled(false);
+            String id = jTable_course.getValueAt(row, 1).toString();
+            CourseUI C = new CourseUI(id);
+            C.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            C.setLocationRelativeTo(this);
+            C.setAlwaysOnTop(true);
+            C.addWindowListener(new WindowAdapter() {
+                public void windowClosed(WindowEvent e) {
+                    setEnabled(true);
+                }
+            });
+            C.setVisible(true);
+        }
+    }//GEN-LAST:event_jButton_courModifyMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

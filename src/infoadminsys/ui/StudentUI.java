@@ -65,17 +65,11 @@ public class StudentUI extends javax.swing.JFrame {
         jTextField_email.setEditable(edit);
         jTextField_NO.setEditable(edit);
     }
-
-    private void buttonModify() {
-        jButton_modify.setVisible(false);
-        jButton_save.setVisible(true);
-        jButton_back.setVisible(true);
-    }
-
-    private void buttonReadonly() {
-        jButton_modify.setVisible(true);
-        jButton_save.setVisible(false);
-        jButton_back.setVisible(false);
+    
+    private void buttonVisible(boolean  vis) {
+        jButton_modify.setVisible(!vis);
+        jButton_save.setVisible(vis);
+        jButton_back.setVisible(vis);
     }
 
     private void setVis(boolean vis)
@@ -106,7 +100,7 @@ public class StudentUI extends javax.swing.JFrame {
         }
         setText();
         setEdit(false);
-        buttonReadonly();
+        buttonVisible(false);
         setVis(!sudo);
     }
     
@@ -559,7 +553,7 @@ public class StudentUI extends javax.swing.JFrame {
     private void jButton_modifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_modifyActionPerformed
         // TODO add your handling code here:
         setEdit(true);
-        buttonModify();
+        buttonVisible(true);
     }//GEN-LAST:event_jButton_modifyActionPerformed
 
     private void jButton_backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_backActionPerformed
@@ -582,6 +576,7 @@ public class StudentUI extends javax.swing.JFrame {
             return;
         }
         JOptionPane.showMessageDialog(this, "保存成功！", "提示信息", JOptionPane.INFORMATION_MESSAGE);
+        displayInfo(false);
     }//GEN-LAST:event_jButton_saveActionPerformed
 
     private void jLabel_accountMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel_accountMouseClicked
