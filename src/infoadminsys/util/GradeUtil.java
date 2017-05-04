@@ -24,11 +24,11 @@ public class GradeUtil {
     }
 
     public boolean saveGrade(Map<String,Object> gradeMap) {
-        String sql = "insert into grade(course_id,student_id,score) values(?,?,?)";
+        String sql = "update selectedcourse set score = ? where course_id = ? and student_id = ?;";
         List<Object> param = new ArrayList<>();
-        param.add(gradeMap.get("courseId"));
-        param.add(gradeMap.get("id"));
         param.add(gradeMap.get("score"));
+        param.add(gradeMap.get("course_id"));
+        param.add(gradeMap.get("id"));
         boolean flag = false;
         try {
             flag = jdbcUtil.updateByPreparedStatement(sql,param);

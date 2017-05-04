@@ -141,7 +141,7 @@ public class CourseUtil {
 
     //根据课程序号提交课程
     public boolean commitCourseByCourseId(String courseId) {
-        String sql = "update course set commitStatus = '已提交' where id = ?";
+        String sql = "update course set status = '已提交' where id = ?";
         List<Object> param = new ArrayList<>();
         param.add(courseId);
         boolean flag = false;
@@ -156,7 +156,7 @@ public class CourseUtil {
 
     //暂存课程
     public boolean draftCourseByCourseId(String courseId) {
-        String sql = "update course set commitStatus = '已暂存' where id = ?";
+        String sql = "update course set status = '已暂存' where id = ?";
         List<Object> params = new ArrayList<>();
         params.add(courseId);
         boolean flag = false;

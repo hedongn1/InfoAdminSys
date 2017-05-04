@@ -145,6 +145,7 @@ public class TeacherUI extends javax.swing.JFrame {
                 }
                 */
                 gradeInputModel.setStudentByCourseId(courseId);
+                jTable_scores.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
                 super.mouseClicked(e);
             }
         });
@@ -160,11 +161,9 @@ public class TeacherUI extends javax.swing.JFrame {
         String[] columnStrings = {"id","name","status"};
         String[] columnShowStrings = {"课程编号","课程名","提交状态"};
 
-
         public void update() {
             list = getAllCourses();
             fireTableDataChanged();
-
         }
 
         private List<Map<String,Object>> getAllCourses() {
@@ -182,7 +181,6 @@ public class TeacherUI extends javax.swing.JFrame {
 
         public Object getValueAt(int rowIndex, int columnIndex) {
             Map<String,Object> map = list.get(rowIndex);
-
             return map.get(columnStrings[columnIndex]);
         }
 
@@ -211,11 +209,9 @@ public class TeacherUI extends javax.swing.JFrame {
         private GradeUtil gradeUtil = new GradeUtil();
         private List<Map<String,Object>> list = new ArrayList<>();
 
-
-        String[] columnStrings = {"id","course_id", "name","score"};
+        String[] columnStrings = {"id","course_id","name","score"};
         String[] columnShowStrings = {"学号", "课程编号","姓名", "成绩"};
-        
-        
+ 
         boolean[] canEdit = new boolean[]{
                 false, false, false, true
             };
@@ -224,11 +220,10 @@ public class TeacherUI extends javax.swing.JFrame {
             return courseUtil.findAllStudentWithGradeByCourseId(courseId);
         }
 
-
         public boolean commitGrades() {
-
             for (int i = 0; i < list.size(); i++) {
                 Map<String,Object> map = list.get(i);
+                //map.put("score", getValueAt(i, 3));
                 if (map.get("score") == null || map.get("score") == "") {
                     JOptionPane.showMessageDialog(frame, "请将成绩填写完整后再提交", "提示", JOptionPane.INFORMATION_MESSAGE);
                     return false;
@@ -236,10 +231,9 @@ public class TeacherUI extends javax.swing.JFrame {
             }
 
             for (int i = 0; i < list.size(); i++) {
-                Map<String, Object> map = list.get(i);
+                Map<String,Object> map = list.get(i);
                 gradeUtil.saveGrade(map);
                 courseUtil.commitCourseByCourseId(courseId);
-
             }
             return true;
         }
@@ -248,7 +242,6 @@ public class TeacherUI extends javax.swing.JFrame {
             this.courseId = courseId;
             list = getAllStudentByCourseId(courseId);
             fireTableDataChanged();
-
         }
 
         public int getRowCount() {
@@ -260,7 +253,7 @@ public class TeacherUI extends javax.swing.JFrame {
         }
 
         public Object getValueAt(int rowIndex, int columnIndex) {
-            Map<String, Object> map = list.get(rowIndex);
+            Map<String,Object> map = list.get(rowIndex);
             return map.get(columnStrings[columnIndex]);
         }
 
@@ -273,9 +266,8 @@ public class TeacherUI extends javax.swing.JFrame {
         }
 
         public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-            Map<String, Object> map = list.get(rowIndex);
+            Map<String,Object> map = list.get(rowIndex);
             map.put(columnStrings[columnIndex], aValue);
-
         }
 
     }
@@ -322,7 +314,7 @@ public class TeacherUI extends javax.swing.JFrame {
         jTable_scores = new javax.swing.JTable();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTable_courses = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
+        saveButton = new javax.swing.JButton();
         jLabel_account = new javax.swing.JLabel();
         jLabel_hello = new javax.swing.JLabel();
         jLabel_logOut = new javax.swing.JLabel();
@@ -581,10 +573,15 @@ public class TeacherUI extends javax.swing.JFrame {
         });
         jScrollPane3.setViewportView(jTable_courses);
 
-        jButton1.setText("保存");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        saveButton.setText("保存");
+        saveButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                saveButtonMouseClicked(evt);
+            }
+        });
+        saveButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                saveButtonActionPerformed(evt);
             }
         });
 
@@ -598,7 +595,7 @@ public class TeacherUI extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
+                    .addComponent(saveButton))
                 .addGap(108, 108, 108))
         );
         jPanel3Layout.setVerticalGroup(
@@ -609,7 +606,7 @@ public class TeacherUI extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 479, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
+                .addComponent(saveButton)
                 .addGap(0, 40, Short.MAX_VALUE))
         );
 
@@ -756,13 +753,21 @@ public class TeacherUI extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jTable_coursesMouseClicked
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_saveButtonActionPerformed
+
+    private void saveButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_saveButtonMouseClicked
+        // TODO add your handling code here:
+        
+        boolean flag = gradeInputModel.commitGrades();
+        if (flag == true) {
+            courseInfoModel.update();
+        }
+    }//GEN-LAST:event_saveButtonMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton_back;
     private javax.swing.JButton jButton_modify;
     private javax.swing.JButton jButton_save;
@@ -799,5 +804,6 @@ public class TeacherUI extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField_name;
     private javax.swing.JTextField jTextField_sex;
     private javax.swing.JTextField jTextField_title;
+    private javax.swing.JButton saveButton;
     // End of variables declaration//GEN-END:variables
 }
