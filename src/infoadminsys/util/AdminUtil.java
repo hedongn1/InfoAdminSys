@@ -33,8 +33,8 @@ public class AdminUtil {
                 Map.Entry entry = (Map.Entry) iter.next();
                 String key = (String) entry.getKey();
                 Object value = entry.getValue();
-                sql += key + "=?";
-                param.add(value);
+                sql += key + " Like ? ";
+                param.add("%"+value+"%");
                 count++;
                 if (count < condition.size()) {
                     sql += " AND ";

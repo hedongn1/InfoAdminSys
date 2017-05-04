@@ -13,7 +13,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -56,7 +55,7 @@ public class CourseUtil {
                 Map.Entry entry = (Map.Entry) iter.next();
                 String key = (String) entry.getKey();
                 Object value = entry.getValue();
-                sql += " AND "+key + "=?";
+                sql += " AND "+key + " like ? ";
                 param.add(value);
             }
         }

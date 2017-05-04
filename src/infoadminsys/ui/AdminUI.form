@@ -7,7 +7,7 @@
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
-    <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
+    <SyntheticProperty name="generateCenter" type="boolean" value="true"/>
   </SyntheticProperties>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
@@ -45,8 +45,8 @@
                   <Component id="jLabel_account" linkSize="2" alignment="2" min="-2" pref="16" max="-2" attributes="0"/>
                   <Component id="jLabel_hello" alignment="0" min="-2" pref="16" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-              <Component id="jTabbedPane1" pref="597" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+              <Component id="jTabbedPane1" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -98,7 +98,7 @@
                               <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                               <Component id="jTextField_stuName" min="-2" pref="140" max="-2" attributes="0"/>
                               <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                              <Component id="jComboBox_stuDepart" pref="223" max="32767" attributes="0"/>
+                              <Component id="jTextField_stuDepart" min="-2" pref="223" max="-2" attributes="0"/>
                               <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                               <Component id="jTextField_stuMajor" min="-2" pref="245" max="-2" attributes="0"/>
                           </Group>
@@ -121,24 +121,24 @@
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+                      <EmptySpace min="1" pref="1" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="2" attributes="0">
                           <Component id="jTextField_stuID" alignment="2" min="-2" max="-2" attributes="0"/>
                           <Component id="jTextField_stuName" alignment="2" min="-2" max="-2" attributes="0"/>
-                          <Component id="jComboBox_stuDepart" alignment="2" min="-2" max="-2" attributes="0"/>
                           <Component id="jTextField_stuMajor" alignment="2" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel_search1" alignment="2" min="-2" pref="24" max="-2" attributes="0"/>
+                          <Component id="jTextField_stuDepart" alignment="2" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                      <Component id="jScrollPane1" pref="501" max="32767" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
+                      <Component id="jScrollPane1" pref="478" max="32767" attributes="0"/>
+                      <EmptySpace pref="7" max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="2" attributes="0">
                           <Component id="jButton_stuModify" alignment="2" min="-2" max="-2" attributes="0"/>
                           <Component id="jButton_stuDelete" alignment="2" min="-2" max="-2" attributes="0"/>
                           <Component id="jButton_stuImport" alignment="2" min="-2" max="-2" attributes="0"/>
                           <Component id="jButton_stuExport" alignment="2" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -219,14 +219,6 @@
                 <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTextField_stuMajorKeyPressed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JComboBox" name="jComboBox_stuDepart">
-              <Events>
-                <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jComboBox_stuDepartKeyPressed"/>
-              </Events>
-              <AuxValues>
-                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
-              </AuxValues>
-            </Component>
             <Component class="javax.swing.JLabel" name="jLabel_search1">
               <Properties>
                 <Property name="toolTipText" type="java.lang.String" value=""/>
@@ -271,6 +263,11 @@
                 <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jButton_stuModifyMouseClicked"/>
               </Events>
             </Component>
+            <Component class="javax.swing.JTextField" name="jTextField_stuDepart">
+              <Events>
+                <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTextField_stuDepartKeyPressed"/>
+              </Events>
+            </Component>
           </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="jPanel_teacher">
@@ -302,7 +299,7 @@
                               <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                               <Component id="jTextField_teaName" min="-2" pref="140" max="-2" attributes="0"/>
                               <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                              <Component id="jComboBox_teaDepart" pref="223" max="32767" attributes="0"/>
+                              <Component id="jTextField_teaDepart" min="-2" pref="223" max="-2" attributes="0"/>
                               <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                               <Component id="jTextField_teaTitle" min="-2" pref="245" max="-2" attributes="0"/>
                           </Group>
@@ -325,24 +322,24 @@
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+                      <EmptySpace min="1" pref="1" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="2" attributes="0">
                           <Component id="jTextField_teaID" alignment="2" min="-2" max="-2" attributes="0"/>
                           <Component id="jTextField_teaName" alignment="2" min="-2" max="-2" attributes="0"/>
-                          <Component id="jComboBox_teaDepart" alignment="2" min="-2" max="-2" attributes="0"/>
                           <Component id="jTextField_teaTitle" alignment="2" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel_search2" alignment="2" min="-2" pref="24" max="-2" attributes="0"/>
+                          <Component id="jTextField_teaDepart" alignment="2" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                      <Component id="jScrollPane2" pref="501" max="32767" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace min="1" pref="1" max="-2" attributes="0"/>
+                      <Component id="jScrollPane2" pref="479" max="32767" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="2" attributes="0">
                           <Component id="jButton_teaModify" alignment="2" min="-2" max="-2" attributes="0"/>
                           <Component id="jButton_teaDelete" alignment="2" min="-2" max="-2" attributes="0"/>
                           <Component id="jButton_teaImport" alignment="2" min="-2" max="-2" attributes="0"/>
                           <Component id="jButton_teaExport" alignment="2" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -423,14 +420,6 @@
                 <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTextField_teaTitleKeyPressed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JComboBox" name="jComboBox_teaDepart">
-              <Events>
-                <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jComboBox_teaDepartKeyPressed"/>
-              </Events>
-              <AuxValues>
-                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
-              </AuxValues>
-            </Component>
             <Component class="javax.swing.JLabel" name="jLabel_search2">
               <Properties>
                 <Property name="toolTipText" type="java.lang.String" value=""/>
@@ -473,6 +462,11 @@
               </Properties>
               <Events>
                 <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jButton_teaModifyMouseClicked"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JTextField" name="jTextField_teaDepart">
+              <Events>
+                <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTextField_teaDepartKeyPressed"/>
               </Events>
             </Component>
           </SubComponents>
@@ -534,15 +528,15 @@
                           <Component id="jTextField_courTea" alignment="2" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                      <Component id="jScrollPane3" min="-2" pref="496" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="jScrollPane3" pref="480" max="32767" attributes="0"/>
+                      <EmptySpace pref="7" max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="2" attributes="0">
                           <Component id="jButton_courModify" alignment="2" min="-2" max="-2" attributes="0"/>
                           <Component id="jButton_courDelete" alignment="2" min="-2" max="-2" attributes="0"/>
                           <Component id="jButton_courExport" alignment="2" min="-2" max="-2" attributes="0"/>
                           <Component id="jButton_courImport" alignment="2" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -715,23 +709,21 @@
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Component id="jLabel_search4" min="-2" pref="24" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jTextField_accUsername" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jComboBox_accType" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
+                          <Component id="jComboBox_accType" min="-2" max="-2" attributes="0"/>
+                          <Component id="jTextField_accUsername" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                      <Component id="jScrollPane4" pref="502" max="32767" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jScrollPane4" min="-2" pref="479" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="2" attributes="0">
                           <Component id="jButton_accModify" alignment="2" min="-2" max="-2" attributes="0"/>
                           <Component id="jButton_accDelete" alignment="2" min="-2" max="-2" attributes="0"/>
                           <Component id="jButton_accExport" alignment="2" min="-2" max="-2" attributes="0"/>
                           <Component id="jButton_accImport" alignment="2" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>

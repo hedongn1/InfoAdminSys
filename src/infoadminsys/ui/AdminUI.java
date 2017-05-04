@@ -42,8 +42,6 @@ public class AdminUI extends javax.swing.JFrame {
     private CourseUtil courseUtil = new CourseUtil();
 
     private void setSearchIcon() {
-        if(getClass().getResource("/icon/search.png")==null)
-            JOptionPane.showMessageDialog(this, "找不到图标!", "提示信息",JOptionPane.WARNING_MESSAGE);
         ImageIcon icon = new ImageIcon(getClass().getResource("/icon/search.png"));
         icon.setImage(icon.getImage().getScaledInstance(24, 24, Image.SCALE_DEFAULT));
         jLabel_search1.setIcon(icon);
@@ -60,7 +58,7 @@ public class AdminUI extends javax.swing.JFrame {
         jLabel_search1.setBounds(20, 0, 24, 24);
         jTextField_stuID.setBounds(54, 3, 133, 20);
         jTextField_stuName.setBounds(184, 3, 138, 20);
-        jComboBox_stuDepart.setBounds(318, 4, 231, 20);
+        jTextField_stuDepart.setBounds(319, 3, 227, 20);
         jTextField_stuMajor.setBounds(543, 3, 232, 20);
 
         jPanel_teacher.setLayout(null);
@@ -68,7 +66,7 @@ public class AdminUI extends javax.swing.JFrame {
         jLabel_search2.setBounds(20, 0, 24, 24);
         jTextField_teaID.setBounds(54, 3, 133, 20);
         jTextField_teaName.setBounds(184, 3, 138, 20);
-        jComboBox_teaDepart.setBounds(318, 4, 231, 20);
+        jTextField_teaDepart.setBounds(319, 3, 227, 20);
         jTextField_teaTitle.setBounds(543, 3, 232, 20);
 
         jPanel_course.setLayout(null);
@@ -229,8 +227,8 @@ public class AdminUI extends javax.swing.JFrame {
         if (jTextField_stuName.getText().length() > 0) {
             condition.put("name", jTextField_stuName.getText());
         }
-        if (jComboBox_stuDepart.getSelectedItem() != null) {
-            condition.put("depart", jComboBox_stuDepart.getSelectedItem());
+        if (jTextField_stuDepart.getText().length()>0) {
+            condition.put("depart", jTextField_stuDepart.getText());
         }
         if (jTextField_stuMajor.getText().length() > 0) {
             condition.put("major", jTextField_stuMajor.getText());
@@ -251,8 +249,8 @@ public class AdminUI extends javax.swing.JFrame {
         if (jTextField_teaName.getText().length() > 0) {
             condition.put("name", jTextField_teaName.getText());
         }
-        if (jComboBox_stuDepart.getSelectedItem() != null) {
-            condition.put("depart", jComboBox_teaDepart.getSelectedItem());
+        if (jTextField_stuDepart.getText().length()>0) {
+            condition.put("depart", jTextField_teaDepart.getText().length());
         }
         if (jTextField_teaTitle.getText().length() > 0) {
             condition.put("title", jTextField_teaTitle.getText());
@@ -268,13 +266,13 @@ public class AdminUI extends javax.swing.JFrame {
     private void courseSearch() {
         Map<String, Object> condition = new HashMap<>();
         if (jTextField_courID.getText().length() > 0) {
-            condition.put("c.id", jTextField_courID.getText());
+            condition.put("c.id", "%"+jTextField_courID.getText()+"%");
         }
         if (jTextField_courName.getText().length() > 0) {
-            condition.put("c.name", jTextField_courName.getText());
+            condition.put("c.name", "%"+jTextField_courName.getText()+"%");
         }
         if (jTextField_courTea.getText().length() > 0) {
-            condition.put("t.name", jTextField_courTea.getText());
+            condition.put("t.name", "%"+jTextField_courTea.getText()+"%");
         }
         try {
             courList.clear();
@@ -331,24 +329,24 @@ public class AdminUI extends javax.swing.JFrame {
         jTextField_stuID = new javax.swing.JTextField();
         jTextField_stuName = new javax.swing.JTextField();
         jTextField_stuMajor = new javax.swing.JTextField();
-        jComboBox_stuDepart = new javax.swing.JComboBox<>();
         jLabel_search1 = new javax.swing.JLabel();
         jButton_stuExport = new javax.swing.JButton();
         jButton_stuImport = new javax.swing.JButton();
         jButton_stuDelete = new javax.swing.JButton();
         jButton_stuModify = new javax.swing.JButton();
+        jTextField_stuDepart = new javax.swing.JTextField();
         jPanel_teacher = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable_teacher = new javax.swing.JTable();
         jTextField_teaID = new javax.swing.JTextField();
         jTextField_teaName = new javax.swing.JTextField();
         jTextField_teaTitle = new javax.swing.JTextField();
-        jComboBox_teaDepart = new javax.swing.JComboBox<>();
         jLabel_search2 = new javax.swing.JLabel();
         jButton_teaExport = new javax.swing.JButton();
         jButton_teaImport = new javax.swing.JButton();
         jButton_teaDelete = new javax.swing.JButton();
         jButton_teaModify = new javax.swing.JButton();
+        jTextField_teaDepart = new javax.swing.JTextField();
         jPanel_course = new javax.swing.JPanel();
         jButton_courModify = new javax.swing.JButton();
         jButton_courDelete = new javax.swing.JButton();
@@ -438,12 +436,6 @@ public class AdminUI extends javax.swing.JFrame {
             }
         });
 
-        jComboBox_stuDepart.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jComboBox_stuDepartKeyPressed(evt);
-            }
-        });
-
         jLabel_search1.setToolTipText("");
         jLabel_search1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel_search1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -485,6 +477,12 @@ public class AdminUI extends javax.swing.JFrame {
             }
         });
 
+        jTextField_stuDepart.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextField_stuDepartKeyPressed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel_studentLayout = new javax.swing.GroupLayout(jPanel_student);
         jPanel_student.setLayout(jPanel_studentLayout);
         jPanel_studentLayout.setHorizontalGroup(
@@ -501,7 +499,7 @@ public class AdminUI extends javax.swing.JFrame {
                         .addGap(0, 0, 0)
                         .addComponent(jTextField_stuName, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, 0)
-                        .addComponent(jComboBox_stuDepart, 0, 223, Short.MAX_VALUE)
+                        .addComponent(jTextField_stuDepart, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, 0)
                         .addComponent(jTextField_stuMajor, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
@@ -519,22 +517,22 @@ public class AdminUI extends javax.swing.JFrame {
         jPanel_studentLayout.setVerticalGroup(
             jPanel_studentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel_studentLayout.createSequentialGroup()
-                .addGap(0, 0, 0)
+                .addGap(1, 1, 1)
                 .addGroup(jPanel_studentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jTextField_stuID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextField_stuName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox_stuDepart, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextField_stuMajor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel_search1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, 0)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 501, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(jLabel_search1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField_stuDepart, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(1, 1, 1)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 478, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
                 .addGroup(jPanel_studentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jButton_stuModify)
                     .addComponent(jButton_stuDelete)
                     .addComponent(jButton_stuImport)
                     .addComponent(jButton_stuExport))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(12, 12, 12))
         );
 
         jTabbedPane1.addTab("学生信息", jPanel_student);
@@ -596,12 +594,6 @@ public class AdminUI extends javax.swing.JFrame {
             }
         });
 
-        jComboBox_teaDepart.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jComboBox_teaDepartKeyPressed(evt);
-            }
-        });
-
         jLabel_search2.setToolTipText("");
         jLabel_search2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel_search2.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -643,6 +635,12 @@ public class AdminUI extends javax.swing.JFrame {
             }
         });
 
+        jTextField_teaDepart.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextField_teaDepartKeyPressed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel_teacherLayout = new javax.swing.GroupLayout(jPanel_teacher);
         jPanel_teacher.setLayout(jPanel_teacherLayout);
         jPanel_teacherLayout.setHorizontalGroup(
@@ -659,7 +657,7 @@ public class AdminUI extends javax.swing.JFrame {
                         .addGap(0, 0, 0)
                         .addComponent(jTextField_teaName, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, 0)
-                        .addComponent(jComboBox_teaDepart, 0, 223, Short.MAX_VALUE)
+                        .addComponent(jTextField_teaDepart, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, 0)
                         .addComponent(jTextField_teaTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
@@ -677,22 +675,22 @@ public class AdminUI extends javax.swing.JFrame {
         jPanel_teacherLayout.setVerticalGroup(
             jPanel_teacherLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel_teacherLayout.createSequentialGroup()
-                .addGap(0, 0, 0)
+                .addGap(1, 1, 1)
                 .addGroup(jPanel_teacherLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jTextField_teaID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextField_teaName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox_teaDepart, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextField_teaTitle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel_search2, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, 0)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 501, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(jLabel_search2, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField_teaDepart, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(1, 1, 1)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 479, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel_teacherLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jButton_teaModify)
                     .addComponent(jButton_teaDelete)
                     .addComponent(jButton_teaImport)
                     .addComponent(jButton_teaExport))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(12, 12, 12))
         );
 
         jTabbedPane1.addTab("教师信息", jPanel_teacher);
@@ -836,14 +834,14 @@ public class AdminUI extends javax.swing.JFrame {
                     .addComponent(jTextField_courName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextField_courTea, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, 0)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 496, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
                 .addGroup(jPanel_courseLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jButton_courModify)
                     .addComponent(jButton_courDelete)
                     .addComponent(jButton_courExport)
                     .addComponent(jButton_courImport))
-                .addContainerGap())
+                .addGap(12, 12, 12))
         );
 
         jTabbedPane1.addTab("课程信息", jPanel_course);
@@ -959,20 +957,19 @@ public class AdminUI extends javax.swing.JFrame {
         jPanel_accountLayout.setVerticalGroup(
             jPanel_accountLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel_accountLayout.createSequentialGroup()
-                .addGroup(jPanel_accountLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel_accountLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel_search4, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel_accountLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jTextField_accUsername, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jComboBox_accType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jComboBox_accType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField_accUsername))
                 .addGap(0, 0, 0)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 502, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 479, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel_accountLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jButton_accModify)
                     .addComponent(jButton_accDelete)
                     .addComponent(jButton_accExport)
                     .addComponent(jButton_accImport))
-                .addContainerGap())
+                .addGap(12, 12, 12))
         );
 
         jTabbedPane1.addTab("账号信息", jPanel_account);
@@ -1029,8 +1026,8 @@ public class AdminUI extends javax.swing.JFrame {
                     .addComponent(jLabel_logOut)
                     .addComponent(jLabel_account, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel_hello, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 597, Short.MAX_VALUE))
+                .addGap(0, 0, 0)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel_account, jLabel_logOut});
@@ -1039,6 +1036,7 @@ public class AdminUI extends javax.swing.JFrame {
         jTabbedPane1.getAccessibleContext().setAccessibleDescription("");
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jLabel_accountMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel_accountMouseClicked
@@ -1228,13 +1226,6 @@ public class AdminUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jTextField_stuNameKeyPressed
 
-    private void jComboBox_stuDepartKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jComboBox_stuDepartKeyPressed
-        // TODO add your handling code here:
-        if (evt.getKeyCode() == evt.VK_ENTER) {
-            studentSearch();
-        }
-    }//GEN-LAST:event_jComboBox_stuDepartKeyPressed
-
     private void jTextField_stuMajorKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_stuMajorKeyPressed
         // TODO add your handling code here:
         if (evt.getKeyCode() == evt.VK_ENTER) {
@@ -1255,13 +1246,6 @@ public class AdminUI extends javax.swing.JFrame {
             teacherSearch();
         }
     }//GEN-LAST:event_jTextField_teaNameKeyPressed
-
-    private void jComboBox_teaDepartKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jComboBox_teaDepartKeyPressed
-        // TODO add your handling code here:
-        if (evt.getKeyCode() == evt.VK_ENTER) {
-            teacherSearch();
-        }
-    }//GEN-LAST:event_jComboBox_teaDepartKeyPressed
 
     private void jTextField_teaTitleKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_teaTitleKeyPressed
         // TODO add your handling code here:
@@ -1450,6 +1434,20 @@ public class AdminUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton_courModifyMouseClicked
 
+    private void jTextField_stuDepartKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_stuDepartKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyCode() == evt.VK_ENTER) {
+            studentSearch();
+        }
+    }//GEN-LAST:event_jTextField_stuDepartKeyPressed
+
+    private void jTextField_teaDepartKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_teaDepartKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyCode() == evt.VK_ENTER) {
+            teacherSearch();
+        }
+    }//GEN-LAST:event_jTextField_teaDepartKeyPressed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton_accDelete;
@@ -1469,8 +1467,6 @@ public class AdminUI extends javax.swing.JFrame {
     private javax.swing.JButton jButton_teaImport;
     private javax.swing.JButton jButton_teaModify;
     private javax.swing.JComboBox<String> jComboBox_accType;
-    private javax.swing.JComboBox<String> jComboBox_stuDepart;
-    private javax.swing.JComboBox<String> jComboBox_teaDepart;
     private javax.swing.JLabel jLabel_account;
     private javax.swing.JLabel jLabel_hello;
     private javax.swing.JLabel jLabel_logOut;
@@ -1495,9 +1491,11 @@ public class AdminUI extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField_courID;
     private javax.swing.JTextField jTextField_courName;
     private javax.swing.JTextField jTextField_courTea;
+    private javax.swing.JTextField jTextField_stuDepart;
     private javax.swing.JTextField jTextField_stuID;
     private javax.swing.JTextField jTextField_stuMajor;
     private javax.swing.JTextField jTextField_stuName;
+    private javax.swing.JTextField jTextField_teaDepart;
     private javax.swing.JTextField jTextField_teaID;
     private javax.swing.JTextField jTextField_teaName;
     private javax.swing.JTextField jTextField_teaTitle;
