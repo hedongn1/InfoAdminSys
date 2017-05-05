@@ -28,4 +28,4 @@ ALTER TABLE course ADD capacity INTEGER;
 ALTER TABLE course ADD selectedcnt INTEGER;
 
 INSERT INTO course
-VALUE ('cs1001','MATLAB程序设计','123',45,30,'未给分');
+VALUES('CS1001','MATLAB程序设计','123',60,1,'未给分');
