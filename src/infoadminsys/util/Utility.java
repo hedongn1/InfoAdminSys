@@ -18,6 +18,19 @@ import java.util.Set;
  */
 public class Utility {
 
+    static long BASE=961211;
+    static long MOD=2147483647;
+    
+    static public String Hash(String str) {
+        byte[] s=str.getBytes();
+        int n=s.length;
+        long sum=0;
+        for(int i=0;i<n;i++) {
+            sum=(sum*BASE+s[i])%MOD;
+        }
+        return Long.toString(sum);
+    }
+    
     static public java.sql.Date StringToDate(String str) throws ParseException {
         if (str==null || str.equals("")) {
             return null;

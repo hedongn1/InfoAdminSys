@@ -80,7 +80,7 @@ public class AdminUI extends javax.swing.JFrame {
         jScrollPane4.setBounds(6, 27, 767, 480);
         jLabel_search4.setBounds(20, 0, 24, 24);
         jTextField_accUsername.setBounds(54, 3, 360, 20);
-        jComboBox_accType.setBounds(410, 3, 365, 20);
+        jComboBox_accType.setBounds(410, 4, 365, 20);
 
         DefaultTableCellRenderer hr=(DefaultTableCellRenderer) jTable_student.getTableHeader().getDefaultRenderer();
         hr.setHorizontalAlignment(JLabel.CENTER);

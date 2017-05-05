@@ -160,6 +160,7 @@ public class AccountManageUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void updatePassword(String password) throws SQLException {
+        password=Utility.Hash(password);
         String sql="UPDATE userpass SET password=? WHERE username=?;";
         List<Object> param=new ArrayList<>();
         param.add(password);
