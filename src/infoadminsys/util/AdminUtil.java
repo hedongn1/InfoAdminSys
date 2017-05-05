@@ -53,6 +53,8 @@ public class AdminUtil {
     }
 
     public <T> void insertData(List<T> dataList, String[] col, Class<T> cls) throws Exception {
+        int n=dataList.size();
+        if(n<=0) return;
         String table=cls.getSimpleName().toLowerCase();
         String sql = "INSERT INTO " + table + "(", duplicate = " ON DUPLICATE KEY UPDATE ";
         for (int i = 0; i < col.length; i++) {
@@ -67,7 +69,6 @@ public class AdminUtil {
             }
         }
         sql += "VALUE ";
-        int n = dataList.size();
         List<Object> param=new ArrayList<Object>();
         for (int i = 0; i < n; i++) {
             T data = dataList.get(i);
