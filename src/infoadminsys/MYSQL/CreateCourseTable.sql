@@ -24,8 +24,5 @@ ALTER TABLE course DROP FOREIGN KEY course_ibfk_1;
 ALTER TABLE course ADD FOREIGN KEY(teacher_id) REFERENCES teacher(id)
 ON UPDATE CASCADE ON DELETE CASCADE;
 
-ALTER TABLE course ADD capacity INTEGER;
-ALTER TABLE course ADD selectedcnt INTEGER;
-
 INSERT INTO course
-VALUE ('CS1001','MATLAB程序设计','123','未给分');
+VALUES('CS1001','MATLAB程序设计','123',60,1,'未给分');

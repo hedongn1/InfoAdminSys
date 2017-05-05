@@ -136,17 +136,7 @@ public class TeacherUI extends javax.swing.JFrame {
 
         jTable_courses.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                // System.out.println(table2.getSelectedRow());
-                String courseId = courseInfoModel.getValueAt(jTable_courses.getSelectedRow(), 0).toString().trim();
-                /*
-                boolean useDraft = !courseInfoModel.getValueAt(jTable_courses.getSelectedRow(), 4).toString().equals("已提交");
-                if (useDraft) {
-                    makeRightAble();
-                } else {
-                    makeRightDisable();
-
-                }
-                 */
+                String courseId = courseInfoModel.getValueAt(jTable_courses.getSelectedRow(), 0).toString().trim();            
                 gradeInputModel.setStudentByCourseId(courseId);
                 jTable_scores.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
                 super.mouseClicked(e);
