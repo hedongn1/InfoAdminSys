@@ -23,9 +23,8 @@ public class LoginUI extends javax.swing.JFrame {
         initComponents();
         this.getRootPane().setDefaultButton(btnsubmit);
     }
-    
-    private void LoginAction()
-    {
+
+    private void LoginAction() {
         if (txtusername.getText() == null || txtusername.getText().length() <= 0) {
             JOptionPane.showMessageDialog(this, "请输入用户名", "提示", JOptionPane.WARNING_MESSAGE);
             return;
@@ -45,26 +44,29 @@ public class LoginUI extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "用户名或密码错误！", "提示", JOptionPane.WARNING_MESSAGE);
             return;
         } else {
-            switch(result.type)
-            {
-                case "student":
-                    StudentUI S = new StudentUI(username,false);
-                    S.setLocationRelativeTo(null);
-                    S.setVisible(true);
-                    this.dispose();
-                    break;
-                case "teacher":
-                    TeacherUI T = new TeacherUI(username,false);
-                    T.setLocationRelativeTo(null);
-                    T.setVisible(true);
-                    this.dispose();
-                    break;
-                case "admin":
-                    AdminUI AD=new AdminUI("admin");
-                    AD.setLocationRelativeTo(null);
-                    AD.setVisible(true);
-                    this.dispose();
-                    break;
+            try {
+                switch (result.type) {
+                    case "student":
+                        StudentUI S = new StudentUI(username, false);
+                        S.setLocationRelativeTo(null);
+                        S.setVisible(true);
+                        this.dispose();
+                        break;
+                    case "teacher":
+                        TeacherUI T = new TeacherUI(username, false);
+                        T.setLocationRelativeTo(null);
+                        T.setVisible(true);
+                        this.dispose();
+                        break;
+                    case "admin":
+                        AdminUI AD = new AdminUI("admin");
+                        AD.setLocationRelativeTo(null);
+                        AD.setVisible(true);
+                        this.dispose();
+                        break;
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "登录失败!请联系管理员！", "提示", JOptionPane.WARNING_MESSAGE);
             }
         }
     }

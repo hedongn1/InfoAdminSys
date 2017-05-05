@@ -178,7 +178,7 @@ public class AccountManageUI extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "两次新密码不一致！", "提示信息", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        if (passOld.length()==0 || passNew1.length()==0) {
+        if ((!sudo && passOld.length()==0) || passNew1.length()==0) {
             JOptionPane.showMessageDialog(this, "密码不能为空！", "提示信息", JOptionPane.WARNING_MESSAGE);
             return;
         }

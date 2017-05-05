@@ -20,10 +20,10 @@ public class JdbcUtil {
     private ResultSet resultSet = null;
 
     private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-    private static final String DB_URL = "jdbc:mysql://localhost/InfoAdminSys?useSSL=false&characterEncoding=utf8";
+    private static final String DB_URL = "jdbc:mysql://rm-bp15cmwq61ngc9m9go.mysql.rds.aliyuncs.com/InfoAdminSys?useSSL=false&characterEncoding=utf8";
 
     private static final String DB_USERNAME = "root";
-    private static final String DB_PASSWORD = "hedong";
+    private static final String DB_PASSWORD = "lshHED123";
 
     public JdbcUtil() {
         try {

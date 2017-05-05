@@ -13,7 +13,7 @@ CREATE TABLE userpass(
     password CHAR(30) NOT NULL,
     type enum('student','teacher','admin') NOT NULL,
     PRIMARY KEY(username)
-);
+)CHARACTER SET=utf8;
 
 INSERT INTO userpass
 VALUE ('15307130120','lsh','student');

@@ -52,7 +52,10 @@ public class TeacherUtil {
                 Field field = cls.getDeclaredField(attrName);
                 param.add(field.get(teacher));
             } else {
-                param.add(teacher.birthday.toString());
+                if(teacher.birthday!=null)
+                    param.add(teacher.birthday.toString());
+                else
+                    param.add(null);
             }
         }
         sql += "WHERE id=?;";
