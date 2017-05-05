@@ -5,6 +5,8 @@
  */
 package infoadminsys.cls;
 
+import infoadminsys.util.*;
+
 /**
  *
  * @author hed
@@ -19,7 +21,7 @@ public class UserPass {
     }
     
     public UserPass(String username, String password) {
-        this.password = password;
+        this.password = Utility.Hash(password);
         this.username = username;
     }
     

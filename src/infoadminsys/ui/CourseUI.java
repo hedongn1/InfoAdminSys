@@ -235,38 +235,38 @@ public class CourseUI extends javax.swing.JFrame {
         jLabel7.setText("选课学生");
 
         jButton_save.setText("保存");
-        jButton_save.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton_saveMouseClicked(evt);
+        jButton_save.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_saveActionPerformed(evt);
             }
         });
 
         jButton_delete.setText("删除");
-        jButton_delete.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton_deleteMouseClicked(evt);
+        jButton_delete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_deleteActionPerformed(evt);
             }
         });
 
         jButton_insert.setText("插入");
-        jButton_insert.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton_insertMouseClicked(evt);
+        jButton_insert.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_insertActionPerformed(evt);
             }
         });
 
         jButton_modify.setText("修改");
-        jButton_modify.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton_modifyMouseClicked(evt);
+        jButton_modify.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_modifyActionPerformed(evt);
             }
         });
 
         jButton_back.setText("返回");
         jButton_back.setToolTipText("");
-        jButton_back.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton_backMouseClicked(evt);
+        jButton_back.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_backActionPerformed(evt);
             }
         });
 
@@ -367,14 +367,7 @@ public class CourseUI extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField_teaNameActionPerformed
 
-    private void jButton_modifyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_modifyMouseClicked
-        // TODO add your handling code here:
-        buttonVisible(true);
-        setEdit(true);
-        tableModel = (DefaultTableModel) jTable_select.getModel();
-    }//GEN-LAST:event_jButton_modifyMouseClicked
-
-    private void jButton_insertMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_insertMouseClicked
+    private void jButton_insertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_insertActionPerformed
         // TODO add your handling code here:
         if (course.selectedcnt >= course.capacity) {
             JOptionPane.showMessageDialog(this, "选课人数已达上限！\n", "提示信息", JOptionPane.WARNING_MESSAGE);
@@ -383,9 +376,9 @@ public class CourseUI extends javax.swing.JFrame {
         int n = tableModel.getRowCount() + 1;
         tableModel.addRow(new Object[]{n, null, null, null});
         selectedcntInc(1);
-    }//GEN-LAST:event_jButton_insertMouseClicked
+    }//GEN-LAST:event_jButton_insertActionPerformed
 
-    private void jButton_deleteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_deleteMouseClicked
+    private void jButton_deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_deleteActionPerformed
         // TODO add your handling code here:
         int rows[] = jTable_select.getSelectedRows();
         int n = rows.length;
@@ -405,9 +398,9 @@ public class CourseUI extends javax.swing.JFrame {
             }
             selectedcntInc(-n);
         }
-    }//GEN-LAST:event_jButton_deleteMouseClicked
+    }//GEN-LAST:event_jButton_deleteActionPerformed
 
-    private void jButton_saveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_saveMouseClicked
+    private void jButton_saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_saveActionPerformed
         // TODO add your handling code here:
         try {
             int n = deletedRows.size();
@@ -446,15 +439,22 @@ public class CourseUI extends javax.swing.JFrame {
         }
         JOptionPane.showMessageDialog(this, "保存成功！", "提示信息", JOptionPane.INFORMATION_MESSAGE);
         displayInfo(true);
-    }//GEN-LAST:event_jButton_saveMouseClicked
+    }//GEN-LAST:event_jButton_saveActionPerformed
 
-    private void jButton_backMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_backMouseClicked
+    private void jButton_backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_backActionPerformed
         // TODO add your handling code here:
         int result = JOptionPane.showConfirmDialog(this, "确定退出？未保存的内容将丢失！", "提示信息", JOptionPane.YES_NO_OPTION);
         if (result == JOptionPane.YES_OPTION) {
             displayInfo(true);
         }
-    }//GEN-LAST:event_jButton_backMouseClicked
+    }//GEN-LAST:event_jButton_backActionPerformed
+
+    private void jButton_modifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_modifyActionPerformed
+        // TODO add your handling code here:
+        buttonVisible(true);
+        setEdit(true);
+        tableModel = (DefaultTableModel) jTable_select.getModel();
+    }//GEN-LAST:event_jButton_modifyActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
