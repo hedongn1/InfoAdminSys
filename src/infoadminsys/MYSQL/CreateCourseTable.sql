@@ -11,18 +11,20 @@ USE InfoAdminSys;
 CREATE TABLE course(
     id CHAR(20) NOT NULL,
     name CHAR(30) NOT NULL,
-    teacher_id CHAR(20) NOT NULL,
+    teacher_id CHAR(20),
     capacity INTEGER,
     selectedcnt INTEGER,
     status CHAR(30),
     PRIMARY KEY(id),
-    FOREIGN KEY(teacher_id) REFERENCES teacher(id) ON UPDATE CASCADE ON DELETE CASCADE
+    FOREIGN KEY(teacher_id) REFERENCES teacher(id) ON UPDATE CASCADE ON DELETE SET NULL
 )CHARACTER SET=utf8;
 
-ALTER TABLE course DROP FOREIGN KEY course_ibfk_1;
+ALTER TABLE course DROP FOREIGN KEY course_ibfk_2;
 
 ALTER TABLE course ADD FOREIGN KEY(teacher_id) REFERENCES teacher(id)
-ON UPDATE CASCADE ON DELETE CASCADE;
+ON UPDATE CASCADE ON DELETE SET NULL;
+
+ALTER TABLE course CHANGE teacher_id teacher_id CHAR(20);
 
 ALTER TABLE course ADD capacity INTEGER;
 ALTER TABLE course ADD selectedcnt INTEGER;

@@ -24,4 +24,4 @@ VALUE ('admin','123','admin');
 INSERT INTO userpass
 VALUE ('yangchen','123','teacher');
 
-ALTER TABLE userpass ALTER password SET DEFAULT '000000';
+ALTER TABLE userpass ALTER password SET DEFAULT '701363672';

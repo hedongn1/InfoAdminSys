@@ -1197,7 +1197,6 @@ public class AdminUI extends javax.swing.JFrame {
             StudentUI S = new StudentUI(username, true);
             S.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             S.setLocationRelativeTo(this);
-            S.setAlwaysOnTop(true);
             S.addWindowListener(new WindowAdapter() {
                 public void windowClosed(WindowEvent e) {
                     setEnabled(true);
@@ -1333,7 +1332,6 @@ public class AdminUI extends javax.swing.JFrame {
             TeacherUI T = new TeacherUI(username, true);
             T.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             T.setLocationRelativeTo(this);
-            T.setAlwaysOnTop(true);
             T.addWindowListener(new WindowAdapter() {
                 public void windowClosed(WindowEvent e) {
                     setEnabled(true);
@@ -1424,7 +1422,6 @@ public class AdminUI extends javax.swing.JFrame {
             CourseUI C = new CourseUI(id);
             C.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             C.setLocationRelativeTo(this);
-            C.setAlwaysOnTop(true);
             C.addWindowListener(new WindowAdapter() {
                 public void windowClosed(WindowEvent e) {
                     setEnabled(true);
