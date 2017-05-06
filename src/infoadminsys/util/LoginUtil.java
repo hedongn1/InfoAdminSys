@@ -40,4 +40,13 @@ public class LoginUtil {
         return ret;
     }
     
+    protected void finalize() throws Throwable {
+        super.finalize();
+        if (jdbcUtil != null) {
+            jdbcUtil.releaseConn();
+            jdbcUtil = null;
+
+        }
+    }
+    
 }
