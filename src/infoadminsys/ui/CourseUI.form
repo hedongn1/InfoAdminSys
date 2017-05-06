@@ -214,7 +214,7 @@
         <Property name="text" type="java.lang.String" value="&#x4fdd;&#x5b58;"/>
       </Properties>
       <Events>
-        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jButton_saveMouseClicked"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_saveActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jButton_delete">
@@ -222,7 +222,7 @@
         <Property name="text" type="java.lang.String" value="&#x5220;&#x9664;"/>
       </Properties>
       <Events>
-        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jButton_deleteMouseClicked"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_deleteActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jButton_insert">
@@ -230,7 +230,7 @@
         <Property name="text" type="java.lang.String" value="&#x63d2;&#x5165;"/>
       </Properties>
       <Events>
-        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jButton_insertMouseClicked"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_insertActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jButton_modify">
@@ -238,7 +238,7 @@
         <Property name="text" type="java.lang.String" value="&#x4fee;&#x6539;"/>
       </Properties>
       <Events>
-        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jButton_modifyMouseClicked"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_modifyActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jButton_back">
@@ -247,7 +247,7 @@
         <Property name="toolTipText" type="java.lang.String" value=""/>
       </Properties>
       <Events>
-        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jButton_backMouseClicked"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_backActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

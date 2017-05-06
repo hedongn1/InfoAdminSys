@@ -23,7 +23,7 @@ public class JdbcUtil {
     private static final String DB_URL = "jdbc:mysql://rm-bp15cmwq61ngc9m9go.mysql.rds.aliyuncs.com/InfoAdminSys?useSSL=false&characterEncoding=utf8";
 
     private static final String DB_USERNAME = "root";
-    private static final String DB_PASSWORD = "lshHED123";
+    private static final String DB_PASSWORD = "hedong";
 
     public JdbcUtil() {
         try {

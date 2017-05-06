@@ -136,17 +136,7 @@ public class TeacherUI extends javax.swing.JFrame {
 
         jTable_courses.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                // System.out.println(table2.getSelectedRow());
-                String courseId = courseInfoModel.getValueAt(jTable_courses.getSelectedRow(), 0).toString().trim();
-                /*
-                boolean useDraft = !courseInfoModel.getValueAt(jTable_courses.getSelectedRow(), 4).toString().equals("已提交");
-                if (useDraft) {
-                    makeRightAble();
-                } else {
-                    makeRightDisable();
-
-                }
-                 */
+                String courseId = courseInfoModel.getValueAt(jTable_courses.getSelectedRow(), 0).toString().trim();            
                 gradeInputModel.setStudentByCourseId(courseId);
                 jTable_scores.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
                 super.mouseClicked(e);
@@ -556,20 +546,10 @@ public class TeacherUI extends javax.swing.JFrame {
             }
         ));
         jTable_courses.getTableHeader().setReorderingAllowed(false);
-        jTable_courses.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jTable_coursesMouseClicked(evt);
-            }
-        });
         jScrollPane2.setViewportView(jTable_courses);
 
         saveButton.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
         saveButton.setText("保存");
-        saveButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                saveButtonMouseClicked(evt);
-            }
-        });
         saveButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 saveButtonActionPerformed(evt);
@@ -729,6 +709,9 @@ public class TeacherUI extends javax.swing.JFrame {
         // TODO add your handling code here:
         try {
             saveData();
+        } catch (ParseException e) {
+            JOptionPane.showMessageDialog(this, "请按照yyyy-MM-dd的格式输入日期！\n如：1996-01-01", "提示信息", JOptionPane.WARNING_MESSAGE);
+            return;
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "保存失败！\n" + e.getMessage(), "提示信息", JOptionPane.WARNING_MESSAGE);
             return;
@@ -737,23 +720,13 @@ public class TeacherUI extends javax.swing.JFrame {
         displayInfo(false);
     }//GEN-LAST:event_jButton_saveActionPerformed
 
-    private void jTable_coursesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable_coursesMouseClicked
-        // TODO add your handling code here:
-
-    }//GEN-LAST:event_jTable_coursesMouseClicked
-
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_saveButtonActionPerformed
-
-    private void saveButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_saveButtonMouseClicked
-        // TODO add your handling code here:
-
         boolean flag = gradeInputModel.commitGrades();
         if (flag == true) {
             courseInfoModel.update();
         }
-    }//GEN-LAST:event_saveButtonMouseClicked
+    }//GEN-LAST:event_saveButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

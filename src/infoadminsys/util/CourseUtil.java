@@ -18,15 +18,15 @@ import java.util.Set;
  *
  * @author hed
  */
-
 public class CourseUtil {
+
     private JdbcUtil jdbcUtil;
 
     public CourseUtil() {
         jdbcUtil = new JdbcUtil();
         jdbcUtil.getConnection();
     }
-    
+
     public void uploadData(Course course) throws Exception {
         String sql = "UPDATE course SET ";
         Class<Course> cls = Course.class;
@@ -35,7 +35,11 @@ public class CourseUtil {
         for (int i = 0; i < itemNum; i++) {
             String attrName = Course.Attr[i];
             sql = sql + attrName + "=?";
-            if(i+1<itemNum) sql+=", "; else sql+=" ";
+            if (i + 1 < itemNum) {
+                sql += ", ";
+            } else {
+                sql += " ";
+            }
             Field field = cls.getDeclaredField(attrName);
             param.add(field.get(course));
         }
@@ -43,26 +47,32 @@ public class CourseUtil {
         param.add(course.id);
         jdbcUtil.updateByPreparedStatement(sql, param);
     }
-    
+
     //获得所有课程信息
-    public List<Map<String,Object>> findAllCourse(Map<String, Object> condition) {
+    public List<Map<String, Object>> findAllCourse(Map<String, Object> condition) {
         String sql = "select c.id as id, c.name as name, teacher_id, t.name as teacher_name, capacity, selectedcnt, status "
-               +"from course as c, teacher as t where teacher_id = t.id";
-        List<Object> param=new ArrayList<>();
+                + "from course as c left join teacher as t on teacher_id = t.id ";
+        List<Object> param = new ArrayList<>();
         if (condition.size() > 0) {
+            sql += "where ";
             Set set = condition.entrySet();
+            int count = 0;
             for (Iterator iter = set.iterator(); iter.hasNext();) {
                 Map.Entry entry = (Map.Entry) iter.next();
                 String key = (String) entry.getKey();
                 Object value = entry.getValue();
-                sql += " AND "+key + " like ? ";
+                sql += key + " like ? ";
                 param.add(value);
+                count++;
+                if (count < condition.size()) {
+                    sql += " and ";
+                }
             }
         }
-        sql+=";";
-        List<Map<String,Object>> list = new ArrayList<>();
+        sql += ";";
+        List<Map<String, Object>> list = new ArrayList<>();
         try {
-            list = jdbcUtil.getCertainResultList(sql,param);
+            list = jdbcUtil.getCertainResultList(sql, param);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -70,7 +80,7 @@ public class CourseUtil {
     }
 
     //根据教师id获得所有课程信息
-    public List<Map<String,Object>> findAllCoursesByTeacherId(String teacherId) {
+    public List<Map<String, Object>> findAllCoursesByTeacherId(String teacherId) {
         String sql = "select * from course where teacher_id = ?";
         List<Object> params = new ArrayList<>();
         params.add(teacherId);
@@ -82,9 +92,8 @@ public class CourseUtil {
         }
         return list;
     }
-    
 
-    public boolean saveCourse(Map<String,Object> map) {
+    public boolean saveCourse(Map<String, Object> map) {
         String sql = "";
         if (map.containsKey("id")) {
             sql = "update course set name = ? ,teacher_id = ? where id = ?";
@@ -100,7 +109,7 @@ public class CourseUtil {
         }
         boolean flag = false;
         try {
-            flag = jdbcUtil.updateByPreparedStatement(sql,param);
+            flag = jdbcUtil.updateByPreparedStatement(sql, param);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -120,18 +129,17 @@ public class CourseUtil {
         return flag;
     }
 
-
     //根据课程的id查询所有选择该课程的学生及成绩
-    public List<Map<String,Object>> findAllStudentWithGradeByCourseId(String courseId) {
-        String sql = "select s.id as id, s.name, c.course_id, c.score from student as s, " +
-                " selectedcourse as c where id = student_id and course_id = ? order by id asc";
+    public List<Map<String, Object>> findAllStudentWithGradeByCourseId(String courseId) {
+        String sql = "select s.id as id, s.name, c.course_id, c.score from student as s, "
+                + " selectedcourse as c where id = student_id and course_id = ? order by id asc";
 
         List<Object> param = new ArrayList<>();
         param.add(courseId);
         List<Map<String, Object>> list = new ArrayList<>();
 
         try {
-            list = jdbcUtil.getCertainResultList(sql,param);
+            list = jdbcUtil.getCertainResultList(sql, param);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -145,13 +153,12 @@ public class CourseUtil {
         param.add(courseId);
         boolean flag = false;
         try {
-            flag = jdbcUtil.updateByPreparedStatement(sql,param);
+            flag = jdbcUtil.updateByPreparedStatement(sql, param);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return flag;
     }
-
 
     //暂存课程
     public boolean draftCourseByCourseId(String courseId) {
@@ -166,7 +173,6 @@ public class CourseUtil {
         }
         return flag;
     }
-
 
     public void clearCommitStautsByCourseId(String courseId) {
 
@@ -196,4 +202,3 @@ public class CourseUtil {
         //System.out.println(this.getClass().toString() + "销毁了");
     }
 }
-
