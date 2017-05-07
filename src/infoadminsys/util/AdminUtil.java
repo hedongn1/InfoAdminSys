@@ -22,7 +22,7 @@ public class AdminUtil {
     }
 
     public <T> List<T> downloadData(Map<String, Object> condition, Class<T> cls) throws Exception {
-        String table=cls.getSimpleName().toLowerCase();
+        String table = cls.getSimpleName().toLowerCase();
         String sql = "SELECT * FROM " + table + " ";
         List<Object> param = new ArrayList<>();
         if (condition.size() > 0) {
@@ -34,7 +34,7 @@ public class AdminUtil {
                 String key = (String) entry.getKey();
                 Object value = entry.getValue();
                 sql += key + " Like ? ";
-                param.add("%"+value+"%");
+                param.add("%" + value + "%");
                 count++;
                 if (count < condition.size()) {
                     sql += " AND ";
@@ -53,9 +53,11 @@ public class AdminUtil {
     }
 
     public <T> void insertData(List<T> dataList, String[] col, Class<T> cls) throws Exception {
-        int n=dataList.size();
-        if(n<=0) return;
-        String table=cls.getSimpleName().toLowerCase();
+        int n = dataList.size();
+        if (n <= 0) {
+            return;
+        }
+        String table = cls.getSimpleName().toLowerCase();
         String sql = "INSERT INTO " + table + "(", duplicate = " ON DUPLICATE KEY UPDATE ";
         for (int i = 0; i < col.length; i++) {
             sql += col[i];
@@ -69,14 +71,14 @@ public class AdminUtil {
             }
         }
         sql += "VALUE ";
-        List<Object> param=new ArrayList<Object>();
+        List<Object> param = new ArrayList<Object>();
         for (int i = 0; i < n; i++) {
             T data = dataList.get(i);
             sql += "(";
             for (int j = 0; j < col.length; j++) {
                 Object value = cls.getDeclaredField(col[j]).get(data);
                 param.add(value);
-                sql+="?";
+                sql += "?";
                 //if(value!=null) sql += "'" + value.toString() + "'";
                 //else sql+="null";
                 if (j + 1 < col.length) {
@@ -91,15 +93,14 @@ public class AdminUtil {
         sql += duplicate;
         jdbcUtil.updateByPreparedStatement(sql, param);
     }
-    
-    public void deleteData(String table,String key,String value) throws Exception
-    {
-        String sql="DELETE FROM "+table+" WHERE "+key+"=?;";
-        List<Object> param=new ArrayList<>();
+
+    public void deleteData(String table, String key, String value) throws Exception {
+        String sql = "DELETE FROM " + table + " WHERE " + key + "=?;";
+        List<Object> param = new ArrayList<>();
         param.add(value);
-        jdbcUtil.updateByPreparedStatement(sql,param);
+        jdbcUtil.updateByPreparedStatement(sql, param);
     }
-    
+
     protected void finalize() throws Throwable {
         super.finalize();
         if (jdbcUtil != null) {
