@@ -199,6 +199,5 @@ public class CourseUtil {
             jdbcUtil = null;
 
         }
-        //System.out.println(this.getClass().toString() + "销毁了");
     }
 }
