@@ -471,9 +471,9 @@ public class AdminUI extends javax.swing.JFrame {
         });
 
         jButton_stuModify.setText("查看详细/修改");
-        jButton_stuModify.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton_stuModifyMouseClicked(evt);
+        jButton_stuModify.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_stuModifyActionPerformed(evt);
             }
         });
 
@@ -629,9 +629,9 @@ public class AdminUI extends javax.swing.JFrame {
         });
 
         jButton_teaModify.setText("查看详细/修改");
-        jButton_teaModify.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton_teaModifyMouseClicked(evt);
+        jButton_teaModify.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_teaModifyActionPerformed(evt);
             }
         });
 
@@ -698,9 +698,9 @@ public class AdminUI extends javax.swing.JFrame {
         jPanel_course.setPreferredSize(new java.awt.Dimension(800, 500));
 
         jButton_courModify.setText("查看详细/修改");
-        jButton_courModify.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton_courModifyMouseClicked(evt);
+        jButton_courModify.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_courModifyActionPerformed(evt);
             }
         });
 
@@ -887,9 +887,9 @@ public class AdminUI extends javax.swing.JFrame {
         }
 
         jButton_accModify.setText("重置密码");
-        jButton_accModify.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton_accModifyMouseClicked(evt);
+        jButton_accModify.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_accModifyActionPerformed(evt);
             }
         });
 
@@ -1188,24 +1188,6 @@ public class AdminUI extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jLabel_search3KeyPressed
 
-    private void jButton_stuModifyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_stuModifyMouseClicked
-        // TODO add your handling code here:
-        int row = jTable_student.getSelectedRow();
-        if (row >= 0) {
-            setEnabled(false);
-            String username = jTable_student.getValueAt(row, 1).toString();
-            StudentUI S = new StudentUI(username, true);
-            S.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-            S.setLocationRelativeTo(this);
-            S.addWindowListener(new WindowAdapter() {
-                public void windowClosed(WindowEvent e) {
-                    setEnabled(true);
-                }
-            });
-            S.setVisible(true);
-        }
-    }//GEN-LAST:event_jButton_stuModifyMouseClicked
-
     private void jLabel_search2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jLabel_search2KeyPressed
         // TODO add your handling code here:
         teacherSearch();
@@ -1323,24 +1305,6 @@ public class AdminUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton_accDeleteMouseClicked
 
-    private void jButton_teaModifyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_teaModifyMouseClicked
-        // TODO add your handling code here:
-        int row = jTable_teacher.getSelectedRow();
-        if (row >= 0) {
-            setEnabled(false);
-            String username = jTable_teacher.getValueAt(row, 1).toString();
-            TeacherUI T = new TeacherUI(username, true);
-            T.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-            T.setLocationRelativeTo(this);
-            T.addWindowListener(new WindowAdapter() {
-                public void windowClosed(WindowEvent e) {
-                    setEnabled(true);
-                }
-            });
-            T.setVisible(true);
-        }
-    }//GEN-LAST:event_jButton_teaModifyMouseClicked
-
     private void jButton_courImportMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_courImportMouseClicked
         // TODO add your handling code here:
         Import(courList, Course.class);
@@ -1393,7 +1357,39 @@ public class AdminUI extends javax.swing.JFrame {
         Export(accList, UserPass.class);
     }//GEN-LAST:event_jButton_accExportMouseClicked
 
-    private void jButton_accModifyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_accModifyMouseClicked
+    private void jTextField_stuDepartKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_stuDepartKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyCode() == evt.VK_ENTER) {
+            studentSearch();
+        }
+    }//GEN-LAST:event_jTextField_stuDepartKeyPressed
+
+    private void jTextField_teaDepartKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_teaDepartKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyCode() == evt.VK_ENTER) {
+            teacherSearch();
+        }
+    }//GEN-LAST:event_jTextField_teaDepartKeyPressed
+
+    private void jButton_courModifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_courModifyActionPerformed
+        // TODO add your handling code here:
+        int row = jTable_course.getSelectedRow();
+        if (row >= 0) {
+            setEnabled(false);
+            String id = jTable_course.getValueAt(row, 1).toString();
+            CourseUI C = new CourseUI(id);
+            C.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            C.setLocationRelativeTo(this);
+            C.addWindowListener(new WindowAdapter() {
+                public void windowClosed(WindowEvent e) {
+                    setEnabled(true);
+                }
+            });
+            C.setVisible(true);
+        }
+    }//GEN-LAST:event_jButton_courModifyActionPerformed
+
+    private void jButton_accModifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_accModifyActionPerformed
         // TODO add your handling code here:
         int row = jTable_account.getSelectedRow();
         if (row >= 0) {
@@ -1411,39 +1407,43 @@ public class AdminUI extends javax.swing.JFrame {
             });
             AM.setVisible(true);
         }
-    }//GEN-LAST:event_jButton_accModifyMouseClicked
+    }//GEN-LAST:event_jButton_accModifyActionPerformed
 
-    private void jButton_courModifyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_courModifyMouseClicked
+    private void jButton_stuModifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_stuModifyActionPerformed
         // TODO add your handling code here:
-        int row = jTable_course.getSelectedRow();
+        int row = jTable_student.getSelectedRow();
         if (row >= 0) {
             setEnabled(false);
-            String id = jTable_course.getValueAt(row, 1).toString();
-            CourseUI C = new CourseUI(id);
-            C.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-            C.setLocationRelativeTo(this);
-            C.addWindowListener(new WindowAdapter() {
+            String username = jTable_student.getValueAt(row, 1).toString();
+            StudentUI S = new StudentUI(username, true);
+            S.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            S.setLocationRelativeTo(this);
+            S.addWindowListener(new WindowAdapter() {
                 public void windowClosed(WindowEvent e) {
                     setEnabled(true);
                 }
             });
-            C.setVisible(true);
+            S.setVisible(true);
         }
-    }//GEN-LAST:event_jButton_courModifyMouseClicked
+    }//GEN-LAST:event_jButton_stuModifyActionPerformed
 
-    private void jTextField_stuDepartKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_stuDepartKeyPressed
+    private void jButton_teaModifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_teaModifyActionPerformed
         // TODO add your handling code here:
-        if (evt.getKeyCode() == evt.VK_ENTER) {
-            studentSearch();
+        int row = jTable_teacher.getSelectedRow();
+        if (row >= 0) {
+            setEnabled(false);
+            String username = jTable_teacher.getValueAt(row, 1).toString();
+            TeacherUI T = new TeacherUI(username, true);
+            T.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            T.setLocationRelativeTo(this);
+            T.addWindowListener(new WindowAdapter() {
+                public void windowClosed(WindowEvent e) {
+                    setEnabled(true);
+                }
+            });
+            T.setVisible(true);
         }
-    }//GEN-LAST:event_jTextField_stuDepartKeyPressed
-
-    private void jTextField_teaDepartKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_teaDepartKeyPressed
-        // TODO add your handling code here:
-        if (evt.getKeyCode() == evt.VK_ENTER) {
-            teacherSearch();
-        }
-    }//GEN-LAST:event_jTextField_teaDepartKeyPressed
+    }//GEN-LAST:event_jButton_teaModifyActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
