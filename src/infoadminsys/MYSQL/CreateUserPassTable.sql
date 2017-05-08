@@ -21,7 +21,4 @@ VALUE ('15307130120','lsh','student');
 INSERT INTO userpass
 VALUE ('admin','123','admin');
 
-INSERT INTO userpass
-VALUE ('yangchen','123','teacher');
-
 ALTER TABLE userpass ALTER password SET DEFAULT '701363672';
