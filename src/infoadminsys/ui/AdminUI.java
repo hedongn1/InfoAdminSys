@@ -249,7 +249,7 @@ public class AdminUI extends javax.swing.JFrame {
         if (jTextField_teaName.getText().length() > 0) {
             condition.put("name", jTextField_teaName.getText());
         }
-        if (jTextField_stuDepart.getText().length()>0) {
+        if (jTextField_teaDepart.getText().length()>0) {
             condition.put("depart", jTextField_teaDepart.getText().length());
         }
         if (jTextField_teaTitle.getText().length() > 0) {
