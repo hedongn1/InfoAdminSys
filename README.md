@@ -1,3 +1,3 @@
 # InfoAdminSys
 
-A school database manage system implemented by Shihan Lin and me.
+A school database system that manages students' personal and course information, designed and implemented by Shihan Lin and me.
